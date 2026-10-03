@@ -148,7 +148,7 @@ the secret path never appears in the page markup or the JS bundle.
 | **Content editors** | Form-based editors for profile, projects, experience, education, skills, coding profiles, updates, achievements, services, certifications, gallery and FAQ — add / edit / reorder / delete |
 | **Sections & Visibility** | Toggle switch for every section — About, Services, Skills, Coding Profiles, Experience, Projects, Achievements, Updates, Gallery, FAQ, Contact. Turning it Off removes it from the website and the nav. |
 | **Messages** | Read / reply / mark / delete messages from the website form |
-| **Analytics** | Private visitor stats — visits per day, popular sections, referrers, devices (self-hosted, no cookies) |
+| **Analytics** | Private visitor stats — date-range filter (7/30/90 days, All, or custom dates), visits per day, popular sections, referrers, devices, and one-click **CSV export** (self-hosted, no cookies) |
 | **Advanced (JSON)** | Full raw content editor — invalid JSON is never saved (it shows an error) |
 | **Settings** | Change the password, edit site title/SEO, inspect the tech details |
 
@@ -179,7 +179,8 @@ the secret path never appears in the page markup or the JS bundle.
 | GET | `/api/admin/entry` | Public — returns the panel URL at click time (used by the discreet footer icon; keeps the secret path out of the page/JS). Throttled, 10 req / min / IP |
 | POST | `/api/admin/login` | **Admin** — verify the panel password (throttled, 15 tries / 10 min / IP) |
 | GET | `/api/admin/overview` | **Admin** — counts, unread messages, content size, panel path |
-| GET | `/api/admin/analytics` | **Admin** — visits (today / 7d / 30d / all), daily chart, top sections, referrers, devices, recent visits |
+| GET | `/api/admin/analytics?from=YYYY-MM-DD&to=YYYY-MM-DD` | **Admin** — visits, unique visitors, daily chart, top sections, referrers, devices, recent visits for the date range (defaults to last 30 days, capped at 92) |
+| GET | `/api/admin/analytics/export?from=&to=` | **Admin** — the same range as a CSV file (time, type, section, source, device, IP), downloads via the dashboard's "Export CSV" button |
 | POST | `/api/admin/password` | **Admin** — change the password (persists to `server/.env`) |
 | GET | `/api/admin/content` | **Admin** — full content JSON |
 | PUT | `/api/admin/content` | **Admin** — save content (shallow-merges top-level keys) |

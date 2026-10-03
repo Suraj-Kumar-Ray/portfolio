@@ -56,7 +56,7 @@ That icon is deliberately **faded** — a normal visitor does not notice it, and
 | **Gallery** | Travel / friends photos |
 | **Sections & Visibility** | Which section shows on the website (ON/OFF switch) |
 | **Messages** | Messages from the contact form (reply / read / delete) |
-| **Analytics** | Who visited and what they looked at (visits, top sections, sources) |
+| **Analytics** | Who visited and what they looked at — pick any date range (7/30/90 days, All, or your own dates) and export it as a CSV file |
 | **Advanced (JSON)** | All content as raw JSON — for power users |
 | **Settings** | Change password, site title / SEO, technical info |
 
