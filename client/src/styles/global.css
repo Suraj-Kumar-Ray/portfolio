@@ -1989,8 +1989,9 @@ main {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 36px;
+  /* the quick-links column gets the most room so its two sub-columns fit */
+  grid-template-columns: 1.5fr 1.7fr 1fr;
+  gap: 32px;
   padding-bottom: 40px;
 }
 
@@ -2030,6 +2031,16 @@ main {
 .footer-links a:hover {
   color: var(--accent-2);
   transform: translateX(4px);
+}
+
+/* The quick links are a full site map; on wider screens they sit in two
+   columns so the footer stays compact instead of one long 12-row strip.
+   (Phones override this with `display: contents` further down.) */
+.footer-links-quick {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 22px;
+  row-gap: 9px;
+  align-items: start;
 }
 
 .footer-bottom {
