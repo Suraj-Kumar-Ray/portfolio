@@ -804,6 +804,39 @@
       }
     ]
   },
+  "trust": {
+    "eyebrow": "Experience & education",
+    "items": [
+      {
+        "name": "Hindustan Aeronautics Limited",
+        "short": "HAL",
+        "role": "Software Engineering Intern",
+        "year": "2024"
+      },
+      {
+        "name": "Chandigarh University",
+        "short": "CU",
+        "role": "M.E. Computer Science",
+        "year": "2025 — Present"
+      },
+      {
+        "name": "Sambhram Institute of Technology",
+        "short": "VTU",
+        "role": "B.E. Computer Science",
+        "year": "2020 — 2024"
+      },
+      {
+        "name": "Mphasis",
+        "short": "MP",
+        "role": "Advanced IT Training",
+        "year": "Certified"
+      }
+    ],
+    "highlights": [
+      "Winner — Intra-College Science Exhibition",
+      "DevHacks 1.0 participant"
+    ]
+  },
   "process": [
     {
       "title": "Discovery talk",

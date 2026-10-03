@@ -945,6 +945,31 @@ const EDITORS = {
     blank: () => ({ title: 'New step', description: '' }),
   },
 
+  trust: {
+    nav: 'trust',
+    kind: 'group',
+    topKey: 'trust',
+    path: ['trust'],
+    title: 'Trust Strip',
+    hint: 'Hero ke neeche patli credibility patti — jahan aapne kaam kiya/padhai aur aapki wins. Ye recruiter ko turant bharosa dilata hai.',
+    headerFields: [
+      { key: 'eyebrow', label: 'Small label', type: 'text', hint: 'Example: Experience & education' },
+      { key: 'highlights', label: 'Highlights / awards', type: 'lines', wide: true, hint: 'Ek line me ek highlight' },
+    ],
+    list: {
+      key: 'items',
+      itemTitle: (p, i) => p.name || 'Organisation ' + (i + 1),
+      itemSub: (p) => [p.role, p.year].filter(Boolean).join(' · '),
+      fields: [
+        { key: 'name', label: 'Organisation name', type: 'text', wide: true },
+        { key: 'short', label: 'Badge text', type: 'text', hint: '2–3 letters, Example: HAL' },
+        { key: 'role', label: 'Your role / course', type: 'text', wide: true },
+        { key: 'year', label: 'Year', type: 'text', hint: 'Example: 2024 ya 2025 — Present' },
+      ],
+      blank: () => ({ name: 'New organisation', short: '', role: '', year: '' }),
+    },
+  },
+
   audit: {
     nav: 'audit',
     kind: 'object',
@@ -1005,6 +1030,7 @@ const PAGES = [
       { id: 'work', label: 'Packages & Quote', icon: 'briefcase' },
       { id: 'process', label: 'How I Work', icon: 'refresh' },
       { id: 'audit', label: 'Free Website Review', icon: 'sparkle' },
+      { id: 'trust', label: 'Trust Strip', icon: 'sparkle' },
       { id: 'faq', label: 'FAQ', icon: 'help' },
     ],
   },
@@ -1038,6 +1064,7 @@ const SUBTITLES = {
   work: 'Service packages, prices and the /quote page.',
   process: 'Your process steps — shown on the Work and Quote pages.',
   audit: 'The free website review offer — a low-friction lead magnet.',
+  trust: 'The credibility strip under the hero — where you worked/studied, plus wins.',
   seo: 'Message alerts, Telegram pings and search engine verification.',
   faq: 'Frequently asked questions.',
   sections: 'Choose which sections show on the website.',
