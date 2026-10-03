@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
 import { goToSection } from '../navigation'
+import ThemeToggle from './ThemeToggle'
 
 export interface NavLink {
   id: string
@@ -121,6 +122,7 @@ export default function Navbar({
           </div>
 
           <div className="nav-actions">
+            <ThemeToggle />
             <button type="button" className="btn btn-primary btn-sm" onClick={() => go(contactTarget)}>
               Hire Me <ArrowUpRight size={15} />
             </button>
@@ -157,6 +159,10 @@ export default function Navbar({
             <button type="button" className="btn btn-primary" onClick={() => go(contactTarget)}>
               Hire Me <ArrowUpRight size={16} />
             </button>
+            <div className="mobile-menu-theme">
+              <span>Theme</span>
+              <ThemeToggle />
+            </div>
           </div>
         </>
       )}

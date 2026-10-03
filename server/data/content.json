@@ -81,7 +81,7 @@
     {
       "key": "testimonials",
       "label": "Testimonials",
-      "enabled": true
+      "enabled": false
     },
     {
       "key": "blog",
@@ -430,7 +430,7 @@
         "PHP",
         "MySQL"
       ],
-      "image": "/projects/tms.svg",
+      "image": "/projects/teachers-management.webp",
       "caseStudy": {
         "problem": "Small institutes keep teacher and student records in paper files and spreadsheets. Records go stale, get duplicated, and finding one profile means searching through files by hand.",
         "solution": "A PHP + MySQL web application with complete CRUD for teacher and student profiles — server-side validation on every field, a relational schema designed for clean queries, and a simple HTML/CSS/JS interface that non-technical staff can use.",
@@ -457,7 +457,7 @@
         "PyQt5",
         "Image Processing"
       ],
-      "image": "/projects/imgtool.svg",
+      "image": "/projects/image-compression.webp",
       "caseStudy": {
         "problem": "High-resolution photos eat storage and slow down uploads, but the usual compression tools are full of technical settings that regular users don't understand.",
         "solution": "A Python desktop tool with a PyQt5 GUI that compresses and decompresses images using image-processing algorithms — with quality benchmarks run to tune the balance between file size and visual quality.",
@@ -485,7 +485,7 @@
         "CNN",
         "Medical Imaging"
       ],
-      "image": "/projects/skinlesion.svg",
+      "image": "/projects/skin-lesion.webp",
       "caseStudy": {
         "problem": "Melanoma is far more treatable when caught early, but skin-lesion datasets are heavily imbalanced — the malignant minority cases are exactly the ones standard models tend to miss.",
         "solution": "A fine-tuned multi-modal CNN that combines image data with patient metadata, trained with class-balanced learning that targets minority-class recall, plus comparative experiments against baseline models.",
@@ -513,7 +513,7 @@
         "Attention",
         "KNN"
       ],
-      "image": "/projects/prostate.svg",
+      "image": "/projects/prostate-cancer.webp",
       "caseStudy": {
         "problem": "Classifying cancer from histopathology images means spotting subtle tissue patterns — and single-model pipelines either overfit or fail to explain their decisions.",
         "solution": "A hybrid pipeline: CNN feature extraction, an attention layer that focuses on the informative regions, and a KNN classifier on top — compared model-by-model in executed notebooks.",
@@ -541,7 +541,7 @@
         "Node.js",
         "Express"
       ],
-      "image": "/projects/portfolio.svg",
+      "image": "/projects/portfolio-platform.webp",
       "caseStudy": {
         "problem": "I needed a professional online presence that recruiters and clients can actually find and contact through — without paying monthly for website builders, form services or analytics tools.",
         "solution": "A React + TypeScript frontend over an Express REST API, deployed on a free host: validated contact pipeline, self-hosted privacy-friendly analytics, server-injected SEO (JSON-LD, sitemap, per-page meta) and a secret admin panel to edit every word of content.",
@@ -804,6 +804,24 @@
       }
     ]
   },
+  "process": [
+    {
+      "title": "Discovery talk",
+      "description": "We talk on WhatsApp or a short call — what you need, who it is for and your deadline. Free, no obligation."
+    },
+    {
+      "title": "Fixed quote",
+      "description": "You get the scope, price and timeline in writing within 24 hours, so there are no surprises later."
+    },
+    {
+      "title": "Build & weekly updates",
+      "description": "I build in the open and send a progress update every week — you always know where things stand."
+    },
+    {
+      "title": "Delivery & handover",
+      "description": "Deployed, tested and handed over with the source code, plus one free round of changes after delivery."
+    }
+  ],
   "audit": {
     "title": "Get a free website review",
     "subtitle": "Send me your website — I'll review speed, mobile experience and SEO, then send a short written summary of the three fixes that would help most. Completely free, no obligation.",

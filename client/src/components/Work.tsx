@@ -5,9 +5,18 @@ import Section from './Section'
 import { WhatsAppGlyph } from './QuickConnect'
 import Collapse from './Collapse'
 import InquiryForm from './InquiryForm'
-import type { Profile, WorkBlock } from '../types'
+import Process from './Process'
+import type { ProcessStep, Profile, WorkBlock } from '../types'
 
-export default function Work({ block, profile }: { block: WorkBlock; profile: Profile }) {
+export default function Work({
+  block,
+  profile,
+  process,
+}: {
+  block: WorkBlock
+  profile: Profile
+  process?: ProcessStep[]
+}) {
   const packages = block.packages || []
   const [selectedPackage, setSelectedPackage] = useState('')
 
@@ -74,6 +83,8 @@ export default function Work({ block, profile }: { block: WorkBlock; profile: Pr
           </article>
         ))}
       </Collapse>
+
+      <Process steps={process} />
 
       <div className="work-split">
         <aside className="work-side reveal">

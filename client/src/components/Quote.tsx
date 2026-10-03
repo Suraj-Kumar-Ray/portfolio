@@ -3,14 +3,23 @@ import { Check, CheckCircle2, Clock, IndianRupee, Rocket } from 'lucide-react'
 import { Icon } from '../icons'
 import SubPage from './SubPage'
 import InquiryForm from './InquiryForm'
+import Process from './Process'
 import { WhatsAppGlyph } from './QuickConnect'
-import type { Profile, WorkBlock } from '../types'
+import type { ProcessStep, Profile, WorkBlock } from '../types'
 
 /**
  * Standalone, shareable quote page (/quote). This is the link to send a client
  * on WhatsApp — packages, what they get and a qualifying form in one screen.
  */
-export default function Quote({ work, profile }: { work: WorkBlock; profile: Profile }) {
+export default function Quote({
+  work,
+  profile,
+  process,
+}: {
+  work: WorkBlock
+  profile: Profile
+  process?: ProcessStep[]
+}) {
   const packages = work?.packages || []
   const [selectedPackage, setSelectedPackage] = useState('')
 
@@ -78,6 +87,8 @@ export default function Quote({ work, profile }: { work: WorkBlock; profile: Pro
             </article>
           ))}
         </div>
+
+        <Process steps={process} />
 
         <div className="work-split" style={{ paddingBottom: 70 }}>
           <aside className="work-side reveal">

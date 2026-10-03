@@ -30,6 +30,7 @@ import { Notes, BlogIndex, BlogPostView } from './components/Blog'
 import CaseStudy from './components/CaseStudy'
 import Quote from './components/Quote'
 import Audit from './components/Audit'
+import NotFound from './components/NotFound'
 
 // Standalone pages (/work/:id, /blog, /blog/:slug) are real URLs with their
 // own server-injected SEO tags. The app renders them instead of the home page
@@ -40,6 +41,8 @@ const BLOG_SLUG = (PATH.match(/^\/blog\/([a-zA-Z0-9-]+)$/) || [])[1] || ''
 const IS_QUOTE = PATH === '/quote'
 const IS_AUDIT = PATH === '/audit'
 const IS_SUB_PAGE = PATH === '/blog' || IS_QUOTE || IS_AUDIT || Boolean(WORK_ID) || Boolean(BLOG_SLUG)
+// every URL the app knows how to render — anything else is a 404
+const IS_KNOWN = PATH === '/' || PATH === '/blog' || IS_QUOTE || IS_AUDIT || Boolean(WORK_ID) || Boolean(BLOG_SLUG)
 
 type State =
   | { status: 'loading' }
@@ -174,19 +177,25 @@ export default function App() {
     updates,
     blog,
     testimonials,
+    process,
     audit,
     faq,
   } = state.content
+
+  if (!IS_KNOWN) return <NotFound profile={profile} />
 
   // standalone pages — real URLs, own chrome, own SEO (see server sendIndex)
   if (WORK_ID) return <CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />
   if (BLOG_SLUG) return <BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />
   if (PATH === '/blog') return <BlogIndex block={blog || { posts: [] }} profile={profile} />
-  if (IS_QUOTE) return <Quote work={work} profile={profile} />
+  if (IS_QUOTE) return <Quote work={work} profile={profile} process={process} />
   if (IS_AUDIT) return <Audit audit={audit} profile={profile} />
 
   return (
     <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <ScrollProgress />
       <Navbar
         name={profile.name}
@@ -195,7 +204,7 @@ export default function App() {
         hireTarget={hireTarget}
       />
 
-      <main>
+      <main id="main">
         <Hero profile={profile} />
         <Stats stats={profile.stats} />
         {isOn('about') && <About profile={profile} />}
@@ -208,7 +217,7 @@ export default function App() {
         {isOn('projects') && <Projects projects={projects} />}
         {isOn('achievements') && <Achievements achievements={achievements} />}
         {isOn('updates') && <Updates block={updates} />}
-        {isOn('work') && work && <Work block={work} profile={profile} />}
+        {isOn('work') && work && <Work block={work} profile={profile} process={process} />}
         {isOn('gallery') && <Gallery block={gallery} />}
         {isOn('testimonials') && testimonials?.length > 0 && <Testimonials testimonials={testimonials} />}
         {isOn('blog') && blog?.posts?.length > 0 && <Notes block={blog} />}

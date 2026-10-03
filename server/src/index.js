@@ -339,6 +339,7 @@ const CONTENT_KEYS = [
   'blog',
   'testimonials',
   'faq',
+  'process',
   'audit',
 ]
 
@@ -971,6 +972,17 @@ function isoDate(s) {
   return undefined
 }
 
+// A real 404: only these paths exist. Anything else is answered with a 404
+// status (so crawlers drop it) and a friendly not-found page.
+function isKnownPath(content, clean) {
+  if (clean === '/' || clean === '/blog' || clean === '/quote' || clean === '/audit') return true
+  const workMatch = clean.match(/^\/work\/([a-zA-Z0-9-]+)$/)
+  if (workMatch) return (content.projects || []).some((p) => String(p.id) === workMatch[1])
+  const postMatch = clean.match(/^\/blog\/([a-zA-Z0-9-]+)$/)
+  if (postMatch) return (content.blog?.posts || []).some((p) => String(p.slug) === postMatch[1])
+  return false
+}
+
 function seoJsonLd(base, reqPath = '/') {
   const content = getContent()
   const p = content.profile || {}
@@ -1157,7 +1169,7 @@ function seoJsonLd(base, reqPath = '/') {
         })),
       })
     }
-  } else {
+  } else if (isKnownPath(content, path)) {
     // home page → project showcase + FAQ (both earn rich results)
     if (sectionOn('projects') && projects.length) {
       graph.push({
@@ -1224,6 +1236,7 @@ function sendIndex(req, res) {
     let description = meta.description || ''
     let canonical = base + '/'
     let ogType = 'website'
+    const notFound = !isKnownPath(content, clean)
     const posts = (content.blog || {}).posts || []
     const workMatch = clean.match(/^\/work\/([a-zA-Z0-9-]+)$/)
     const postMatch = clean.match(/^\/blog\/([a-zA-Z0-9-]+)$/)
@@ -1258,6 +1271,11 @@ function sendIndex(req, res) {
         (content.audit || {}).subtitle ||
         `Send your website and get a free, no-obligation review from ${owner} — speed, mobile, SEO and what to fix first.`
       canonical = `${base}/audit`
+    }
+    if (notFound) {
+      title = `Page not found · ${owner}`
+      description = 'This page does not exist. Head back to the portfolio to see projects, notes and ways to get in touch.'
+      canonical = `${base}/`
     }
 
     const ld = JSON.stringify(seoJsonLd(base, clean)).replace(/</g, '\\u003c')
@@ -1326,6 +1344,9 @@ if (fs.existsSync(CLIENT_DIST)) {
   )
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next()
+    const clean = String(req.path || '/').replace(/\/+$/, '') || '/'
+    // unknown paths get a real 404 status so search engines never index them
+    if (!isKnownPath(getContent(), clean)) res.status(404)
     sendIndex(req, res)
   })
 }

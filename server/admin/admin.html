@@ -587,7 +587,7 @@ const EDITORS = {
       { key: 'description', label: 'Description', type: 'area', wide: true, rows: 4 },
       { key: 'highlights', label: 'Highlights', type: 'lines', wide: true },
       { key: 'tech', label: 'Technologies', type: 'csv', wide: true, hint: 'Separate values with commas' },
-      { key: 'image', label: 'Image path', type: 'text', hint: 'Example: /projects/tms.svg' },
+      { key: 'image', label: 'Image path', type: 'text', hint: 'Example: /projects/teachers-management.webp' },
       { path: ['links', 'live'], key: 'live', label: 'Live demo URL', type: 'text' },
       { path: ['links', 'source'], key: 'source', label: 'Source code URL', type: 'text' },
       { path: ['caseStudy', 'problem'], key: 'problem', label: 'Case study — the problem', type: 'area', wide: true, rows: 3, hint: 'Project ki problem page (/work/...) par dikhti hai' },
@@ -929,6 +929,22 @@ const EDITORS = {
     },
   },
 
+  process: {
+    nav: 'process',
+    kind: 'list',
+    topKey: 'process',
+    path: ['process'],
+    title: 'How I Work',
+    hint: 'Aapka process (Discovery → Quote → Build → Delivery). Home ke "Work With Me" section aur /quote page par dikhta hai — client ko bharosa dilata hai.',
+    itemTitle: (p, i) => p.title || 'Step ' + (i + 1),
+    itemSub: (p) => String(p.description || '').slice(0, 60),
+    fields: [
+      { key: 'title', label: 'Step title', type: 'text' },
+      { key: 'description', label: 'Description', type: 'area', wide: true, rows: 3 },
+    ],
+    blank: () => ({ title: 'New step', description: '' }),
+  },
+
   audit: {
     nav: 'audit',
     kind: 'object',
@@ -987,6 +1003,7 @@ const PAGES = [
       { id: 'testimonials', label: 'Testimonials', icon: 'user' },
       { id: 'blog', label: 'Notes / Blog', icon: 'code' },
       { id: 'work', label: 'Packages & Quote', icon: 'briefcase' },
+      { id: 'process', label: 'How I Work', icon: 'refresh' },
       { id: 'audit', label: 'Free Website Review', icon: 'sparkle' },
       { id: 'faq', label: 'FAQ', icon: 'help' },
     ],
@@ -1019,6 +1036,7 @@ const SUBTITLES = {
   testimonials: 'Feedback from people you worked with.',
   blog: 'Notes / Blog — short articles that bring Google visitors.',
   work: 'Service packages, prices and the /quote page.',
+  process: 'Your process steps — shown on the Work and Quote pages.',
   audit: 'The free website review offer — a low-friction lead magnet.',
   seo: 'Message alerts, Telegram pings and search engine verification.',
   faq: 'Frequently asked questions.',
