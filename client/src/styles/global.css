@@ -43,6 +43,19 @@
   --panel-soft: rgba(6, 10, 20, 0.5);
   --field: rgba(6, 10, 20, 0.65);
   --field-focus: rgba(6, 10, 20, 0.9);
+
+  /* availability badge — the light theme redefines these for contrast */
+  --ok-bg: rgba(52, 211, 153, 0.14);
+  --ok-border: rgba(52, 211, 153, 0.42);
+  --ok-text: #6ee7b7;
+  --ok-dot: #34d399;
+  --ok-glow: rgba(52, 211, 153, 0.6);
+  --ok-glow-fade: rgba(52, 211, 153, 0);
+
+  /* error / danger surfaces (form statuses) */
+  --err-bg: rgba(248, 113, 113, 0.1);
+  --err-border: rgba(248, 113, 113, 0.4);
+  --err-text: #fca5a5;
 }
 
 /* ---------- light theme ----------
@@ -80,6 +93,18 @@
   --panel-soft: rgba(15, 23, 42, 0.04);
   --field: rgba(255, 255, 255, 0.8);
   --field-focus: #ffffff;
+
+  /* a deeper green so the badge stays readable on a bright canvas */
+  --ok-bg: rgba(5, 150, 105, 0.13);
+  --ok-border: rgba(5, 150, 105, 0.4);
+  --ok-text: #047857;
+  --ok-dot: #059669;
+  --ok-glow: rgba(5, 150, 105, 0.5);
+  --ok-glow-fade: rgba(5, 150, 105, 0);
+
+  --err-bg: rgba(220, 38, 38, 0.09);
+  --err-border: rgba(220, 38, 38, 0.35);
+  --err-text: #b91c1c;
 }
 
 /* ambient background is much lighter on a bright canvas */
@@ -596,11 +621,12 @@ main {
   gap: 9px;
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.35);
-  color: #6ee7b7;
+  background: var(--ok-bg);
+  border: 1px solid var(--ok-border);
+  color: var(--ok-text);
   font-size: 0.83rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   margin-bottom: 24px;
 }
 
@@ -608,20 +634,20 @@ main {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+  background: var(--ok-dot);
+  box-shadow: 0 0 0 0 var(--ok-glow);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+    box-shadow: 0 0 0 0 var(--ok-glow);
   }
   70% {
-    box-shadow: 0 0 0 12px rgba(52, 211, 153, 0);
+    box-shadow: 0 0 0 12px var(--ok-glow-fade);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+    box-shadow: 0 0 0 0 var(--ok-glow-fade);
   }
 }
 
@@ -2110,15 +2136,15 @@ main {
 }
 
 .form-status.success {
-  background: rgba(52, 211, 153, 0.12);
-  border: 1px solid rgba(52, 211, 153, 0.4);
-  color: #6ee7b7;
+  background: var(--ok-bg);
+  border: 1px solid var(--ok-border);
+  color: var(--ok-text);
 }
 
 .form-status.error {
-  background: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.4);
-  color: #fca5a5;
+  background: var(--err-bg);
+  border: 1px solid var(--err-border);
+  color: var(--err-text);
 }
 
 .form-status svg {
