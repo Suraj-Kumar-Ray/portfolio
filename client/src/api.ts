@@ -12,7 +12,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T
   return body
 }
 
-export const getContent = () => request<Content>('/content')
+declare global {
+  interface Window {
+    // Server-injected in index.html so the first paint needs no API round-trip.
+    __CONTENT__?: Content
+  }
+}
+
+// Prefer the content the server already inlined into the page (zero network
+// latency, instant first paint). Fall back to the API on the dev server or any
+// page that was not server-rendered.
+export const getContent = async (): Promise<ApiResult<Content>> => {
+  if (window.__CONTENT__) return { ok: true, data: window.__CONTENT__ }
+  return request<Content>('/content')
+}
 
 // Asks the server where the private dashboard lives. Only used by the tiny
 // footer icon, so the URL never appears in the public page or bundle.
