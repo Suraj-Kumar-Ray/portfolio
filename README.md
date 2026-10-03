@@ -213,7 +213,7 @@ curl -X PATCH -H "x-admin-token: $ADMIN_TOKEN" -H "Content-Type: application/jso
   -d '{"enabled":false}' http://localhost:5000/api/admin/sections/gallery
 ```
 
-Messages are stored in `server/data/messages.json` (git-ignored).
+Messages (and every other mutable document) are saved through the storage layer in [server/src/store.js](server/src/store.js) — plain files in development, **MongoDB Atlas** in production so nothing is lost on a redeploy. See **Durable data** below.
 
 ---
 
@@ -224,10 +224,13 @@ portfolio/
 ├── package.json             # root scripts (dev / build / start)
 ├── server/
 │   ├── admin/admin.html     # dashboard UI (served on the secret ADMIN_PATH)
-│   ├── src/index.js         # Express app: API, rate limit, static hosting
+│   ├── src/
+│   │   ├── index.js         # Express app: API, rate limit, static hosting
+│   │   └── store.js         # durable storage: local files, or MongoDB Atlas
 │   └── data/
-│       ├── content.json     # ← edit your details here
-│       ├── messages.json    # contact form submissions
+│       ├── content.json     # ← edit your details here (seed for the DB)
+│       ├── messages.json    # contact form submissions (local dev only)
+│       ├── settings.json    # panel password override (git-ignored, local dev)
 │       └── resume.pdf       # ← drop your resume here
 └── client/
     ├── index.html           # SEO meta, fonts
@@ -259,7 +262,8 @@ Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprin
 4. **Auto-deploy:** every `git push` to `main` redeploys automatically.
 
 **Important hosting notes:**
-- Render's free-tier disk is **temporary** — every redeploy resets `messages.json` (the inbox) and any panel edits to `content.json` back to the committed version; analytics.json too. For long-term data, take a paid disk or a database.
+- Render's free-tier disk is **temporary**. That is fine now: set `MONGODB_URI` (see **[Durable data](#-durable-data)**) and messages, analytics and panel edits live in a free MongoDB Atlas cluster instead of the ephemeral disk.
+- Without `MONGODB_URI` the app still runs — it just keeps using local files, so a redeploy resets the inbox and any panel edits. The server logs `Data store: local files` in that case.
 - Free instances **spin down** after ~15 min idle — first request then takes ~50 s (subsequent ones are fast).
 - `SITE_URL` env var pins the absolute URLs used by sitemap / canonical / JSON-LD (falls back to the request host if unset).
 - The server **does not boot** in production without `ADMIN_TOKEN` (deliberate — opening the panel with a default password would be too easy).
@@ -268,6 +272,30 @@ Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprin
 - **Free SEO setup (one-time):** add the site to [Google Search Console](https://search.google.com/search-console) + [Bing Webmaster Tools](https://www.bing.com/webmasters), choose the HTML-tag verification method and paste the codes into **SEO & Alerts** in the panel; then submit `https://suraj-portfolio-wjpt.onrender.com/sitemap.xml` in both.
 
 **Split hosting:** deploy `client/dist` to Vercel/Netlify and the `server/` to Render; set `CLIENT_ORIGIN` to your frontend URL and point the client's API base at it.
+
+---
+
+## 💾 Durable data
+
+By default the app reads and writes the JSON files in `server/data/`. On a host with an ephemeral disk (Render's free tier) a redeploy throws those edits away. Point it at a free database instead and nothing is lost:
+
+The storage layer lives in [server/src/store.js](server/src/store.js). It reads everything from an in-memory copy loaded once at boot (so all the existing synchronous reads keep working) and writes back to the active backend. If the database is ever unreachable it logs a warning and falls back to local files — the site never goes down.
+
+**Setup (free, ~5 min, no credit card):**
+
+1. Create a free **M0** cluster at [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. **Database Access** → add a user (username + password).
+3. **Network Access** → allow `0.0.0.0/0` (Render's IPs are dynamic).
+4. **Connect → Drivers** → copy the connection string and swap in your password.
+5. Put it in `server/.env` for local runs, and in the host's **Environment** tab for production:
+
+   ```
+   MONGODB_URI=mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+   ```
+
+Optional: `MONGODB_DB` (default `portfolio`) and `MONGODB_COLLECTION` (default `documents`).
+
+On the first boot against an empty cluster, each document is seeded from the local file (so `content.json` starts from whatever is committed). After that, panel edits, messages and analytics all persist across redeploys — and a panel password change is stored too, so it survives even though the host's `ADMIN_TOKEN` env var stays as it was. The `/api/health` and panel **Overview** show which backend is active.
 
 ---
 

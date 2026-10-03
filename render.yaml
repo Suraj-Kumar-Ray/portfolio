@@ -24,3 +24,8 @@ services:
       # Password is entered in the Render dashboard (never stored in git).
       - key: ADMIN_TOKEN
         sync: false
+      # MongoDB Atlas connection string (see README → "Durable data"). Without,
+      # the free instance keeps data on its ephemeral disk and a redeploy wipes
+      # messages, analytics and panel edits.
+      - key: MONGODB_URI
+        sync: false

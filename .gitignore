@@ -6,3 +6,4 @@ dist/
 .freebuff/
 server/data/messages.json
 server/data/analytics.json
+server/data/settings.json
