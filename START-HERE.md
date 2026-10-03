@@ -5,9 +5,9 @@
 | What | Link |
 |---|---|
 | 🌐 **Website** (everyone can see it) | `http://localhost:5000` |
-| 🔒 **Dashboard** (FOR YOU ONLY) | Click the small 🔒 icon in the website footer, or go straight to `http://localhost:5000/CHANGE_ME_ADMIN_PATH` |
+| 🔒 **Dashboard** (FOR YOU ONLY) | Click the small 🔒 icon in the website footer, or open `server\.env` and read the value after `ADMIN_PATH=` |
 
-Dashboard password: **`CHANGE_ME_ADMIN_PASSWORD`**
+Dashboard password: it is in `server\.env` after `ADMIN_TOKEN=` (kept out of this file on purpose).
 
 ---
 
@@ -29,8 +29,8 @@ Dashboard password: **`CHANGE_ME_ADMIN_PASSWORD`**
 
 That icon is deliberately **faded** — a normal visitor does not notice it, and nothing says "Admin" or "Login" on it. Since you know about it, you can click it directly.
 
-**Backup way:** type the link → `http://localhost:5000/CHANGE_ME_ADMIN_PATH`
-**Password:** `CHANGE_ME_ADMIN_PASSWORD`
+**Backup way:** open `server\.env` → the link is `http://localhost:5000` + whatever is after `ADMIN_PATH=`.
+**Password:** whatever is after `ADMIN_TOKEN=` in the same file.
 
 ### The public can never see it
 - This link is **not as easy as `/admin`** — it is a **secret address** nobody can guess.
@@ -124,7 +124,7 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 |---|---|
 | Window closes right after double-clicking `START.bat` | Node.js is not installed → install the **LTS** version from https://nodejs.org |
 | Site does not open | The black window must have been closed — run `START.bat` again |
-| Dashboard says "That password is not correct" | Type the password carefully: `CHANGE_ME_ADMIN_PASSWORD` (no extra spaces) |
+| Dashboard says "That password is not correct" | Type the password carefully — copy the exact `ADMIN_TOKEN` value from `server\.env` (no extra spaces) |
 | Cannot find the footer 🔒 icon | Look at the very **bottom** line of the footer, a little to the right of `© 2026 Suraj Kumar. All rights reserved.` — it is very faint. It brightens when you hover over it |
 | "Too many attempts" error | 15 wrong tries happened — wait 10 minutes, then try again |
 | Forgot the dashboard link | Open the `server\.env` file → it is written after `ADMIN_PATH=` |
@@ -142,7 +142,7 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 | | Link |
 |---|---|
 | 🌐 **Website** (for companies / shared) | https://suraj-portfolio-wjpt.onrender.com |
-| 🔒 **Dashboard** (FOR YOU ONLY) | https://suraj-portfolio-wjpt.onrender.com/CHANGE_ME_ADMIN_PATH |
+| 🔒 **Dashboard** (FOR YOU ONLY) | https://suraj-portfolio-wjpt.onrender.com + the `ADMIN_PATH` value you set in Render's **Environment** tab |
 
 Notes:
 - Free hosting **sleeps** after ~15 minutes of no visitors — the first opening then takes ~30–50 seconds. Later openings are instant.
@@ -152,7 +152,7 @@ Notes:
   3. Dashboard → **SEO & Alerts** → paste both codes → Save → go back to both sites and press **Verify**.
   4. In both sites → Sitemaps → submit `https://suraj-portfolio-wjpt.onrender.com/sitemap.xml`.
 - **To publish any change:** run `git add -A && git commit -m "update" && git push` — Render rebuilds and puts it live automatically in ~2 minutes.
-- Panel password is the same as local (`CHANGE_ME_ADMIN_PASSWORD`).
+- Panel password is the same as local — it is the `ADMIN_TOKEN` you set in Render's **Environment** tab.
 - **Inbox messages, analytics and dashboard edits are no longer lost on redeploy** — they are saved to a free MongoDB Atlas database once you set `MONGODB_URI` (see README → **Durable data**). The server prints `Data store: MongoDB Atlas — survives redeploys` on boot when it is active. Until `MONGODB_URI` is set it keeps using local files, so a redeploy still resets them (the base content in the repo always stays).
 
 ---
