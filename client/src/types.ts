@@ -1,0 +1,239 @@
+export interface Meta {
+  siteName: string
+  title: string
+  description: string
+  keywords: string[]
+  themeColor: string
+  ogImage: string
+  favicon: string
+}
+
+export interface Social {
+  label: string
+  url: string
+  icon: string
+}
+
+export interface Stat {
+  label: string
+  value: number
+  suffix: string
+}
+
+export interface Profile {
+  name: string
+  role: string
+  tagline: string
+  shortIntro: string
+  location: string
+  email: string
+  phone: string
+  avatar: string
+  resumeUrl: string
+  availability: string
+  yearsOfExperience: number
+  about: string[]
+  highlights: string[]
+  languages: string[]
+  stats: Stat[]
+  socials: Social[]
+}
+
+export interface Service {
+  title: string
+  icon: string
+  description: string
+}
+
+export interface SkillItem {
+  name: string
+  level: number
+}
+
+export interface SkillGroup {
+  category: string
+  icon: string
+  items: SkillItem[]
+}
+
+export interface Experience {
+  role: string
+  company: string
+  period: string
+  location: string
+  type: string
+  description: string
+  highlights: string[]
+  technologies: string[]
+}
+
+export interface Education {
+  degree: string
+  school: string
+  period: string
+  description: string
+}
+
+export interface Certification {
+  name: string
+  issuer: string
+  year: string
+}
+
+export interface ProjectLinks {
+  live: string
+  source: string
+}
+
+export interface Project {
+  id: string
+  title: string
+  category: string
+  featured: boolean
+  year: string
+  description: string
+  highlights: string[]
+  tech: string[]
+  image: string
+  links: ProjectLinks
+}
+
+export interface Testimonial {
+  name: string
+  role: string
+  company: string
+  rating: number
+  text: string
+}
+
+export interface Achievement {
+  title: string
+  icon: string
+  description: string
+}
+
+/** "Work with me" — the freelance / hire-me offer. */
+export interface WorkPackage {
+  title: string
+  icon: string
+  description: string
+  features: string[]
+  timeline: string
+  price: string
+}
+
+export interface WorkBlock {
+  eyebrow?: string
+  title?: string
+  subtitle?: string
+  formTitle?: string
+  formSub?: string
+  note?: string
+  points?: string[]
+  packages: WorkPackage[]
+}
+
+/** Every section can be switched on/off from the admin panel. */
+export interface SectionConfig {
+  key: string
+  label: string
+  enabled: boolean
+}
+
+export interface ProfileStat {
+  label: string
+  value: string
+}
+
+export interface CodingProfile {
+  platform: string
+  handle: string
+  icon: string
+  description: string
+  stats: ProfileStat[]
+  url: string
+}
+
+export interface CodingProfilesBlock {
+  title?: string
+  subtitle?: string
+  profiles: CodingProfile[]
+}
+
+export interface GalleryItem {
+  image: string
+  caption: string
+  tag?: string
+}
+
+export interface GalleryBlock {
+  title?: string
+  subtitle?: string
+  items: GalleryItem[]
+}
+
+export interface UpdateItem {
+  date: string
+  type?: string
+  title: string
+  description: string
+}
+
+export interface UpdatesBlock {
+  title?: string
+  subtitle?: string
+  items: UpdateItem[]
+}
+
+export interface Faq {
+  question: string
+  answer: string
+}
+
+export interface Content {
+  meta: Meta
+  sections: SectionConfig[]
+  profile: Profile
+  services: Service[]
+  skills: SkillGroup[]
+  tools: string[]
+  experience: Experience[]
+  education: Education[]
+  certifications: Certification[]
+  projects: Project[]
+  achievements: Achievement[]
+  work: WorkBlock
+  codingProfiles: CodingProfilesBlock
+  gallery: GalleryBlock
+  updates: UpdatesBlock
+  testimonials: Testimonial[]
+  faq: Faq[]
+  updatedAt: string
+}
+
+export interface ContactPayload {
+  name: string
+  email: string
+  subject: string
+  message: string
+  website?: string
+}
+
+export interface InquiryPayload {
+  name: string
+  email: string
+  phone?: string
+  projectType: string
+  budget: string
+  timeline: string
+  message: string
+  website?: string
+}
+
+export interface ApiResult<T> {
+  ok: boolean
+  data?: T
+  message?: string
+  error?: string
+  errors?: string[]
+}

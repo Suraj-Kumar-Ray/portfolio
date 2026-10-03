@@ -1,0 +1,683 @@
+{
+  "meta": {
+    "siteName": "Suraj Kumar",
+    "title": "Suraj Kumar — Full-Stack Developer | React, PHP & MySQL",
+    "description": "Portfolio of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL), M.E. CSE at Chandigarh University, ex-Software Engineering Intern at Hindustan Aeronautics Limited (HAL).",
+    "keywords": [
+      "Suraj Kumar",
+      "Full-Stack Developer",
+      "React.js Developer",
+      "PHP MySQL",
+      "Chandigarh University",
+      "M.E CSE",
+      "HAL Internship",
+      "Portfolio"
+    ],
+    "themeColor": "#060a14",
+    "ogImage": "/og.svg",
+    "favicon": "/favicon.svg"
+  },
+  "sections": [
+    {
+      "key": "about",
+      "label": "About Me",
+      "enabled": true
+    },
+    {
+      "key": "services",
+      "label": "Services",
+      "enabled": true
+    },
+    {
+      "key": "skills",
+      "label": "Skills",
+      "enabled": true
+    },
+    {
+      "key": "codingProfiles",
+      "label": "Coding Profiles",
+      "enabled": true
+    },
+    {
+      "key": "experience",
+      "label": "Experience",
+      "enabled": true
+    },
+    {
+      "key": "projects",
+      "label": "Projects",
+      "enabled": true
+    },
+    {
+      "key": "achievements",
+      "label": "Achievements",
+      "enabled": true
+    },
+    {
+      "key": "updates",
+      "label": "Updates / Timeline",
+      "enabled": true
+    },
+    {
+      "key": "work",
+      "label": "Work With Me (hire / freelance)",
+      "enabled": true
+    },
+    {
+      "key": "gallery",
+      "label": "Gallery (travel, friends)",
+      "enabled": false
+    },
+    {
+      "key": "faq",
+      "label": "FAQ",
+      "enabled": true
+    },
+    {
+      "key": "contact",
+      "label": "Contact",
+      "enabled": true
+    }
+  ],
+  "profile": {
+    "name": "Suraj Kumar",
+    "role": "Full-Stack Developer",
+    "tagline": "M.E. CSE @ Chandigarh University · I build responsive, scalable web apps with React.js, JavaScript, PHP & MySQL — ex-Software Engineering Intern at HAL.",
+    "shortIntro": "Hi, I'm Suraj",
+    "location": "Ludhiana, Punjab, India",
+    "email": "csesuraj2003@gmail.com",
+    "phone": "+91-7795253485",
+    "avatar": "/avatar.jpg?v=3",
+    "resumeUrl": "/api/resume",
+    "availability": "Open to full-time roles · Available immediately",
+    "yearsOfExperience": 1,
+    "about": [
+      "I'm a full-stack developer with expertise in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
+      "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I've interned at Hindustan Aeronautics Limited, where I developed and validated navigation-system software."
+    ],
+    "highlights": [
+      "Software Engineering Intern at Hindustan Aeronautics Limited (HAL)",
+      "M.E. CSE at Chandigarh University · B.E. CSE with CGPA 8.7",
+      "Full-stack builds in React.js, PHP & MySQL with end-to-end testing",
+      "Winner — Intra-College Science Exhibition · DevHacks 1.0 participant"
+    ],
+    "languages": [
+      "English (Proficient)",
+      "Hindi (Native)"
+    ],
+    "stats": [
+      {
+        "label": "Internships Completed",
+        "value": 1,
+        "suffix": ""
+      },
+      {
+        "label": "Projects Shipped",
+        "value": 5,
+        "suffix": "+"
+      },
+      {
+        "label": "Certifications & Training",
+        "value": 4,
+        "suffix": ""
+      },
+      {
+        "label": "Hackathons & Exhibitions",
+        "value": 2,
+        "suffix": ""
+      }
+    ],
+    "socials": [
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/in/suraj-kumar-507119203",
+        "icon": "linkedin"
+      },
+      {
+        "label": "Email",
+        "url": "mailto:csesuraj2003@gmail.com",
+        "icon": "mail"
+      },
+      {
+        "label": "Phone",
+        "url": "tel:+917795253485",
+        "icon": "phone"
+      }
+    ]
+  },
+  "services": [
+    {
+      "title": "Frontend Development",
+      "icon": "layout",
+      "description": "Responsive, mobile-first interfaces in React.js, HTML5, CSS3 and Bootstrap — clean, cross-browser and accessible."
+    },
+    {
+      "title": "Backend & Databases",
+      "icon": "server",
+      "description": "PHP and MySQL backends with solid SQL, CRUD operations, data validation and well-structured database design."
+    },
+    {
+      "title": "Software Testing",
+      "icon": "gauge",
+      "description": "Manual, functional and database testing with structured bug reporting — features ship when they actually work."
+    },
+    {
+      "title": "Python & Desktop Tools",
+      "icon": "code",
+      "description": "Python desktop applications with PyQt5 GUIs and image-processing workflows: compression, transformation and validation."
+    }
+  ],
+  "skills": [
+    {
+      "category": "Programming Languages",
+      "icon": "code",
+      "items": [
+        {
+          "name": "JavaScript (ES6+)",
+          "level": 90
+        },
+        {
+          "name": "Java",
+          "level": 88
+        },
+        {
+          "name": "C / C++",
+          "level": 85
+        },
+        {
+          "name": "SQL",
+          "level": 85
+        },
+        {
+          "name": "Python",
+          "level": 82
+        }
+      ]
+    },
+    {
+      "category": "Frontend",
+      "icon": "monitor",
+      "items": [
+        {
+          "name": "HTML5 & CSS3",
+          "level": 94
+        },
+        {
+          "name": "React.js",
+          "level": 90
+        },
+        {
+          "name": "Responsive Web Design",
+          "level": 90
+        },
+        {
+          "name": "Bootstrap",
+          "level": 88
+        },
+        {
+          "name": "JavaScript (DOM & ES6)",
+          "level": 88
+        }
+      ]
+    },
+    {
+      "category": "Backend & Databases",
+      "icon": "server",
+      "items": [
+        {
+          "name": "MySQL",
+          "level": 88
+        },
+        {
+          "name": "PHP",
+          "level": 85
+        },
+        {
+          "name": "DBMS Concepts",
+          "level": 85
+        },
+        {
+          "name": "CRUD & Data Validation",
+          "level": 88
+        },
+        {
+          "name": "Database Testing",
+          "level": 82
+        }
+      ]
+    },
+    {
+      "category": "Testing & Tools",
+      "icon": "cloud",
+      "items": [
+        {
+          "name": "Manual Testing",
+          "level": 88
+        },
+        {
+          "name": "Functional Testing",
+          "level": 86
+        },
+        {
+          "name": "Bug Reporting",
+          "level": 85
+        },
+        {
+          "name": "Git & GitHub",
+          "level": 82
+        },
+        {
+          "name": "PyQt5 & Image Processing",
+          "level": 78
+        },
+        {
+          "name": "Selenium",
+          "level": 75
+        }
+      ]
+    }
+  ],
+  "tools": [
+    "Java",
+    "C",
+    "C++",
+    "Python",
+    "JavaScript",
+    "React.js",
+    "HTML5",
+    "CSS3",
+    "Bootstrap",
+    "PHP",
+    "MySQL",
+    "SQL",
+    "DBMS",
+    "Git",
+    "Selenium",
+    "PyQt5",
+    "Image Processing",
+    "Manual Testing",
+    "Functional Testing",
+    "Bug Reporting"
+  ],
+  "experience": [
+    {
+      "role": "Software Engineering Intern",
+      "company": "Hindustan Aeronautics Limited (HAL)",
+      "period": "2024",
+      "location": "On-site, India",
+      "type": "Internship",
+      "description": "Contributed to aerospace software delivery on navigation systems — development, validation and technical documentation.",
+      "highlights": [
+        "Developed navigation system software and contributed to aerospace project delivery",
+        "Performed functional testing and validation of navigation modules",
+        "Conducted technical research, documentation and cross-team collaboration",
+        "Prepared detailed technical documentation and reports, maintaining accuracy and consistency of records"
+      ],
+      "technologies": [
+        "Software Development",
+        "Functional Testing",
+        "Technical Documentation"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "M.E. in Computer Science & Engineering",
+      "school": "Chandigarh University, Punjab",
+      "period": "2025 — Present",
+      "description": "Pursuing (UID 25MCS10032 · Section ME-3). Focus on applied machine learning and deep learning for medical image analysis."
+    },
+    {
+      "degree": "B.E. in Computer Science & Engineering",
+      "school": "Sambhram Institute of Technology (VTU)",
+      "period": "2020 — 2024",
+      "description": "Graduated May 2024 with CGPA 8.7/10. Coursework: data structures, DBMS, web technologies, software engineering."
+    },
+    {
+      "degree": "Higher Secondary (Class XII)",
+      "school": "New Horizon School, Bhagalpur, Bihar",
+      "period": "2018 — 2020",
+      "description": "Intermediate (CBSE) — 85.6%."
+    },
+    {
+      "degree": "Matriculation (Class X)",
+      "school": "P.L. Siksha Niketan, Khagaria, Bihar",
+      "period": "2017 — 2018",
+      "description": "CBSE — 74%."
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Data Structures",
+      "issuer": "Coursera",
+      "year": "Jan 2023"
+    },
+    {
+      "name": "Web Development",
+      "issuer": "iNeuron",
+      "year": "Dec 2023"
+    },
+    {
+      "name": "Advanced IT Skill Training",
+      "issuer": "Mphasis",
+      "year": ""
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Winner — Intra-College Science Exhibition",
+      "icon": "award",
+      "description": "First place for an applied science project, recognised among department entries."
+    },
+    {
+      "title": "DevHacks 1.0 — National Level Hackathon",
+      "icon": "briefcase",
+      "description": "Participant in the 24-hour national hackathon — building and pitching under deadline pressure."
+    },
+    {
+      "title": "DSA Summer Winning Camp 2026",
+      "icon": "code",
+      "description": "Completed the advanced DSA worksheet track (LeetCode hard problems: reverse-k groups, LFU cache, skip lists)."
+    },
+    {
+      "title": "Research in Medical Image Analysis",
+      "icon": "education",
+      "description": "M.E. dissertation on fine-tuned multi-modal CNNs for melanoma detection in skin-lesion classification."
+    }
+  ],
+  "projects": [
+    {
+      "id": "teachers-management",
+      "title": "Teachers Management System",
+      "category": "Full-Stack",
+      "featured": true,
+      "year": "2024",
+      "description": "A full-stack DBMS web application for managing teacher and student profiles with complete CRUD operations and validated data flow.",
+      "highlights": [
+        "CRUD profile management for teachers & students",
+        "SQL data validation + end-to-end functional and database testing"
+      ],
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "PHP",
+        "MySQL"
+      ],
+      "image": "/projects/tms.svg",
+      "links": {
+        "live": "",
+        "source": ""
+      }
+    },
+    {
+      "id": "image-compression",
+      "title": "Image Compression & Decompression Tool",
+      "category": "Python",
+      "featured": true,
+      "year": "2024",
+      "description": "A desktop application that compresses and decompresses images with an intuitive PyQt5 GUI, applying image-processing algorithms that keep quality high while cutting file size.",
+      "highlights": [
+        "PyQt5 GUI designed for non-technical users",
+        "Quality-benchmarked compression algorithms"
+      ],
+      "tech": [
+        "Python",
+        "PyQt5",
+        "Image Processing"
+      ],
+      "image": "/projects/imgtool.svg",
+      "links": {
+        "live": "",
+        "source": ""
+      }
+    },
+    {
+      "id": "skin-lesion",
+      "title": "Skin Lesion Classification (M.E. Dissertation)",
+      "category": "AI / Research",
+      "featured": true,
+      "year": "2026",
+      "description": "A fine-tuned multi-modal CNN with class-balanced learning for improved melanoma and minority-class detection in skin-lesion classification.",
+      "highlights": [
+        "Multi-modal CNN combining imaging + patient data",
+        "Class-balanced learning targeting minority-class recall"
+      ],
+      "tech": [
+        "Python",
+        "Deep Learning",
+        "CNN",
+        "Medical Imaging"
+      ],
+      "image": "/projects/skinlesion.svg",
+      "links": {
+        "live": "",
+        "source": ""
+      }
+    },
+    {
+      "id": "prostate-cancer",
+      "title": "Prostate Cancer Hybrid Model",
+      "category": "AI / Research",
+      "featured": false,
+      "year": "2025",
+      "description": "Hybrid CNN + attention + KNN pipeline for prostate cancer classification from histopathology images, with comparative model experiments.",
+      "highlights": [
+        "Hybrid CNN + Attention + KNN architecture",
+        "Experiments documented in executed notebooks"
+      ],
+      "tech": [
+        "Python",
+        "CNN",
+        "Attention",
+        "KNN"
+      ],
+      "image": "/projects/prostate.svg",
+      "links": {
+        "live": "",
+        "source": ""
+      }
+    },
+    {
+      "id": "portfolio-platform",
+      "title": "Portfolio & Resume Platform",
+      "category": "Full-Stack",
+      "featured": false,
+      "year": "2026",
+      "description": "This portfolio — a React + TypeScript frontend over an Express REST API, with a validated contact pipeline and a generated one-page resume.",
+      "highlights": [
+        "React + Express REST API with rate limiting",
+        "Single-file content CMS + PDF resume generation"
+      ],
+      "tech": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Express"
+      ],
+      "image": "/projects/portfolio.svg",
+      "links": {
+        "live": "",
+        "source": ""
+      }
+    }
+  ],
+  "work": {
+    "eyebrow": "Work With Me",
+    "title": "Have an idea? Let's build it together.",
+    "subtitle": "Websites, web apps and small tools for startups, shops and students — clean code, quick delivery and honest communication.",
+    "formTitle": "Start a project",
+    "formSub": "Tell me what you need. Send the details — I reply within 24 hours.",
+    "note": "Small job or big — we talk first, then scope, cost and timeline are fixed. No advance payment; pay after delivery.",
+    "points": [
+      "Reply within 24 hours",
+      "The source code is fully yours",
+      "One round of free changes after delivery",
+      "Weekly progress update"
+    ],
+    "packages": [
+      {
+        "title": "Business Website",
+        "icon": "layout",
+        "description": "Fast, mobile-first website for your shop, business or personal brand — shareable on WhatsApp.",
+        "features": [
+          "Up to 5 pages",
+          "Mobile + tablet perfect",
+          "Contact / enquiry form",
+          "Basic SEO setup"
+        ],
+        "timeline": "3–5 days",
+        "price": "Let's discuss"
+      },
+      {
+        "title": "Web Application",
+        "icon": "server",
+        "description": "Custom dashboards, admin panels and CRUD apps with login, database and reports.",
+        "features": [
+          "Login & user roles",
+          "Database + REST API",
+          "Admin dashboard",
+          "Deployment help"
+        ],
+        "timeline": "1–3 weeks",
+        "price": "Let's discuss"
+      },
+      {
+        "title": "Python / Desktop Tool",
+        "icon": "code",
+        "description": "Automation scripts, image / data processing and desktop tools with a simple GUI.",
+        "features": [
+          "Automation script",
+          "PyQt desktop GUI",
+          "Image / data processing",
+          "Usage documentation"
+        ],
+        "timeline": "4–10 days",
+        "price": "Let's discuss"
+      },
+      {
+        "title": "Fix or Improve Existing Site",
+        "icon": "gauge",
+        "description": "Bugs, broken layout, slow pages — or a full redesign of an old website.",
+        "features": [
+          "Bug fixing",
+          "Speed improvements",
+          "Responsive redesign",
+          "Testing & handover"
+        ],
+        "timeline": "2–5 days",
+        "price": "Let's discuss"
+      }
+    ]
+  },
+  "codingProfiles": {
+    "title": "Coding Profiles",
+    "subtitle": "Practice stats, code and profiles — updated as I go.",
+    "profiles": [
+      {
+        "platform": "LeetCode",
+        "handle": "",
+        "icon": "code",
+        "description": "Data structures & algorithms practice — arrays, dynamic programming, graphs and linked lists.",
+        "stats": [
+          {
+            "label": "Problems Solved",
+            "value": "400+"
+          },
+          {
+            "label": "Focus",
+            "value": "DSA"
+          }
+        ],
+        "url": ""
+      },
+      {
+        "platform": "GitHub",
+        "handle": "",
+        "icon": "github",
+        "description": "Code for my projects and practice repos. Add your profile link to show it off.",
+        "stats": [
+          {
+            "label": "Repositories",
+            "value": "Coming soon"
+          },
+          {
+            "label": "Link",
+            "value": "Add profile"
+          }
+        ],
+        "url": ""
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Life Beyond Code",
+    "subtitle": "Travel, friends and everything in between — replace these with your own photos.",
+    "items": [
+      {
+        "image": "/gallery/photo-1.svg",
+        "caption": "Add a travel photo",
+        "tag": "Travel"
+      },
+      {
+        "image": "/gallery/photo-2.svg",
+        "caption": "Add a photo with friends",
+        "tag": "Friends"
+      },
+      {
+        "image": "/gallery/photo-3.svg",
+        "caption": "Add a campus or work photo",
+        "tag": "Campus"
+      }
+    ]
+  },
+  "updates": {
+    "title": "What's New",
+    "subtitle": "Milestones and updates, newest first.",
+    "items": [
+      {
+        "date": "Jul 2026",
+        "type": "award",
+        "title": "DSA Summer Winning Camp 2026",
+        "description": "Completed the advanced DSA worksheet track — reverse-k group, LFU cache, skip list and text-editor design problems."
+      },
+      {
+        "date": "Aug 2025",
+        "type": "education",
+        "title": "Started M.E. CSE at Chandigarh University",
+        "description": "Began post-graduation in Computer Science & Engineering (UID 25MCS10032), focusing on applied machine learning."
+      },
+      {
+        "date": "2024",
+        "type": "briefcase",
+        "title": "Software Engineering Internship at HAL",
+        "description": "Developed and validated navigation-system software at Hindustan Aeronautics Limited."
+      },
+      {
+        "date": "May 2024",
+        "type": "award",
+        "title": "Graduated B.E. CSE with CGPA 8.7",
+        "description": "Completed B.E. in Computer Science & Engineering from Sambhram Institute of Technology (VTU)."
+      }
+    ]
+  },
+  "testimonials": [],
+  "faq": [
+    {
+      "question": "Are you available for a full-time role?",
+      "answer": "Yes — I'm pursuing M.E. CSE at Chandigarh University and I'm open to full-time roles and internships in full-stack development. The fastest way to reach me is the contact form, email or phone."
+    },
+    {
+      "question": "What is your core tech stack?",
+      "answer": "React.js, JavaScript (ES6+), HTML5, CSS3 and Bootstrap on the frontend; PHP and MySQL on the backend, with SQL, DBMS design and data validation. I also build Python/PyQt5 desktop tools and work with Java and C/C++."
+    },
+    {
+      "question": "Do you have industry experience?",
+      "answer": "Yes — I completed a Software Engineering Internship at Hindustan Aeronautics Limited (HAL), where I developed navigation-system software, performed functional testing and validation, and prepared technical documentation for aerospace project delivery."
+    },
+    {
+      "question": "What testing do you do?",
+      "answer": "Manual testing, functional testing and database testing with structured bug reporting. Every project I ship — including my Teachers Management System — goes through end-to-end functional and database validation."
+    }
+  ]
+}

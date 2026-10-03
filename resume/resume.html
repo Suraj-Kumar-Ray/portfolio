@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Resume of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL). M.E. CSE at Chandigarh University, ex-Software Engineering Intern at HAL." />
+<title>Suraj Kumar — Resume</title>
+<style>
+  @page { size: A4; margin: 9mm 10mm; }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #1a2233;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 10.2pt;
+    line-height: 1.28;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page { width: 100%; }
+
+  /* ---------- header ---------- */
+  header { text-align: center; }
+
+  .name {
+    margin: 0;
+    font-size: 24pt;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #0b1226;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+
+  .headline {
+    margin: 3px 0 0;
+    font-size: 11.2pt;
+    font-weight: 600;
+    color: #4f46e5;
+    letter-spacing: 0.2px;
+  }
+
+  .contact {
+    margin: 7px auto 0;
+    font-size: 9.4pt;
+    color: #33405a;
+    max-width: 100%;
+  }
+  .contact span { white-space: nowrap; }
+  .sep { color: #9aa5bb; padding: 0 6px; }
+  a { color: #33405a; text-decoration: none; }
+
+  .rule {
+    height: 2.5px;
+    background: linear-gradient(90deg, #4f46e5, #0891b2);
+    margin: 9px 0 0;
+    border-radius: 2px;
+  }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 8px; }
+
+  h2 {
+    margin: 0 0 5px;
+    font-size: 11pt;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: #0b1226;
+    border-bottom: 1.4px solid #d7dcea;
+    padding-bottom: 3px;
+  }
+
+  ul { margin: 4px 0 0; padding-left: 15px; }
+  li { margin-bottom: 2px; }
+  li::marker { color: #4f46e5; }
+
+  .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .title { font-weight: 700; color: #0b1226; font-size: 10.4pt; }
+  .org { color: #37415c; font-weight: 600; }
+  .dates { font-size: 9.3pt; color: #4f46e5; font-weight: 700; white-space: nowrap; }
+  .meta { font-size: 9.4pt; color: #5b6784; font-style: italic; }
+
+  .entry { margin-bottom: 8px; }
+  .entry:last-child { margin-bottom: 0; }
+
+  .skills-line { margin-bottom: 3.5px; }
+  .skills-line b {
+    color: #0b1226;
+    font-weight: 700;
+    display: inline-block;
+    min-width: 132px;
+  }
+
+  .proj { margin-bottom: 6.5px; }
+  .proj .title { font-size: 10.3pt; }
+  .stack { color: #4f46e5; font-weight: 600; font-size: 9.5pt; }
+
+  .two-col { display: flex; gap: 18px; }
+  .two-col > div { flex: 1; }
+
+  /* floating download button — screen only, never printed */
+  .dl-btn {
+    display: none;
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 10;
+    background: linear-gradient(135deg, #4f46e5, #0891b2);
+    color: #fff;
+    font-family: inherit;
+    font-size: 11pt;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 999px;
+    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+  }
+
+  /* ---------- screen: page as a card ---------- */
+  @media screen {
+    body { background: #eef1f7; }
+    .page {
+      max-width: 800px;
+      margin: 24px auto;
+      background: #fff;
+      padding: 30px 32px;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.12);
+    }
+    .dl-btn { display: inline-flex; align-items: center; gap: 8px; }
+  }
+
+  /* ---------- screen: mobile ---------- */
+  @media screen and (max-width: 720px) {
+    body {
+      background: #fff;
+      font-size: 11.5pt;
+      line-height: 1.45;
+    }
+    .page {
+      margin: 0;
+      padding: 22px 16px 84px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .name { font-size: 19pt; letter-spacing: 0.4px; }
+    .headline { font-size: 10.6pt; }
+    .contact {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2px 12px;
+      font-size: 9.8pt;
+    }
+    .contact .sep { display: none; }
+    section { margin-top: 16px; }
+    h2 { font-size: 10.6pt; letter-spacing: 1px; }
+    .row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+    }
+    .dates { font-size: 9.8pt; }
+    .meta { font-size: 10pt; }
+    .two-col { flex-direction: column; gap: 0; }
+    .skills-line { margin-bottom: 8px; }
+    .skills-line b {
+      display: block;
+      min-width: 0;
+      margin-bottom: 1px;
+    }
+    .entry { margin-bottom: 14px; }
+    .proj { margin-bottom: 12px; }
+    ul { padding-left: 18px; }
+    li { margin-bottom: 5px; }
+    .stack { font-size: 10pt; }
+    .dl-btn { left: 16px; right: 16px; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1 class="name">Suraj Kumar</h1>
+    <p class="headline">Full-Stack Developer &nbsp;|&nbsp; React.js &middot; JavaScript &middot; PHP &middot; MySQL</p>
+    <p class="contact">
+      <span>Ludhiana, Punjab, India</span><span class="sep">|</span>
+      <span>+91-7795253485</span><span class="sep">|</span>
+      <span><a href="mailto:csesuraj2003@gmail.com">csesuraj2003@gmail.com</a></span><span class="sep">|</span>
+      <span><a href="https://linkedin.com/in/suraj-kumar-507119203">linkedin.com/in/suraj-kumar-507119203</a></span>
+    </p>
+    <div class="rule"></div>
+  </header>
+
+  <section>
+    <h2>Professional Summary</h2>
+    <p style="margin:0">
+      Full-stack developer with expertise in <b>React.js, JavaScript, PHP and MySQL</b>, experienced in building
+      responsive, scalable web applications with strong debugging and testing capabilities. Currently pursuing
+      <b>M.E. in Computer Science &amp; Engineering at Chandigarh University</b>, after graduating B.E. CSE from
+      Sambhram Institute of Technology (VTU) with <b>CGPA 8.7</b>. Completed a Software Engineering Internship at
+      <b>Hindustan Aeronautics Limited (HAL)</b>, developing and validating navigation-system software. Available
+      immediately for a full-time role.
+    </p>
+  </section>
+
+  <section>
+    <h2>Technical Skills</h2>
+    <div class="skills-line"><b>Languages:</b> Java, C, C++, Python, JavaScript (ES6+), SQL</div>
+    <div class="skills-line"><b>Frontend:</b> React.js, HTML5, CSS3, Bootstrap, Responsive Web Design</div>
+    <div class="skills-line"><b>Backend / DB:</b> PHP, MySQL, SQL, DBMS, CRUD &amp; Data Validation</div>
+    <div class="skills-line"><b>Testing &amp; Tools:</b> Manual Testing, Functional Testing, Database Testing, Bug Reporting, Git, Selenium, PyQt5, Image Processing</div>
+    <div class="skills-line"><b>Languages Known:</b> English (Proficient), Hindi (Native)</div>
+  </section>
+
+  <section>
+    <h2>Internship Experience</h2>
+
+    <div class="entry">
+      <div class="row">
+        <div>
+          <span class="title">Software Engineering Intern</span>
+          <span class="org"> &mdash; Hindustan Aeronautics Limited (HAL)</span>
+        </div>
+        <div class="dates">2024 · On-site, India</div>
+      </div>
+      <div class="meta">Aerospace &amp; defence — navigation systems software</div>
+      <ul>
+        <li>Developed navigation system software and contributed to aerospace project delivery.</li>
+        <li>Performed functional testing and validation of navigation modules.</li>
+        <li>Conducted technical research, documentation and cross-team collaboration.</li>
+        <li>Prepared detailed technical documentation and reports, maintaining accuracy and consistency of records.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <div class="proj">
+      <div class="row">
+        <span class="title">Teachers Management System</span>
+        <span class="stack">HTML · CSS · JavaScript · PHP · MySQL</span>
+      </div>
+      <ul>
+        <li>Built a full-stack DBMS web app for managing teacher and student profiles with complete CRUD operations.</li>
+        <li>Wrote SQL queries for data validation; performed end-to-end functional and database testing.</li>
+      </ul>
+    </div>
+
+    <div class="proj">
+      <div class="row">
+        <span class="title">Image Compression &amp; Decompression Tool</span>
+        <span class="stack">Python · PyQt5 · Image Processing</span>
+      </div>
+      <ul>
+        <li>Developed a desktop application to compress and decompress images with an intuitive PyQt5 GUI.</li>
+        <li>Applied and tested image-processing algorithms ensuring quality and reduced file sizes.</li>
+      </ul>
+    </div>
+
+    <div class="proj">
+      <div class="row">
+        <span class="title">Skin Lesion Classification &mdash; M.E. Dissertation</span>
+        <span class="stack">Python · Deep Learning · CNN</span>
+      </div>
+      <ul>
+        <li>Fine-tuned multi-modal CNN with class-balanced learning for melanoma and minority-class detection in skin-lesion classification.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="two-col">
+      <div>
+        <h2>Education</h2>
+        <div class="entry" style="margin-bottom:6px">
+          <div class="row">
+            <span class="title" style="font-size:10.2pt">M.E. Computer Science &amp; Engineering</span>
+            <span class="dates">2025 — Present</span>
+          </div>
+          <div class="meta">Chandigarh University, Punjab · UID 25MCS10032</div>
+        </div>
+        <div class="entry" style="margin-bottom:6px">
+          <div class="row">
+            <span class="title" style="font-size:10.2pt">B.E. Computer Science &amp; Engineering</span>
+            <span class="dates">2020 — 2024</span>
+          </div>
+          <div class="meta">Sambhram Institute of Technology (VTU) · CGPA 8.7/10</div>
+        </div>
+        <div class="entry">
+          <div class="row">
+            <span class="title" style="font-size:10.2pt">Higher Secondary (Class XII)</span>
+            <span class="dates">2018 — 2020</span>
+          </div>
+          <div class="meta">New Horizon School, Bhagalpur, Bihar · 85.6%</div>
+        </div>
+      </div>
+
+      <div>
+        <h2>Certifications &amp; Achievements</h2>
+        <ul style="margin-top:2px">
+          <li><b>Data Structures</b> — Coursera, Jan 2023</li>
+          <li><b>Web Development</b> — iNeuron, Dec 2023</li>
+          <li><b>Advanced IT Skill Training</b> — Mphasis</li>
+          <li><b>Winner</b> — Intra-College Science Exhibition</li>
+          <li><b>Participant</b> — DevHacks 1.0 National Level 24-Hour Hackathon</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<a class="dl-btn" href="/api/resume" download>⬇ Download PDF</a>
+</body>
+</html>

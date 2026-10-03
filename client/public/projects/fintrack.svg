@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#101c2e"/>
+      <stop offset="100%" stop-color="#08111f"/>
+    </linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="660" cy="90" r="150" fill="#34d399" opacity="0.14"/>
+
+  <rect x="70" y="80" width="300" height="140" rx="16" fill="url(#a)" opacity="0.9"/>
+  <rect x="95" y="115" width="130" height="14" rx="7" fill="#05070f" opacity="0.55"/>
+  <rect x="95" y="150" width="200" height="26" rx="8" fill="#05070f" opacity="0.75"/>
+  <rect x="95" y="190" width="90" height="12" rx="6" fill="#05070f" opacity="0.4"/>
+
+  <rect x="400" y="80" width="330" height="140" rx="16" fill="#ffffff" opacity="0.06"/>
+  <polyline points="425,190 475,155 525,175 575,120 625,140 675,95 710,110"
+            fill="none" stroke="url(#a)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="70" y="245" width="660" height="130" rx="16" fill="#ffffff" opacity="0.05"/>
+  <g>
+    <rect x="100" y="275" width="560" height="14" rx="7" fill="#94a3b8" opacity="0.35"/>
+    <rect x="100" y="275" width="410" height="14" rx="7" fill="url(#a)"/>
+    <rect x="100" y="310" width="560" height="14" rx="7" fill="#94a3b8" opacity="0.35"/>
+    <rect x="100" y="310" width="270" height="14" rx="7" fill="#fbbf24"/>
+    <rect x="100" y="345" width="560" height="14" rx="7" fill="#94a3b8" opacity="0.35"/>
+    <rect x="100" y="345" width="480" height="14" rx="7" fill="#818cf8"/>
+  </g>
+</svg>
