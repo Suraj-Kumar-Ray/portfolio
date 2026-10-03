@@ -21,6 +21,7 @@ A production-ready, recruiter-friendly portfolio site with a **React + TypeScrip
 - **Quick WhatsApp intents** (job / freelance / just saying hi — pre-filled messages), **Request a callback / Book a call** button and a scannable **QR contact card** (MECARD — phones open it as "add contact")
 - **Share bar** (WhatsApp / LinkedIn / copy-link) on the contact card, notes and case studies
 - One-click **vCard download** ("Save my contact" button) — name, photo, phone, email, address and socials in a `.vcf` every phone understands
+- **Command palette (⌘K / Ctrl+K)** — one search box for every section, project, note and action (quote, review, resume, email, WhatsApp, theme), with keyboard navigation. Available from the navbar search button, the sub-page bar and the mobile menu.
 - Scroll-progress bar, scroll-spy navbar, mobile menu, back-to-top, scroll-reveal animations
 - Discreet 🔒 dashboard shortcut in the footer — near-invisible, label-free, resolves the panel URL only on click
 - SEO meta + Open Graph/Twitter cards, semantic HTML, keyboard focus styles, `prefers-reduced-motion` support

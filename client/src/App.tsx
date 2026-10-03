@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { getContent } from './api'
 import { trackVisit, trackSections } from './analytics'
 import { useReveal } from './hooks/useReveal'
@@ -32,6 +32,7 @@ import CaseStudy from './components/CaseStudy'
 import Quote from './components/Quote'
 import Audit from './components/Audit'
 import NotFound from './components/NotFound'
+import CommandPalette from './components/CommandPalette'
 
 // Standalone pages (/work/:id, /blog, /blog/:slug) are real URLs with their
 // own server-injected SEO tags. The app renders them instead of the home page
@@ -103,6 +104,19 @@ export default function App() {
     window.addEventListener(NAV_EVENT, onNavigate)
     return () => window.removeEventListener(NAV_EVENT, onNavigate)
   }, [])
+
+  // A link from a sub-page lands on "/#section". The section does not exist
+  // until the content has rendered, so scroll once it is actually there.
+  useEffect(() => {
+    if (state.status !== 'ready') return
+    const id = window.location.hash.replace(/^#/, '')
+    if (!id) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const timer = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+    }, 80)
+    return () => window.clearTimeout(timer)
+  }, [state.status])
 
   useReveal(ready)
 
@@ -184,16 +198,25 @@ export default function App() {
     faq,
   } = state.content
 
-  if (!IS_KNOWN) return <NotFound profile={profile} />
+  // Every route is wrapped so the command palette is one keystroke away
+  // everywhere, not just on the home page.
+  const withPalette = (node: ReactNode) => (
+    <>
+      {node}
+      <CommandPalette profile={profile} projects={projects} blog={blog} links={navLinks} />
+    </>
+  )
+
+  if (!IS_KNOWN) return withPalette(<NotFound profile={profile} />)
 
   // standalone pages — real URLs, own chrome, own SEO (see server sendIndex)
-  if (WORK_ID) return <CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />
-  if (BLOG_SLUG) return <BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />
-  if (PATH === '/blog') return <BlogIndex block={blog || { posts: [] }} profile={profile} />
-  if (IS_QUOTE) return <Quote work={work} profile={profile} process={process} />
-  if (IS_AUDIT) return <Audit audit={audit} profile={profile} />
+  if (WORK_ID) return withPalette(<CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />)
+  if (BLOG_SLUG) return withPalette(<BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />)
+  if (PATH === '/blog') return withPalette(<BlogIndex block={blog || { posts: [] }} profile={profile} />)
+  if (IS_QUOTE) return withPalette(<Quote work={work} profile={profile} process={process} />)
+  if (IS_AUDIT) return withPalette(<Audit audit={audit} profile={profile} />)
 
-  return (
+  return withPalette(
     <>
       <a className="skip-link" href="#main">
         Skip to content
