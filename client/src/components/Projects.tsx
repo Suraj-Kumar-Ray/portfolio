@@ -45,7 +45,14 @@ export default function Projects({ projects }: { projects: Project[] }) {
         {visible.map((project, i) => (
           <article className="project-card" key={project.id} style={{ animationDelay: `${i * 70}ms` }}>
             <div className="project-media">
-              <img src={project.image} alt={`${project.title} preview`} loading="lazy" />
+              <img
+                src={project.image}
+                alt={`${project.title} — ${project.category} project thumbnail`}
+                loading="lazy"
+                decoding="async"
+                width={1200}
+                height={750}
+              />
               <span className="project-cat">{project.category}</span>
               <span className="project-year">{project.year}</span>
             </div>

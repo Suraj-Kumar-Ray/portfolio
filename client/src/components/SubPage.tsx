@@ -4,6 +4,7 @@ import Footer from './Footer'
 import BackToTop from './BackToTop'
 import QuickConnect from './QuickConnect'
 import StickyCta from './StickyCta'
+import ThemeToggle from './ThemeToggle'
 import type { Profile } from '../types'
 
 /**
@@ -38,9 +39,12 @@ export default function SubPage({
             </span>
             {profile.name}
           </a>
-          <a className="btn btn-ghost btn-sm" href="/">
-            <ArrowLeft size={15} /> Back to portfolio
-          </a>
+          <div className="subpage-actions">
+            <ThemeToggle />
+            <a className="btn btn-ghost btn-sm" href="/">
+              <ArrowLeft size={15} /> Back to portfolio
+            </a>
+          </div>
         </div>
       </header>
 

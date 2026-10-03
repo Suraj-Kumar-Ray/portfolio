@@ -162,6 +162,12 @@ export interface WorkBlock {
   packages: WorkPackage[]
 }
 
+/** One step of the "How I work" process shown on the Work and Quote pages. */
+export interface ProcessStep {
+  title: string
+  description: string
+}
+
 /** The free-website-review lead magnet (/audit). */
 export interface AuditBlock {
   title?: string
@@ -246,6 +252,7 @@ export interface Content {
   updates: UpdatesBlock
   blog: BlogBlock
   testimonials: Testimonial[]
+  process: ProcessStep[]
   audit: AuditBlock
   faq: Faq[]
   updatedAt: string

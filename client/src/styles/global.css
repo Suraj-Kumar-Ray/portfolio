@@ -33,6 +33,64 @@
 
   --nav-h: 72px;
   --max-w: 1160px;
+
+  /* translucent chrome — redefined for the light theme below */
+  --glass: rgba(6, 10, 20, 0.82);
+  --glass-dense: rgba(6, 10, 20, 0.97);
+  --panel: rgba(6, 10, 20, 0.55);
+  --panel-soft: rgba(6, 10, 20, 0.5);
+  --field: rgba(6, 10, 20, 0.65);
+  --field-focus: rgba(6, 10, 20, 0.9);
+}
+
+/* ---------- light theme ----------
+   Same design system, inverted surfaces. Applied via <html data-theme="light">,
+   which the inline script in index.html sets before first paint. */
+:root[data-theme='light'] {
+  --bg: #f6f7fb;
+  --bg-soft: #eef1f7;
+  --surface: rgba(15, 23, 42, 0.035);
+  --surface-strong: #ffffff;
+  --border: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.24);
+
+  --text: #0f172a;
+  --text-soft: #334155;
+  --muted: #5b6b83;
+
+  --accent: #4f46e5;
+  --accent-2: #0891b2;
+  --accent-3: #4338ca;
+  --success: #059669;
+  --danger: #dc2626;
+
+  --grad: linear-gradient(135deg, #4f46e5 0%, #0891b2 100%);
+  --grad-soft: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(8, 145, 178, 0.08));
+
+  --shadow: 0 24px 60px -30px rgba(15, 23, 42, 0.3);
+  --shadow-glow: 0 0 0 1px rgba(79, 70, 229, 0.28), 0 18px 46px -20px rgba(79, 70, 229, 0.42);
+
+  --glass: rgba(255, 255, 255, 0.82);
+  --glass-dense: rgba(255, 255, 255, 0.98);
+  --panel: rgba(15, 23, 42, 0.045);
+  --panel-soft: rgba(15, 23, 42, 0.04);
+  --field: rgba(255, 255, 255, 0.8);
+  --field-focus: #ffffff;
+}
+
+/* ambient background is much lighter on a bright canvas */
+:root[data-theme='light'] body::before {
+  background:
+    radial-gradient(900px 500px at 12% -5%, rgba(79, 70, 229, 0.14), transparent 60%),
+    radial-gradient(800px 460px at 92% 8%, rgba(8, 145, 178, 0.1), transparent 62%),
+    radial-gradient(1000px 700px at 50% 110%, rgba(79, 70, 229, 0.08), transparent 65%),
+    var(--bg);
+}
+
+:root[data-theme='light'] body::after {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
 }
 
 /* ---------- reset ---------- */
@@ -345,7 +403,7 @@ main {
 }
 
 .nav.scrolled {
-  background: rgba(6, 10, 20, 0.82);
+  background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom-color: rgba(148, 163, 184, 0.12);
@@ -400,12 +458,12 @@ main {
 }
 
 .nav-link:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  background: rgba(148, 163, 184, 0.1);
 }
 
 .nav-link.active {
-  color: #fff;
+  color: var(--text);
 }
 
 .nav-link.active::after {
@@ -458,7 +516,7 @@ main {
 .mobile-menu {
   position: fixed;
   inset: var(--nav-h) 0 auto 0;
-  background: rgba(6, 10, 20, 0.97);
+  background: var(--glass-dense);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   padding: 18px 4vw 26px;
@@ -903,7 +961,7 @@ main {
   gap: 14px;
   padding: 13px 15px;
   border-radius: 13px;
-  background: rgba(6, 10, 20, 0.5);
+  background: var(--panel-soft);
   border: 1px solid var(--border);
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
@@ -1137,7 +1195,7 @@ main {
 
 .tool-chip:hover {
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text);
 }
 
 .tool-chip::before {
@@ -1176,7 +1234,7 @@ main {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #060a14;
+  background: var(--bg);
   border: 3px solid var(--accent-2);
   box-shadow: 0 0 0 5px rgba(34, 211, 238, 0.15);
 }
@@ -1410,7 +1468,7 @@ main {
 
 .filter-btn:hover {
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text);
 }
 
 .filter-btn.active {
@@ -1575,7 +1633,7 @@ main {
 
 .project-links a:hover {
   border-color: var(--accent);
-  color: #fff;
+  color: var(--text);
   background: rgba(99, 102, 241, 0.16);
 }
 
@@ -1757,7 +1815,7 @@ main {
   align-items: center;
   padding: 14px 16px;
   border-radius: 14px;
-  background: rgba(6, 10, 20, 0.55);
+  background: var(--panel);
   border: 1px solid var(--border);
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
@@ -1833,7 +1891,7 @@ main {
   width: 100%;
   padding: 13px 16px;
   border-radius: 13px;
-  background: rgba(6, 10, 20, 0.65);
+  background: var(--field);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 0.95rem;
@@ -1850,7 +1908,7 @@ main {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
-  background: rgba(6, 10, 20, 0.9);
+  background: var(--field-focus);
 }
 
 .input.error,
@@ -1908,7 +1966,7 @@ main {
 /* ---------- footer ---------- */
 .footer {
   border-top: 1px solid rgba(148, 163, 184, 0.12);
-  background: rgba(6, 10, 20, 0.7);
+  background: var(--panel);
   padding-top: clamp(44px, 6vw, 64px);
 }
 
@@ -2215,7 +2273,7 @@ main {
   min-width: 120px;
   padding: 12px 14px;
   border-radius: 13px;
-  background: rgba(6, 10, 20, 0.5);
+  background: var(--panel-soft);
   border: 1px solid var(--border);
 }
 
@@ -3059,7 +3117,7 @@ html {
 }
 
 .install-hint .install-text strong {
-  color: #fff;
+  color: var(--text);
 }
 
 .install-hint .btn {
@@ -3082,7 +3140,7 @@ html {
 }
 
 .install-hint .install-close:hover {
-  color: #fff;
+  color: var(--text);
   border-color: var(--accent);
 }
 
@@ -3296,7 +3354,7 @@ html {
   top: 0;
   z-index: 60;
   border-bottom: 1px solid var(--border);
-  background: rgba(6, 10, 20, 0.88);
+  background: var(--glass);
   backdrop-filter: blur(10px);
 }
 .subpage-inner {
@@ -3417,7 +3475,7 @@ html {
     z-index: 950;
     gap: 8px;
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-    background: rgba(6, 10, 20, 0.92);
+    background: var(--glass-dense);
     backdrop-filter: blur(12px);
     border-top: 1px solid var(--border);
   }
@@ -3452,6 +3510,125 @@ html {
   }
   .footer {
     padding-bottom: 84px;
+  }
+}
+
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.subpage-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu-theme {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- skip link (keyboard users) ---------- */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2000;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--grad);
+  color: #05070f;
+  font-weight: 600;
+  transform: translateY(-180%);
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* ---------- process (how I work) ---------- */
+.process-block {
+  margin: 38px 0 8px;
+}
+.notfound-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.process-step {
+  position: relative;
+  padding: 24px 22px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.process-step:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+.process-num {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent-2);
+}
+.process-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  margin: 8px 0 6px;
+}
+.process-desc {
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .process-grid {
+    grid-template-columns: 1fr;
   }
 }
 
