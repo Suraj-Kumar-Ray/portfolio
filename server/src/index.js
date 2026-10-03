@@ -653,10 +653,22 @@ const escXml = (s) =>
 app.get('/robots.txt', (req, res) => {
   const base = siteBase(req)
   res.type('text/plain').send(
-    'User-agent: *\n' +
+    '# Portfolio of Suraj Kumar — open to all crawlers.\n' +
+      '# The private control panel is intentionally not listed here.\n' +
+      'User-agent: *\n' +
       'Allow: /\n' +
       'Disallow: /api/\n' +
       'Disallow: /resume.html\n' +
+      '\n' +
+      '# SEO scrapers only — real search engines (Google, Bing) still get everything.\n' +
+      'User-agent: AhrefsBot\n' +
+      'Disallow: /\n' +
+      '\n' +
+      'User-agent: SemrushBot\n' +
+      'Disallow: /\n' +
+      '\n' +
+      'User-agent: MJ12bot\n' +
+      'Disallow: /\n' +
       '\n' +
       `Sitemap: ${base}/sitemap.xml\n`,
   )
@@ -665,11 +677,14 @@ app.get('/robots.txt', (req, res) => {
 // --- resume: web version + PDF download ------------------------------------
 const RESUME_HTML = path.join(__dirname, '..', '..', 'resume', 'resume.html')
 
-app.get(['/resume', '/resume.html'], (req, res, next) => {
+app.get('/resume', (req, res, next) => {
   if (!fs.existsSync(RESUME_HTML)) return next()
   res.setHeader('Cache-Control', 'no-cache')
   res.sendFile(RESUME_HTML)
 })
+
+// Old bookmarked/duplicate URL → one canonical address (301, keeps link equity)
+app.get('/resume.html', (req, res) => res.redirect(301, '/resume'))
 
 app.get('/api/resume', (req, res) => {
   const resumePath = path.join(DATA_DIR, 'resume.pdf')
@@ -679,26 +694,59 @@ app.get('/api/resume', (req, res) => {
   res.status(404).json({ ok: false, error: 'Resume not found. Add server/data/resume.pdf' })
 })
 
-// One-page portfolio + resume: that is the whole public surface.
+// One-page portfolio + resume: that is the whole public surface. The homepage
+// entry carries <image:*> tags (avatar + project thumbnails) so images can
+// surface in search too; lastmod differs per page (content vs resume edits).
 app.get('/sitemap.xml', (req, res) => {
   const base = siteBase(req)
-  let lastmod = new Date().toISOString().slice(0, 10)
-  try {
-    lastmod = fs.statSync(CONTENT_FILE).mtime.toISOString().slice(0, 10)
-  } catch {
-    /* keep today's date */
+  const content = getContent()
+  const abs = (u) => (/^https?:/i.test(String(u || '')) ? String(u) : base + (String(u).startsWith('/') ? '' : '/') + u)
+  const today = new Date().toISOString().slice(0, 10)
+  const mtime = (file) => {
+    try {
+      return fs.statSync(file).mtime.toISOString().slice(0, 10)
+    } catch {
+      return today
+    }
   }
-  const pages = [{ loc: `${base}/`, freq: 'monthly', pri: '1.0' }]
-  if (fs.existsSync(RESUME_HTML)) pages.push({ loc: `${base}/resume`, freq: 'yearly', pri: '0.5' })
+  const sectionOn = (key) => {
+    const s = (content.sections || []).find((x) => x.key === key)
+    return !s || s.enabled !== false
+  }
+  const imgTag = (loc, title) =>
+    `    <image:image>\n      <image:loc>${escXml(loc)}</image:loc>\n      <image:title>${escXml(title)}</image:title>\n    </image:image>`
+
+  const owner = content.profile?.name || content.meta?.siteName || 'Suraj Kumar'
+  const homeImages = []
+  if (content.profile?.avatar) homeImages.push(imgTag(abs(content.profile.avatar), `${owner} — profile photo`))
+  if (sectionOn('projects')) {
+    for (const proj of content.projects || []) {
+      if (proj.image) homeImages.push(imgTag(abs(proj.image), proj.title))
+    }
+  }
+
+  const home =
+    '  <url>\n' +
+    `    <loc>${escXml(base + '/')}</loc>\n` +
+    `    <lastmod>${mtime(CONTENT_FILE)}</lastmod>\n` +
+    '    <changefreq>monthly</changefreq>\n' +
+    '    <priority>1.0</priority>\n' +
+    (homeImages.length ? homeImages.join('\n') + '\n' : '') +
+    '  </url>'
+  const resume =
+    '  <url>\n' +
+    `    <loc>${escXml(base + '/resume')}</loc>\n` +
+    `    <lastmod>${mtime(RESUME_HTML)}</lastmod>\n` +
+    '    <changefreq>yearly</changefreq>\n' +
+    '    <priority>0.5</priority>\n' +
+    '  </url>'
+
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
-    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    pages
-      .map(
-        (p) =>
-          `  <url>\n    <loc>${escXml(p.loc)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${p.freq}</changefreq>\n    <priority>${p.pri}</priority>\n  </url>`,
-      )
-      .join('\n') +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
+    '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
+    home +
+    (fs.existsSync(RESUME_HTML) ? '\n' + resume : '') +
     '\n</urlset>\n'
   res.type('application/xml').send(xml)
 })
@@ -709,13 +757,19 @@ app.use('/api', (req, res) => res.status(404).json({ ok: false, error: 'Not foun
 // --- static client (production) --------------------------------------------
 const CLIENT_DIST = path.join(__dirname, '..', '..', 'client', 'dist')
 
-// Schema.org Person, built from content.json so it always matches what the
-// panel shows (name, role, email, socials, education, skills). Injected into
-// the served HTML — search engines get it without running any JavaScript.
-function personJsonLd(base) {
+// Schema.org graph, built from content.json so it always matches what the panel
+// shows. Injected into the served HTML — search engines get it without running
+// any JavaScript:
+//   • Person  — you (name, role, contact, education, skills, socials)
+//   • ItemList of CreativeWork — every project card (title, description,
+//     thumbnail, tech keywords, year, author → Person), only when the section
+//     is switched on in the panel.
+function seoJsonLd(base) {
   const content = getContent()
   const p = content.profile || {}
   const meta = content.meta || {}
+  const personId = `${base}/#person`
+  const abs = (u) => (/^https?:/i.test(String(u || '')) ? String(u) : base + (String(u).startsWith('/') ? '' : '/') + u)
   const loc = String(p.location || '')
     .split(',')
     .map((s) => s.trim())
@@ -730,14 +784,14 @@ function personJsonLd(base) {
   const alumniOf = (Array.isArray(content.education) ? content.education : [])
     .filter((e) => /university|institute|college/i.test(String(e.school || '')))
     .map((e) => ({ '@type': 'CollegeOrUniversity', name: e.school }))
-  return {
-    '@context': 'https://schema.org',
+  const person = {
     '@type': 'Person',
+    '@id': personId,
     name: p.name || meta.siteName || 'Suraj Kumar',
     jobTitle: p.role || undefined,
     description: meta.description || p.tagline || undefined,
     url: `${base}/`,
-    image: p.avatar ? (p.avatar.startsWith('http') ? p.avatar : base + (p.avatar.startsWith('/') ? '' : '/') + p.avatar) : undefined,
+    image: p.avatar ? abs(p.avatar) : undefined,
     email: p.email || undefined,
     telephone: p.phone || undefined,
     address: loc.length
@@ -752,6 +806,40 @@ function personJsonLd(base) {
     alumniOf,
     knowsAbout,
   }
+
+  const graph = [person]
+
+  const projectsSection = (content.sections || []).find((x) => x.key === 'projects')
+  const projects = Array.isArray(content.projects) ? content.projects : []
+  if ((!projectsSection || projectsSection.enabled !== false) && projects.length) {
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${base}/#projects`,
+      name: `Projects by ${person.name}`,
+      numberOfItems: projects.length,
+      itemListElement: projects.map((proj, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'CreativeWork',
+          '@id': `${base}/#project-${String(proj.id || i).replace(/[^a-zA-Z0-9-]/g, '')}`,
+          name: proj.title || undefined,
+          description: proj.description || undefined,
+          image: proj.image ? abs(proj.image) : undefined,
+          // no own page per project → the projects section is the canonical spot
+          url: proj.links?.live ? proj.links.live : `${base}/#projects`,
+          dateCreated: /^\d{4}$/.test(String(proj.year || '')) ? proj.year : undefined,
+          keywords: Array.isArray(proj.tech) && proj.tech.length ? proj.tech.join(', ') : undefined,
+          genre: proj.category || undefined,
+          author: { '@id': personId },
+          creator: { '@id': personId },
+          sameAs: proj.links?.source ? proj.links.source : undefined,
+        },
+      })),
+    })
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph }
 }
 
 function sendIndex(req, res) {
@@ -759,7 +847,7 @@ function sendIndex(req, res) {
     if (err) {
       return res.status(500).send('Client build missing — run: cd client && npm run build')
     }
-    const ld = JSON.stringify(personJsonLd(siteBase(req))).replace(/</g, '\\u003c')
+    const ld = JSON.stringify(seoJsonLd(siteBase(req))).replace(/</g, '\\u003c')
     const base = siteBase(req)
     res.setHeader('Cache-Control', 'no-cache')
     res.type('html').send(
