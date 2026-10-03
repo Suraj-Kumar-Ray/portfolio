@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Search } from 'lucide-react'
+import { PALETTE_SHORTCUT, openPalette } from '../palette'
 import Footer from './Footer'
 import BackToTop from './BackToTop'
 import QuickConnect from './QuickConnect'
@@ -40,6 +41,16 @@ export default function SubPage({
             <span className="logo-name">{profile.name}</span>
           </a>
           <div className="subpage-actions">
+            <button
+              type="button"
+              className="nav-search"
+              onClick={openPalette}
+              aria-label="Search the site"
+              title={`Search (${PALETTE_SHORTCUT})`}
+            >
+              <Search size={16} />
+              <span className="nav-search-kbd">{PALETTE_SHORTCUT}</span>
+            </button>
             <ThemeToggle />
             <a className="btn btn-ghost btn-sm" href="/">
               <ArrowLeft size={15} /> Back to portfolio

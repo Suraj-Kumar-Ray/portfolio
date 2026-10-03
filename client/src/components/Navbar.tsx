@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { Menu, X, ArrowUpRight, Search } from 'lucide-react'
 import { goToSection } from '../navigation'
+import { PALETTE_SHORTCUT, openPalette } from '../palette'
 import ThemeToggle from './ThemeToggle'
 
 export interface NavLink {
@@ -122,6 +123,16 @@ export default function Navbar({
           </div>
 
           <div className="nav-actions">
+            <button
+              type="button"
+              className="nav-search"
+              onClick={openPalette}
+              aria-label="Search the site"
+              title={`Search (${PALETTE_SHORTCUT})`}
+            >
+              <Search size={16} />
+              <span className="nav-search-kbd">{PALETTE_SHORTCUT}</span>
+            </button>
             <ThemeToggle />
             <button type="button" className="btn btn-primary btn-sm" onClick={() => go(contactTarget)}>
               Hire Me <ArrowUpRight size={15} />
@@ -156,6 +167,16 @@ export default function Navbar({
                 {link.label}
               </a>
             ))}
+            <button
+              type="button"
+              className="mobile-menu-search"
+              onClick={() => {
+                setOpen(false)
+                openPalette()
+              }}
+            >
+              <Search size={16} /> Search projects, notes and more
+            </button>
             <button type="button" className="btn btn-primary" onClick={() => go(contactTarget)}>
               Hire Me <ArrowUpRight size={16} />
             </button>
