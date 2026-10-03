@@ -469,36 +469,62 @@ api.get('/admin/overview', requireAdmin, (req, res) => {
 })
 
 // --- visitor analytics summary (admin) --------------------------------------
+// Shared by the JSON summary and the CSV export: resolve a YYYY-MM-DD range
+// (defaults to the last 30 days), clamp to today, swap if reversed and cap the
+// window at 92 days so the chart always stays readable.
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+const validDay = (s) => DATE_RE.test(String(s || '')) && !Number.isNaN(Date.parse(String(s) + 'T00:00:00'))
+function resolveRange(query) {
+  const today = dayKey()
+  let to = validDay(query.to) ? String(query.to) : today
+  let from = validDay(query.from) ? String(query.from) : dayKey(new Date(Date.now() - 29 * 864e5))
+  if (to > today) to = today
+  if (from > to) from = to
+  const earliest = dayKey(new Date(Date.parse(to + 'T00:00:00') - 91 * 864e5))
+  if (from < earliest) from = earliest
+  return { from, to }
+}
+const makeHostOf = (req) => (raw) => {
+  const trimmed = String(raw || '').trim()
+  if (!trimmed) return 'Direct'
+  try {
+    const u = new URL(trimmed)
+    const host = u.hostname.replace(/^www\./, '')
+    const self = String(req.get('host') || '').split(':')[0]
+    if (host === self || host === 'localhost' || host === '127.0.0.1') return 'Direct'
+    return host
+  } catch {
+    return 'Direct'
+  }
+}
+
 api.get('/admin/analytics', requireAdmin, (req, res) => {
   const events = getAnalytics().concat(analyticsQueue)
-  const since = (days) => {
-    const cutoff = Date.now() - days * 864e5
-    return (e) => Date.parse(e.t) >= cutoff
+  const hostOf = makeHostOf(req)
+  const { from, to } = resolveRange(req.query)
+  const inRange = (e) => {
+    const d = dayKey(e.t)
+    return d >= from && d <= to
   }
-  const hostOf = (raw) => {
-    const trimmed = String(raw || '').trim()
-    if (!trimmed) return 'Direct'
-    try {
-      const u = new URL(trimmed)
-      const host = u.hostname.replace(/^www\./, '')
-      const self = String(req.get('host') || '').split(':')[0]
-      if (host === self || host === 'localhost' || host === '127.0.0.1') return 'Direct'
-      return host
-    } catch {
-      return 'Direct'
-    }
-  }
-
-  const visits = events.filter((e) => e.k === 'visit')
+  const rangeEvents = events.filter(inRange)
+  const rangeVisits = rangeEvents.filter((e) => e.k === 'visit')
+  const allVisits = events.filter((e) => e.k === 'visit')
   const today = dayKey()
-  const v7 = visits.filter(since(7))
-  const v30 = visits.filter(since(30))
-  const recent30 = events.filter(since(30))
 
-  const daily = Array.from({ length: 14 }, (_, i) => {
-    const d = dayKey(new Date(Date.now() - (13 - i) * 864e5))
-    return { d, v: visits.filter((e) => dayKey(e.t) === d).length }
+  // one bucket per day in the requested range (already capped at 92)
+  const counts = new Map()
+  rangeVisits.forEach((e) => {
+    const k = dayKey(e.t)
+    counts.set(k, (counts.get(k) || 0) + 1)
   })
+  const daily = []
+  const cursor = new Date(from + 'T00:00:00')
+  const end = new Date(to + 'T00:00:00')
+  while (cursor <= end && daily.length < 92) {
+    const d = dayKey(cursor)
+    daily.push({ d, v: counts.get(d) || 0 })
+    cursor.setDate(cursor.getDate() + 1)
+  }
 
   const tally = (list, pick) => {
     const map = new Map()
@@ -509,27 +535,28 @@ api.get('/admin/analytics', requireAdmin, (req, res) => {
     return [...map.entries()].sort((a, b) => b[1] - a[1])
   }
 
-  const devices = Object.fromEntries(tally(v30, (e) => e.dv || 'Desktop'))
+  const devices = Object.fromEntries(tally(rangeVisits, (e) => e.dv || 'Desktop'))
 
   res.json({
     ok: true,
     data: {
+      range: { from, to },
       totals: {
-        all: visits.length,
-        today: visits.filter((e) => dayKey(e.t) === today).length,
-        d7: v7.length,
-        d30: v30.length,
-        unique7: new Set(v7.map((e) => e.ip).filter(Boolean)).size,
+        visits: rangeVisits.length,
+        unique: new Set(rangeVisits.map((e) => e.ip).filter(Boolean)).size,
+        sections: rangeEvents.filter((e) => e.k === 'section').length,
+        today: allVisits.filter((e) => dayKey(e.t) === today).length,
+        all: allVisits.length,
       },
       daily,
-      sections: tally(recent30.filter((e) => e.s), (e) => e.s)
+      sections: tally(rangeEvents.filter((e) => e.s), (e) => e.s)
         .slice(0, 8)
         .map(([k, v]) => ({ k, v })),
-      refs: tally(v30, (e) => hostOf(e.r))
+      refs: tally(rangeVisits, (e) => hostOf(e.r))
         .slice(0, 6)
         .map(([k, v]) => ({ k, v })),
       devices,
-      recent: events.slice(-15).reverse().map((e) => ({
+      recent: rangeEvents.slice(-15).reverse().map((e) => ({
         t: e.t,
         ip: e.ip,
         dv: e.dv,
@@ -539,6 +566,28 @@ api.get('/admin/analytics', requireAdmin, (req, res) => {
       })),
     },
   })
+})
+
+// Raw events of the range as a spreadsheet-friendly CSV (Excel/Sheets open it).
+api.get('/admin/analytics/export', requireAdmin, (req, res) => {
+  const events = getAnalytics().concat(analyticsQueue)
+  const hostOf = makeHostOf(req)
+  const { from, to } = resolveRange(req.query)
+  const rows = [['time', 'type', 'section', 'source', 'device', 'ip']]
+  events
+    .filter((e) => {
+      const d = dayKey(e.t)
+      return d >= from && d <= to
+    })
+    .forEach((e) => rows.push([e.t, e.k, e.s || '', hostOf(e.r), e.dv || '', e.ip || '']))
+  const cell = (v) => {
+    const s = String(v)
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
+  }
+  const csv = rows.map((r) => r.map(cell).join(',')).join('\r\n')
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+  res.setHeader('Content-Disposition', `attachment; filename="analytics_${from}_${to}.csv"`)
+  res.send(csv)
 })
 
 api.post('/admin/password', adminLimit, requireAdmin, (req, res) => {

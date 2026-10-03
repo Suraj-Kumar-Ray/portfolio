@@ -271,6 +271,35 @@
   .ana-n { font-size: 0.68rem; color: var(--muted); }
   .ana-fill { width: 100%; min-height: 3px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, #22d3ee, #6366f1); }
   .ana-d { font-size: 0.6rem; color: var(--muted); }
+  .ana-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; margin-bottom: 16px; }
+  .ana-fld { display: flex; flex-direction: column; gap: 4px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 700; }
+  .ana-fld input {
+    background: var(--panel-2);
+    border: 1px solid var(--line-2);
+    border-radius: 9px;
+    color: var(--text);
+    padding: 7px 10px;
+    font: inherit;
+    font-size: 0.85rem;
+    color-scheme: dark;
+  }
+  .ana-fld input:focus { outline: none; border-color: var(--accent); }
+  .ana-presets { display: flex; gap: 6px; }
+  .ana-chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line-2);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 7px 13px;
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .ana-chip:hover { color: var(--text); border-color: var(--accent); }
+  .ana-chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .ana-csv { margin-left: auto; align-self: flex-end; }
   .ana-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .ana-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
   .ana-list { display: grid; }
@@ -1279,25 +1308,46 @@ function renderSections() {
 
 function renderAnalytics() {
   const frag = document.createDocumentFragment()
+  const iso = (d) => {
+    const p = (n) => String(n).padStart(2, '0')
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate())
+  }
+  const shift = (days) => {
+    const d = new Date()
+    d.setDate(d.getDate() + days)
+    return d
+  }
+  const state = { from: iso(shift(-29)), to: iso(new Date()) }
 
   const stats = document.createElement('section')
   stats.className = 'panel'
   stats.innerHTML =
     '<div class="panel-head"><h2>' + icon('activity') + 'Visitors</h2><p>Private analytics — no cookies, no third party, stored only on your server.</p></div>' +
+    '<div class="ana-bar">' +
+    '<label class="ana-fld">From<input type="date" data-ana="from"></label>' +
+    '<label class="ana-fld">To<input type="date" data-ana="to"></label>' +
+    '<div class="ana-presets">' +
+    '<button type="button" class="ana-chip" data-days="7">7d</button>' +
+    '<button type="button" class="ana-chip on" data-days="30">30d</button>' +
+    '<button type="button" class="ana-chip" data-days="90">90d</button>' +
+    '<button type="button" class="ana-chip" data-days="0">All</button>' +
+    '</div>' +
+    '<button type="button" class="btn tiny ana-csv">⤓ Export CSV</button>' +
+    '</div>' +
     '<div class="stats"><p class="muted">Loading…</p></div>'
   frag.appendChild(stats)
 
   const chart = document.createElement('section')
   chart.className = 'panel'
   chart.innerHTML =
-    '<div class="panel-head"><h2>' + icon('grid') + 'Last 14 days</h2><p>Visits per day.</p></div>' +
+    '<div class="panel-head"><h2>' + icon('grid') + '<span data-ana="chart-title">Visits per day</span></h2><p data-ana="chart-sub">Visits per day.</p></div>' +
     '<div class="ana-chart"><p class="muted">Loading…</p></div>'
   frag.appendChild(chart)
 
   const lists = document.createElement('section')
   lists.className = 'panel'
   lists.innerHTML =
-    '<div class="panel-head"><h2>' + icon('layers') + 'What people open</h2><p>Popular sections and where visitors came from (last 30 days).</p></div>' +
+    '<div class="panel-head"><h2>' + icon('layers') + 'What people open</h2><p data-ana="lists-sub">Popular sections and where visitors came from.</p></div>' +
     '<div class="ana-cols">' +
     '<div><div class="ana-h">Top sections</div><div class="ana-list" data-ana="sections"></div></div>' +
     '<div><div class="ana-h">Where they came from</div><div class="ana-list" data-ana="refs"></div></div>' +
@@ -1307,66 +1357,162 @@ function renderAnalytics() {
   const recent = document.createElement('section')
   recent.className = 'panel'
   recent.innerHTML =
-    '<div class="panel-head"><h2>' + icon('eye') + 'Recent visits</h2><p>The last 15 beacons — who popped in and what they read.</p></div>' +
+    '<div class="panel-head"><h2>' + icon('eye') + 'Recent visits</h2><p>The last 15 beacons in this range — who popped in and what they read.</p></div>' +
     '<div class="ana-list" data-ana="recent"></div>'
   frag.appendChild(recent)
 
   const pretty = (id) =>
     id ? id.replace(/([A-Z])/g, ' $1').replace(/^./, (c) => c.toUpperCase()) : ''
-  const empty = '<p class="muted empty">Nothing recorded yet — visitors will appear here.</p>'
+  const empty = '<p class="muted empty">Nothing recorded in this range — widen the dates or wait for visitors.</p>'
   // capture the boxes while they are still inside the fragment — a fragment
   // empties itself once its children are appended to the page
+  const inpFrom = stats.querySelector('[data-ana="from"]')
+  const inpTo = stats.querySelector('[data-ana="to"]')
+  const chips = [...stats.querySelectorAll('.ana-chip')]
+  const csvBtn = stats.querySelector('.ana-csv')
+  const boxStats = stats.querySelector('.stats')
+  const chartSub = chart.querySelector('[data-ana="chart-sub"]')
+  const boxChart = chart.querySelector('.ana-chart')
+  const listsSub = lists.querySelector('[data-ana="lists-sub"]')
   const boxSections = lists.querySelector('[data-ana="sections"]')
   const boxRefs = lists.querySelector('[data-ana="refs"]')
   const boxRecent = recent.querySelector('[data-ana="recent"]')
 
-  api('/admin/analytics')
-    .then(({ data }) => {
-      const t = data.totals
-      stats.querySelector('.stats').innerHTML =
-        statCard('Visits today', t.today, t.d7 + ' in the last 7 days') +
-        statCard('Last 7 days', t.d7, t.unique7 + ' unique visitor' + (t.unique7 === 1 ? '' : 's')) +
-        statCard('Last 30 days', t.d30, 'mobile ' + (data.devices.Mobile || 0) + ' · desktop ' + (data.devices.Desktop || 0)) +
-        statCard('All time', t.all, 'tracked without cookies')
+  inpFrom.value = state.from
+  inpTo.value = state.to
+  inpFrom.max = state.to
+  inpTo.max = iso(new Date())
 
-      const max = Math.max(1, ...data.daily.map((d) => d.v))
-      chart.querySelector('.ana-chart').innerHTML = data.daily
-        .map(
-          (d) =>
-            '<div class="ana-col">' +
-            '<span class="ana-n">' + (d.v || '') + '</span>' +
-            '<div class="ana-fill" style="height:' + Math.max(3, Math.round((d.v / max) * 100)) + '%" title="' + esc(d.d) + ' — ' + d.v + ' visits"></div>' +
-            '<span class="ana-d">' + esc(d.d.slice(5)) + '</span>' +
-            '</div>',
-        )
-        .join('')
-
-      boxSections.innerHTML = data.sections.length
-        ? data.sections
-            .map((s) => '<div class="ana-row"><b>' + esc(pretty(s.k)) + '</b><span>' + s.v + ' views</span></div>')
-            .join('')
-        : empty
-
-      boxRefs.innerHTML = data.refs.length
-        ? data.refs
-            .map((r) => '<div class="ana-row"><b>' + esc(r.k) + '</b><span>' + r.v + ' visits</span></div>')
-            .join('')
-        : empty
-
-      boxRecent.innerHTML = data.recent.length
-        ? data.recent
-            .map(
-              (e) =>
-                '<div class="ana-row"><b>' + esc(e.ip || '—') + ' · ' + esc(e.dv || '') + '</b><span>' +
-                esc(when(e.t)) + (e.s ? ' · read ' + esc(pretty(e.s)) : '') +
-                '</span></div>',
-            )
-            .join('')
-        : empty
+  function markChips() {
+    chips.forEach((c) => c.classList.remove('on'))
+    const spanDays = Math.round((Date.parse(state.to) - Date.parse(state.from)) / 864e5) + 1
+    const match = chips.find((c) => {
+      const d = Number(c.dataset.days)
+      if (d === 0) return spanDays >= 92
+      return spanDays === d
     })
-    .catch((err) => {
-      stats.querySelector('.stats').innerHTML = '<p class="muted">' + esc(err.message) + '</p>'
+    if (match) match.classList.add('on')
+  }
+
+  function load() {
+    const qs = '?from=' + state.from + '&to=' + state.to
+    api('/admin/analytics' + qs)
+      .then(({ data }) => {
+        const t = data.totals
+        const span =
+          data.range.from === data.range.to
+            ? data.range.from
+            : data.range.from + ' → ' + data.range.to
+        boxStats.innerHTML =
+          statCard('Visits', t.visits, span) +
+          statCard('Unique visitors', t.unique, 'distinct IPs in range') +
+          statCard('Section reads', t.sections, 'what people actually opened') +
+          statCard('Today / All time', t.today + ' / ' + t.all, 'tracked without cookies')
+        chartSub.textContent = 'Visits per day · ' + span
+        listsSub.textContent = 'Popular sections and where visitors came from · ' + span
+
+        const max = Math.max(1, ...data.daily.map((d) => d.v))
+        // daily gets up to 92 bars — thin out the date labels when crowded
+        const labelStep = Math.max(1, Math.ceil(data.daily.length / 14))
+        boxChart.innerHTML = data.daily
+          .map(
+            (d, i) =>
+              '<div class="ana-col">' +
+              '<span class="ana-n">' + (d.v || '') + '</span>' +
+              '<div class="ana-fill" style="height:' + Math.max(3, Math.round((d.v / max) * 100)) + '%" title="' + esc(d.d) + ' — ' + d.v + ' visits"></div>' +
+              '<span class="ana-d">' + (i % labelStep === 0 ? esc(d.d.slice(5)) : '') + '</span>' +
+              '</div>',
+          )
+          .join('')
+
+        boxSections.innerHTML = data.sections.length
+          ? data.sections
+              .map((s) => '<div class="ana-row"><b>' + esc(pretty(s.k)) + '</b><span>' + s.v + ' views</span></div>')
+              .join('')
+          : empty
+
+        boxRefs.innerHTML = data.refs.length
+          ? data.refs
+              .map((r) => '<div class="ana-row"><b>' + esc(r.k) + '</b><span>' + r.v + ' visits</span></div>')
+              .join('')
+          : empty
+
+        boxRecent.innerHTML = data.recent.length
+          ? data.recent
+              .map(
+                (e) =>
+                  '<div class="ana-row"><b>' + esc(e.ip || '—') + ' · ' + esc(e.dv || '') + '</b><span>' +
+                  esc(when(e.t)) + (e.s ? ' · read ' + esc(pretty(e.s)) : '') +
+                  '</span></div>',
+              )
+              .join('')
+          : empty
+      })
+      .catch((err) => {
+        boxStats.innerHTML = '<p class="muted">' + esc(err.message) + '</p>'
+      })
+  }
+
+  function applyDates() {
+    let from = validDay(inpFrom.value) ? inpFrom.value : state.from
+    let to = validDay(inpTo.value) ? inpTo.value : state.to
+    if (from > to) [from, to] = [to, from]
+    state.from = from
+    state.to = to
+    inpFrom.value = from
+    inpTo.value = to
+    markChips()
+    load()
+  }
+  function validDay(s) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s + 'T00:00:00'))
+  }
+
+  inpFrom.addEventListener('change', applyDates)
+  inpTo.addEventListener('change', applyDates)
+  chips.forEach((c) =>
+    c.addEventListener('click', () => {
+      const d = Number(c.dataset.days)
+      if (d === 0) {
+        // "everything we still have" — server retains 90 days / 8000 events
+        state.from = iso(shift(-91))
+        state.to = iso(new Date())
+      } else {
+        state.from = iso(shift(-(d - 1)))
+        state.to = iso(new Date())
+      }
+      inpFrom.value = state.from
+      inpTo.value = state.to
+      markChips()
+      load()
+    }),
+  )
+  csvBtn.addEventListener('click', () => {
+    csvBtn.disabled = true
+    fetch('/api/admin/analytics/export?from=' + state.from + '&to=' + state.to, {
+      headers: { 'x-admin-token': token },
     })
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Export failed (' + res.status + ')')
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'analytics_' + state.from + '_' + state.to + '.csv'
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        setTimeout(() => URL.revokeObjectURL(url), 4000)
+        toast('CSV downloaded')
+      })
+      .catch((err) => toast(err.message, 'err'))
+      .finally(() => {
+        csvBtn.disabled = false
+      })
+  })
+
+  markChips()
+  load()
 
   return frag
 }
