@@ -10,6 +10,8 @@ export interface Meta {
   notifyEmail?: string
   /** Search-engine site-verification codes (Google Search Console / Bing Webmaster). */
   verification?: { google?: string; bing?: string }
+  /** Instant phone alerts (Telegram bot). The token itself is never sent to the public site. */
+  telegram?: { enabled?: boolean; botToken?: string; chatId?: string }
 }
 
 export interface Social {
@@ -150,11 +152,23 @@ export interface WorkBlock {
   eyebrow?: string
   title?: string
   subtitle?: string
+  /** Heading / intro used by the standalone /quote page. */
+  quoteTitle?: string
+  quoteSub?: string
   formTitle?: string
   formSub?: string
   note?: string
   points?: string[]
   packages: WorkPackage[]
+}
+
+/** The free-website-review lead magnet (/audit). */
+export interface AuditBlock {
+  title?: string
+  subtitle?: string
+  badge?: string
+  points?: string[]
+  note?: string
 }
 
 /** Every section can be switched on/off from the admin panel. */
@@ -232,6 +246,7 @@ export interface Content {
   updates: UpdatesBlock
   blog: BlogBlock
   testimonials: Testimonial[]
+  audit: AuditBlock
   faq: Faq[]
   updatedAt: string
 }

@@ -92,6 +92,8 @@ export default function Footer({ profile, links = [] }: { profile: Profile; link
               <a href="/resume" target="_blank" rel="noreferrer noopener">
                 View resume online
               </a>
+              <a href="/quote">Get a quote (websites &amp; apps)</a>
+              <a href="/audit">Free website review</a>
             </div>
           </div>
         </div>

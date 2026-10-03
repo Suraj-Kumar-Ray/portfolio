@@ -28,6 +28,9 @@ A production-ready, recruiter-friendly portfolio site with a **React + TypeScrip
 - Serves all portfolio content from a single editable JSON file
 - `POST /api/contact` with server-side validation, per-IP rate limiting and a bot honeypot
 - **Instant email alerts** for every contact message / project enquiry (free FormSubmit relay, no account — plus an auto-reply to the sender). One-time: FormSubmit sends an activation email to `meta.notifyEmail` — click it once. Disable with `NOTIFY_DISABLE=true`.
+- **Instant Telegram alerts** — the same lead pings the owner's phone within seconds via a free Telegram bot (token + chat id in the panel's **SEO & Alerts**; env `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` override it and survive redeploys). The bot token is a secret and is stripped from the public `/api/content`.
+- **Lead-magnet pages:** a shareable **`/quote`** page (packages + qualifying form) and a **`/audit`** free website-review offer — both post into the same inbox with the same alerts.
+- **Mobile sticky CTA bar** — on phones a fixed bottom bar (Get a quote / WhatsApp / Call) replaces the floating rail so a lead never has to hunt for how to reach out.
 - **Private dashboard** on a secret, non-indexable URL with token auth, login throttling and form-based editors
 - Resume download, health check, security headers, SPA fallback, serves the built frontend in production
 
@@ -62,8 +65,8 @@ You can also change the password from the dashboard's **Settings** tab (it saves
 **4. What you can do in the panel:**
 
 - **Overview** — summary + "pending tasks" checklist
-- **Profile / Projects / Experience / Education / Skills / Coding Profiles / Updates / Achievements / Services / Certifications / Gallery / Testimonials / Notes (Blog) / FAQ** — all form-based editors (add, edit, reorder, delete)
-- **SEO & Alerts** — message-alert email, Google/Bing verification codes, social share image
+- **Profile / Projects / Experience / Education / Skills / Coding Profiles / Updates / Achievements / Services / Certifications / Gallery / Testimonials / Notes (Blog) / Packages & Quote / Free Website Review / FAQ** — all form-based editors (add, edit, reorder, delete)
+- **SEO & Alerts** — message-alert email, Telegram bot token + chat id, Google/Bing verification codes, social share image
 - **Sections & Visibility** — an on/off switch for every section
 - **Messages** — read / reply / mark / delete messages from the contact form
 - **Advanced (JSON)** — the full content as raw JSON
@@ -146,14 +149,16 @@ the secret path never appears in the page markup or the JS bundle.
 - `/admin` intentionally 404s into the normal site.
 - The response sends `X-Robots-Tag: noindex, nofollow, noarchive` — search engines never list it.
 - `/robots.txt` deliberately does not mention the path (mentioning it would leak it).
-- **SEO (per page, server-injected — crawlers need no JavaScript):** every URL gets its own `<title>`, meta description, canonical, `og:*`/`twitter:*` (with absolute `og:image` → `og.png`, 1200×630, so WhatsApp/LinkedIn show a real preview card) and Schema.org JSON-LD from `content.json`: home = `Person` + project `ItemList` + **`FAQPage`**; `/work/:id` = **`CreativeWork`** + breadcrumb; `/blog` = **`Blog`** with `BlogPosting` entries; `/blog/:slug` = **`BlogPosting`** (dates, word count, author). `sitemap.xml` lists every case study and note with `lastmod` + `<image:*>` tags; `robots.txt` allows every real search engine while blocking SEO scraper bots (and never lists the panel). `/resume.html` 301-redirects to `/resume`. Set `SITE_URL` in `server/.env` after deploying so absolute URLs point at the real domain. Google/Bing verification codes go in **SEO & Alerts** in the panel (`meta.verification`).
+- **SEO (per page, server-injected — crawlers need no JavaScript):** every URL gets its own `<title>`, meta description, canonical, `og:*`/`twitter:*` (with absolute `og:image` → `og.png`, 1200×630, so WhatsApp/LinkedIn show a real preview card) and Schema.org JSON-LD from `content.json`: home = `Person` + **`ProfessionalService`** (local-business card: area served, price range, contact) + project `ItemList` + **`FAQPage`**; `/work/:id` = **`CreativeWork`** + breadcrumb; `/blog` = **`Blog`** with `BlogPosting` entries; `/blog/:slug` = **`BlogPosting`** (dates, word count, author); `/quote` = **`Service`** with an `Offer` per package; `/audit` = the free-review **`Offer`**. `sitemap.xml` lists every case study and note with `lastmod` + `<image:*>` tags; `robots.txt` allows every real search engine while blocking SEO scraper bots (and never lists the panel). `/resume.html` 301-redirects to `/resume`. Set `SITE_URL` in `server/.env` after deploying so absolute URLs point at the real domain. Google/Bing verification codes go in **SEO & Alerts** in the panel (`meta.verification`).
 - Login is throttled to 15 attempts per IP per 10 minutes, and tokens are compared in constant time.
 
 | Panel tab | What it does |
 |---|---|
 | **Overview** | Counts, unread messages, content size + a "pending work" checklist |
-| **Content editors** | Form-based editors for profile, projects, experience, education, skills, coding profiles, updates, achievements, services, certifications, gallery, testimonials, notes (blog) and FAQ — add / edit / reorder / delete |
-| **SEO & Alerts** | Message-alert email, Google/Bing site-verification codes, social share image |
+| **Content editors** | Form-based editors for profile, projects, experience, education, skills, coding profiles, updates, achievements, services, certifications, gallery, testimonials, notes (blog), packages & quote, free website review and FAQ — add / edit / reorder / delete |
+| **Packages & Quote** | Service packages (name, price, timeline, features) and the `/quote` page heading |
+| **Free Website Review** | The `/audit` lead-magnet copy — heading, bullet points and fine print |
+| **SEO & Alerts** | Message-alert email, Telegram bot token + chat id, Google/Bing site-verification codes, social share image |
 | **Sections & Visibility** | Toggle switch for every section — About, Services, Skills, Coding Profiles, Experience, Projects, Achievements, Updates, Gallery, FAQ, Contact. Turning it Off removes it from the website and the nav. |
 | **Messages** | Read / reply / mark / delete messages from the website form |
 | **Analytics** | Private visitor stats — date-range filter (7/30/90 days, All, or custom dates), visits per day, popular sections, referrers, devices, and one-click **CSV export** (self-hosted, no cookies) |
@@ -176,9 +181,10 @@ the secret path never appears in the page markup or the JS bundle.
 |---|---|---|
 | GET | `/api/health` | Liveness + uptime |
 | GET | `/robots.txt` | Crawler rules — allows the site, blocks `/api/` and never mentions the panel path |
-| GET | `/sitemap.xml` | Auto-generated sitemap (homepage + resume + every `/work/:id` case study + `/blog` + every note) with `lastmod` from content edits |
+| GET | `/sitemap.xml` | Auto-generated sitemap (homepage + resume + every `/work/:id` case study + `/blog` + every note + `/quote` + `/audit`) with `lastmod` from content edits |
 | GET | `/api/content` | Full portfolio content |
-| GET | `/api/profile` `/api/skills` `/api/experience` `/api/education` `/api/services` `/api/testimonials` `/api/faq` `/api/tools` `/api/certifications` `/api/meta` | Individual slices |
+| GET | `/api/profile` `/api/skills` `/api/experience` `/api/education` `/api/services` `/api/testimonials` `/api/faq` `/api/tools` `/api/certifications` `/api/meta` `/api/blog` `/api/audit` | Individual slices |
+| POST | `/api/inquiry` | `{ name, email, phone, projectType, budget, timeline, message }` → project enquiry (also used by `/quote` and `/audit`), rate-limited, stores + alerts |
 | GET | `/api/sections` | Section list with their on/off state |
 | GET | `/api/projects?category=Frontend&featured=true` | Projects (+ category list) |
 | GET | `/api/projects/:id` | Single project |
@@ -258,6 +264,7 @@ Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprin
 - `SITE_URL` env var pins the absolute URLs used by sitemap / canonical / JSON-LD (falls back to the request host if unset).
 - The server **does not boot** in production without `ADMIN_TOKEN` (deliberate — opening the panel with a default password would be too easy).
 - **Email alerts (one-time setup):** the first contact message triggers a FormSubmit activation email to `meta.notifyEmail` — click the confirm link once and alerts start arriving. Until then messages still save to the panel.
+- **Telegram alerts (free, ~2 min setup):** in Telegram, message **@BotFather** → `/newbot` → copy the token; then message **@userinfobot** to get your numeric chat id. Paste both in the panel's **SEO & Alerts** (or set `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` in the host's Environment tab so they survive a redeploy).
 - **Free SEO setup (one-time):** add the site to [Google Search Console](https://search.google.com/search-console) + [Bing Webmaster Tools](https://www.bing.com/webmasters), choose the HTML-tag verification method and paste the codes into **SEO & Alerts** in the panel; then submit `https://suraj-portfolio-wjpt.onrender.com/sitemap.xml` in both.
 
 **Split hosting:** deploy `client/dist` to Vercel/Netlify and the `server/` to Render; set `CLIENT_ORIGIN` to your frontend URL and point the client's API base at it.

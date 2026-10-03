@@ -886,6 +886,62 @@ const EDITORS = {
       { key: 'google', path: ['verification', 'google'], label: 'Google site verification code', type: 'text', wide: true, hint: 'Google Search Console se milega' },
       { key: 'bing', path: ['verification', 'bing'], label: 'Bing site verification code', type: 'text', wide: true, hint: 'Bing Webmaster Tools se milega' },
       { key: 'ogImage', label: 'Social share image', type: 'text', wide: true, hint: 'Default /og.png — WhatsApp/LinkedIn preview' },
+      { key: 'telegramEnabled', path: ['telegram', 'enabled'], label: 'Telegram alerts ON', type: 'bool', hint: 'Naya message aane par phone pe turant notification' },
+      { key: 'telegramBot', path: ['telegram', 'botToken'], label: 'Telegram bot token', type: 'text', wide: true, hint: 'Telegram me @BotFather ko /newbot bhejo — token milega (123456:ABC...). Secret hai, website par kabhi nahi jata' },
+      { key: 'telegramChat', path: ['telegram', 'chatId'], label: 'Telegram chat ID', type: 'text', wide: true, hint: '@userinfobot ko message karo, apna chat ID milega (123456789)' },
+    ],
+  },
+
+  work: {
+    nav: 'work',
+    kind: 'group',
+    topKey: 'work',
+    path: ['work'],
+    title: 'Packages & Quote',
+    hint: 'Aapke service packages, price aur /quote page ki heading. Home ka "Work With Me" section aur /quote page dono isi data se bante hain.',
+    headerFields: [
+      { key: 'title', label: 'Home section title', type: 'text', wide: true },
+      { key: 'quoteTitle', label: 'Quote page heading', type: 'text', wide: true },
+      { key: 'quoteSub', label: 'Quote page intro', type: 'area', wide: true, rows: 3 },
+      { key: 'note', label: '"Why work with me" note', type: 'area', wide: true, rows: 3 },
+      { key: 'points', label: 'Guarantee points', type: 'lines', wide: true, hint: 'Ek line me ek point' },
+    ],
+    list: {
+      key: 'packages',
+      itemTitle: (p, i) => p.title || 'Package ' + (i + 1),
+      itemSub: (p) => [p.price, p.timeline].filter(Boolean).join(' · '),
+      fields: [
+        { key: 'title', label: 'Package name', type: 'text' },
+        { key: 'icon', label: 'Icon', type: 'text', hint: 'layout / server / code / gauge' },
+        { key: 'price', label: 'Price', type: 'text', hint: 'Example: ₹4,999 ya "Let\u2019s discuss"' },
+        { key: 'timeline', label: 'Timeline', type: 'text', hint: 'Example: 3–5 days' },
+        { key: 'description', label: 'Description', type: 'area', wide: true, rows: 2 },
+        { key: 'features', label: 'What is included', type: 'csv', wide: true, hint: 'Comma se alag karo' },
+      ],
+      blank: () => ({
+        title: 'New package',
+        icon: 'layout',
+        price: 'Let\u2019s discuss',
+        timeline: '',
+        description: '',
+        features: [],
+      }),
+    },
+  },
+
+  audit: {
+    nav: 'audit',
+    kind: 'object',
+    topKey: 'audit',
+    path: ['audit'],
+    title: 'Free Website Review',
+    hint: 'Free-review lead magnet (/audit) — jab visitor abhi project ke liye ready na ho, ye offer usse message karwa deta hai.',
+    fields: [
+      { key: 'badge', label: 'Badge', type: 'text' },
+      { key: 'title', label: 'Heading', type: 'text', wide: true },
+      { key: 'subtitle', label: 'Intro paragraph', type: 'area', wide: true, rows: 3 },
+      { key: 'points', label: 'What the visitor gets (bullet list)', type: 'lines', wide: true },
+      { key: 'note', label: 'Fine print', type: 'area', wide: true, rows: 2 },
     ],
   },
 
@@ -930,6 +986,8 @@ const PAGES = [
       { id: 'gallery', label: 'Gallery', icon: 'image' },
       { id: 'testimonials', label: 'Testimonials', icon: 'user' },
       { id: 'blog', label: 'Notes / Blog', icon: 'code' },
+      { id: 'work', label: 'Packages & Quote', icon: 'briefcase' },
+      { id: 'audit', label: 'Free Website Review', icon: 'sparkle' },
       { id: 'faq', label: 'FAQ', icon: 'help' },
     ],
   },
@@ -960,7 +1018,9 @@ const SUBTITLES = {
   gallery: 'Travel and friends photos.',
   testimonials: 'Feedback from people you worked with.',
   blog: 'Notes / Blog — short articles that bring Google visitors.',
-  seo: 'Message alerts and search engine verification.',
+  work: 'Service packages, prices and the /quote page.',
+  audit: 'The free website review offer — a low-friction lead magnet.',
+  seo: 'Message alerts, Telegram pings and search engine verification.',
   faq: 'Frequently asked questions.',
   sections: 'Choose which sections show on the website.',
   messages: 'Messages from the contact form.',
@@ -1337,6 +1397,10 @@ function pendingTasks() {
   if (noLinks.length) t.push(['Add a live/source link to ' + noLinks.length + ' project(s)', 'Projects', 'projects'])
   if (!(content.testimonials || []).length) t.push(['Add a testimonial (social proof)', 'Testimonials', 'testimonials'])
   if (!((content.blog && content.blog.posts) || []).length) t.push(['Publish your first note', 'Notes / Blog', 'blog'])
+  const vaguePrices = ((content.work && content.work.packages) || []).filter((p) => /discuss/i.test(p.price || '')).length
+  if (vaguePrices) t.push(['Add a starting price to ' + vaguePrices + ' package(s) — clarity brings more leads', 'Packages & Quote', 'work'])
+  const tg = (content.meta && content.meta.telegram) || {}
+  if (!tg.botToken || !tg.chatId) t.push(['Turn on Telegram alerts for instant lead pings', 'SEO & Alerts', 'seo'])
   if (!(content.meta && content.meta.verification && content.meta.verification.google)) {
     t.push(['Add Google verification code (free traffic data)', 'SEO & Alerts', 'seo'])
   }
