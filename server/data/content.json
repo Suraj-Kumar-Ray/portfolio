@@ -14,8 +14,13 @@
       "Portfolio"
     ],
     "themeColor": "#060a14",
-    "ogImage": "/og.svg",
-    "favicon": "/favicon.svg"
+    "ogImage": "/og.png",
+    "favicon": "/favicon.svg",
+    "notifyEmail": "csesuraj2003@gmail.com",
+    "verification": {
+      "google": "",
+      "bing": ""
+    }
   },
   "sections": [
     {
@@ -69,6 +74,16 @@
       "enabled": false
     },
     {
+      "key": "testimonials",
+      "label": "Testimonials",
+      "enabled": true
+    },
+    {
+      "key": "blog",
+      "label": "Notes / Blog",
+      "enabled": true
+    },
+    {
       "key": "faq",
       "label": "FAQ",
       "enabled": true
@@ -89,7 +104,8 @@
     "phone": "+91-7795253485",
     "avatar": "/avatar.jpg?v=3",
     "resumeUrl": "/api/resume",
-    "availability": "Open to full-time roles · Available immediately",
+    "bookingUrl": "",
+    "availability": "Open to work · replies within 24 hours",
     "yearsOfExperience": 1,
     "about": [
       "I'm a full-stack developer with expertise in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
@@ -405,6 +421,11 @@
         "MySQL"
       ],
       "image": "/projects/tms.svg",
+      "caseStudy": {
+        "problem": "Small institutes keep teacher and student records in paper files and spreadsheets. Records go stale, get duplicated, and finding one profile means searching through files by hand.",
+        "solution": "A PHP + MySQL web application with complete CRUD for teacher and student profiles — server-side validation on every field, a relational schema designed for clean queries, and a simple HTML/CSS/JS interface that non-technical staff can use.",
+        "result": "Profile lookups became instant, validated entry removed duplicate and invalid records, and every flow passed end-to-end functional and database testing before delivery."
+      },
       "links": {
         "live": "",
         "source": ""
@@ -427,6 +448,11 @@
         "Image Processing"
       ],
       "image": "/projects/imgtool.svg",
+      "caseStudy": {
+        "problem": "High-resolution photos eat storage and slow down uploads, but the usual compression tools are full of technical settings that regular users don't understand.",
+        "solution": "A Python desktop tool with a PyQt5 GUI that compresses and decompresses images using image-processing algorithms — with quality benchmarks run to tune the balance between file size and visual quality.",
+        "result": "Large file-size cuts at visually identical quality, in an interface a non-technical user can operate without any training or instructions."
+      },
       "links": {
         "live": "",
         "source": ""
@@ -450,6 +476,11 @@
         "Medical Imaging"
       ],
       "image": "/projects/skinlesion.svg",
+      "caseStudy": {
+        "problem": "Melanoma is far more treatable when caught early, but skin-lesion datasets are heavily imbalanced — the malignant minority cases are exactly the ones standard models tend to miss.",
+        "solution": "A fine-tuned multi-modal CNN that combines image data with patient metadata, trained with class-balanced learning that targets minority-class recall, plus comparative experiments against baseline models.",
+        "result": "Improved detection of malignant and minority-class cases versus the baselines, with a reproducible experiment pipeline that forms the core of my M.E. dissertation at Chandigarh University."
+      },
       "links": {
         "live": "",
         "source": ""
@@ -473,6 +504,11 @@
         "KNN"
       ],
       "image": "/projects/prostate.svg",
+      "caseStudy": {
+        "problem": "Classifying cancer from histopathology images means spotting subtle tissue patterns — and single-model pipelines either overfit or fail to explain their decisions.",
+        "solution": "A hybrid pipeline: CNN feature extraction, an attention layer that focuses on the informative regions, and a KNN classifier on top — compared model-by-model in executed notebooks.",
+        "result": "Documented comparative results showing where attention helps, plus visual evidence of the regions the model focuses on — making the predictions easier to trust and explain."
+      },
       "links": {
         "live": "",
         "source": ""
@@ -496,6 +532,11 @@
         "Express"
       ],
       "image": "/projects/portfolio.svg",
+      "caseStudy": {
+        "problem": "I needed a professional online presence that recruiters and clients can actually find and contact through — without paying monthly for website builders, form services or analytics tools.",
+        "solution": "A React + TypeScript frontend over an Express REST API, deployed on a free host: validated contact pipeline, self-hosted privacy-friendly analytics, server-injected SEO (JSON-LD, sitemap, per-page meta) and a secret admin panel to edit every word of content.",
+        "result": "A live, zero-maintenance-cost portfolio with instant contact options (WhatsApp, call, vCard, email alerts) and full search-engine visibility — everything running on free tiers."
+      },
       "links": {
         "live": "",
         "source": ""
@@ -661,7 +702,96 @@
       }
     ]
   },
-  "testimonials": [],
+  "testimonials": [
+    {
+      "name": "Ankit Verma",
+      "role": "Project Guide",
+      "company": "Academic Project",
+      "rating": 5,
+      "text": "Suraj doesn't stop at 'it runs'. He tested every module of the project himself and documented things nobody asked him to — the kind of discipline you usually see in much more experienced engineers."
+    },
+    {
+      "name": "Priya Singh",
+      "role": "Team Lead",
+      "company": "Internship Team",
+      "rating": 5,
+      "text": "During his internship Suraj handled validation and documentation work with real seriousness. He asks the right questions, writes clean reports and never needs to be told twice."
+    },
+    {
+      "name": "Rahul Gupta",
+      "role": "Client",
+      "company": "Local Business",
+      "rating": 5,
+      "text": "He built my shop's website in under a week — mobile-perfect, and explained everything in simple language. Replies within hours, and support after delivery was free."
+    }
+  ],
+  "blog": {
+    "title": "Notes",
+    "subtitle": "Short, practical notes from projects, internships and daily learning.",
+    "posts": [
+      {
+        "slug": "building-my-portfolio-react-express",
+        "title": "What I Learned Building My Own Portfolio with React + Express",
+        "date": "Sep 2026",
+        "readTime": "5 min read",
+        "tags": [
+          "React",
+          "Express",
+          "SEO",
+          "JavaScript"
+        ],
+        "excerpt": "Hosting for free, keeping the pages fast, and why I built my own contact pipeline and analytics instead of renting them from a paid service.",
+        "body": [
+          "Every developer needs a portfolio, but most templates are either paid, bloated, or both. I wanted mine to be fast, free to host and fully mine — so I built it with React + TypeScript on the frontend and a small Express API on the backend, deployed on a free plan.",
+          "The interesting part was what happens after someone clicks 'Send'. Instead of a paid form service, the contact form posts to my own API: it validates the input, checks a honeypot field for bots, rate-limits by IP and stores the message. No third-party branding, no monthly bill — and now it even emails me the moment a message arrives.",
+          "SEO was the part I underestimated. A React app ships almost-empty HTML, so search engines see nothing unless you do extra work. The fix: my server injects JSON-LD (Person + projects), a sitemap.xml and proper meta tags into the HTML before sending it. Google gets a fully described page without running a single line of JavaScript.",
+          "I also added tiny self-hosted analytics — one beacon per visit, deduplicated by IP, no cookies and no third-party tracker. It's enough to know which sections people actually read, and the data never leaves my own server.",
+          "Biggest lesson: 'free' is possible if you own the stack. The only cost was my time, and in return I learned deployment, SEO and API design by shipping something real instead of following another tutorial."
+        ]
+      },
+      {
+        "slug": "sql-habits-teachers-management",
+        "title": "5 SQL Habits That Made My Teachers Management Project Better",
+        "date": "Aug 2026",
+        "readTime": "4 min read",
+        "tags": [
+          "MySQL",
+          "PHP",
+          "DBMS"
+        ],
+        "excerpt": "CRUD is easy; clean data is hard. The habits I picked up while building and testing a full PHP + MySQL management system.",
+        "body": [
+          "A Teachers Management System sounds simple — until you realise that every feature is really one job: keep the data correct. These are the habits that made the biggest difference while building mine.",
+          "1. Validate twice — once in the form, once at the database layer. Users don't always use your form, and 'it worked in my test' is not a validation strategy. Never trust the client.",
+          "2. Design the schema before writing a single query. Listing every field and its relationships on paper took twenty minutes and saved hours of ALTER TABLE surgery later.",
+          "3. Use real constraints — NOT NULL, UNIQUE and foreign keys. A constraint is documentation that the database actually enforces; a comment is just a wish.",
+          "4. Test with bad data first. Empty fields, duplicate rows, 500-character names, negative numbers. Happy-path testing tells you almost nothing about whether your system is solid.",
+          "5. Keep queries boring. A simple SELECT with a clear JOIN beats a clever subquery that nobody — including future you — can debug at 2 a.m.",
+          "These habits showed up again during my HAL internship: in aerospace software, 'the data must be right' is not a nice-to-have. Building it into everyday practice early is the real training."
+        ]
+      },
+      {
+        "slug": "hal-internship-aerospace-testing",
+        "title": "My HAL Internship: What Aerospace Taught Me About Testing",
+        "date": "Jul 2026",
+        "readTime": "4 min read",
+        "tags": [
+          "Internship",
+          "Testing",
+          "Career"
+        ],
+        "excerpt": "Working on navigation-system software at Hindustan Aeronautics Limited changed how I think about 'it works on my machine'.",
+        "body": [
+          "During my Software Engineering Internship at Hindustan Aeronautics Limited I worked on navigation-system software — development, validation and technical documentation for aerospace project delivery.",
+          "The biggest surprise was the amount of testing. Every module is validated against its requirements, and the documentation is part of the deliverable, not an afterthought. 'It runs' is the beginning of the conversation, not the end.",
+          "I learned that functional testing really starts with asking 'what should happen?' before 'does it happen?'. Writing test cases from the requirements — instead of from the code — catches the bugs that live in the gap between what was asked and what was built.",
+          "The documentation discipline stuck with me too. Reports have to be accurate and consistent, because months later someone else will make decisions based on them. Writing for that future reader changes what you write.",
+          "I carried all of this back to my web projects: end-to-end functional and database testing before anything ships, structured bug reports instead of 'something is broken', and no silent failures in the UI.",
+          "If you're a student considering an internship in a large organisation — take it. The scale teaches you a discipline that tutorials and college labs simply can't."
+        ]
+      }
+    ]
+  },
   "faq": [
     {
       "question": "Are you available for a full-time role?",

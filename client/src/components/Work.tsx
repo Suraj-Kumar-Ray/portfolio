@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { AlertCircle, Check, CheckCircle2, Clock, IndianRupee, Mail, Rocket, Send, Sparkles } from 'lucide-react'
 import { Icon } from '../icons'
 import Section from './Section'
+import { WhatsAppGlyph } from './QuickConnect'
 import Collapse from './Collapse'
 import { sendInquiry } from '../api'
 import type { InquiryPayload, Profile, WorkBlock } from '../types'
@@ -81,6 +82,13 @@ export default function Work({ block, profile }: { block: WorkBlock; profile: Pr
   }
 
   const projectTypes = [...packages.map((p) => p.title), OTHER]
+
+  // direct WhatsApp escape hatch next to email/phone — leads arrive faster there
+  const digits = profile.phone.replace(/\D/g, '')
+  const waNumber = digits.length === 10 ? `91${digits}` : digits
+  const waHref = `https://wa.me/${waNumber}?text=${encodeURIComponent(
+    `Hi ${profile.name.split(' ')[0]}, I would like to discuss a project with you.`,
+  )}`
 
   return (
     <Section
@@ -179,6 +187,16 @@ export default function Work({ block, profile }: { block: WorkBlock; profile: Pr
                 </span>
               </a>
             )}
+            <a className="contact-item" href={waHref} target="_blank" rel="noreferrer noopener">
+              <span className="fact-icon">
+                <WhatsAppGlyph />
+              </span>
+              <span>
+                <span className="fact-label">WhatsApp</span>
+                <br />
+                <span className="fact-value">Chat now — fastest reply</span>
+              </span>
+            </a>
           </div>
         </aside>
 

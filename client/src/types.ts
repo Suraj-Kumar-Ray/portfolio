@@ -6,6 +6,10 @@ export interface Meta {
   themeColor: string
   ogImage: string
   favicon: string
+  /** Where contact-form / enquiry alerts are emailed (free FormSubmit relay). */
+  notifyEmail?: string
+  /** Search-engine site-verification codes (Google Search Console / Bing Webmaster). */
+  verification?: { google?: string; bing?: string }
 }
 
 export interface Social {
@@ -30,6 +34,8 @@ export interface Profile {
   phone: string
   avatar: string
   resumeUrl: string
+  /** Optional calendar link (Calendly / Cal.com). Empty → WhatsApp callback request. */
+  bookingUrl?: string
   availability: string
   yearsOfExperience: number
   about: string[]
@@ -96,6 +102,24 @@ export interface Project {
   tech: string[]
   image: string
   links: ProjectLinks
+  /** Deep-dive content for the project's own case-study page (/work/:id). */
+  caseStudy?: { problem: string; solution: string; result: string }
+}
+
+export interface BlogPost {
+  slug: string
+  title: string
+  date: string
+  readTime?: string
+  tags?: string[]
+  excerpt: string
+  body: string[]
+}
+
+export interface BlogBlock {
+  title?: string
+  subtitle?: string
+  posts: BlogPost[]
 }
 
 export interface Testimonial {
@@ -206,6 +230,7 @@ export interface Content {
   codingProfiles: CodingProfilesBlock
   gallery: GalleryBlock
   updates: UpdatesBlock
+  blog: BlogBlock
   testimonials: Testimonial[]
   faq: Faq[]
   updatedAt: string

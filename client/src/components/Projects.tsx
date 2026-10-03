@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ExternalLink, Github, Star } from 'lucide-react'
+import { ArrowRight, ExternalLink, Github, Star } from 'lucide-react'
 import Section from './Section'
 import Collapse from './Collapse'
 import type { Project } from '../types'
@@ -76,6 +76,10 @@ export default function Projects({ projects }: { projects: Project[] }) {
 
               <div className="project-footer">
                 <div className="project-links">
+                  {/* every project has its own deep-dive page (/work/:id) */}
+                  <a className="primary" href={`/work/${project.id}`}>
+                    Case study <ArrowRight size={15} />
+                  </a>
                   {project.links?.live && (
                     <a className="primary" href={project.links.live} target="_blank" rel="noreferrer noopener">
                       <ExternalLink size={15} /> Live
