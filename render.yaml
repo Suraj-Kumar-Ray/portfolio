@@ -19,9 +19,9 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      # Secret panel path + password are set in the Render dashboard, never in git.
       - key: ADMIN_PATH
-        value: /CHANGE_ME_ADMIN_PATH
-      # Password is entered in the Render dashboard (never stored in git).
+        sync: false
       - key: ADMIN_TOKEN
         sync: false
       # MongoDB Atlas connection string (see README → "Durable data"). Without,

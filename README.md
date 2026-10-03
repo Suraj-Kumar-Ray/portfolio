@@ -48,12 +48,15 @@ npm run build && npm start     # site + API + dashboard  →  http://localhost:5
 # (in development: npm run dev — API on :5000, frontend on :5173)
 ```
 
-**2. Open the dashboard:** the secret link comes from `ADMIN_PATH` in [server/.env](server/.env).
-It is currently set to `ADMIN_PATH=/CHANGE_ME_ADMIN_PATH`, which means:
+**2. Open the dashboard:** the secret link comes from `ADMIN_PATH` in [server/.env](server/.env)
+(never committed). Whatever you put there is appended to your origin:
 
 ```
-http://localhost:5000/CHANGE_ME_ADMIN_PATH
+http://localhost:5000<ADMIN_PATH>
 ```
+
+> The real value is intentionally **not written anywhere in this repo** — read it from `server/.env`
+or change it there / in the Render Environment tab.
 
 > `/admin` **deliberately does not work** — it serves the normal website. That way the public never learns about the panel.
 
@@ -138,8 +141,9 @@ cp Suraj_Kumar_Resume.pdf server/data/resume.pdf
 
 ## 🎛️ Private dashboard — everything from the backend
 
-Open **`{your origin}${ADMIN_PATH}`**, e.g. **http://localhost:5000/CHANGE_ME_ADMIN_PATH**
-(in production: `https://your-domain/CHANGE_ME_ADMIN_PATH`).
+Open **`{your origin}${ADMIN_PATH}`** — the exact `ADMIN_PATH` and `ADMIN_TOKEN` live in
+`server/.env` (git-ignored) and in the Render Environment tab, and are deliberately never
+written into this repo. In production it is `https://<your-domain><ADMIN_PATH>`.
 Login with your `ADMIN_TOKEN` (**change it** in `server/.env` or via Settings before going live).
 
 **Easiest way:** the website footer has a tiny, faded 🔒 icon right after the
@@ -255,7 +259,8 @@ portfolio/
 ### Render (already deployed ✅)
 
 **Live site:** `https://suraj-portfolio-wjpt.onrender.com`  
-**Panel:** `https://suraj-portfolio-wjpt.onrender.com/CHANGE_ME_ADMIN_PATH`
+**Panel:** `https://suraj-portfolio-wjpt.onrender.com` + your `ADMIN_PATH` (set in the Render
+Environment tab, not stored in git)
 
 Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprint**):
 
