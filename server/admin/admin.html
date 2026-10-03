@@ -541,6 +541,7 @@ const EDITORS = {
       { key: 'avatar', label: 'Profile photo', type: 'text', hint: 'Path: /avatar.jpg?v=3' },
       { key: 'yearsOfExperience', label: 'Years of experience', type: 'number' },
       { key: 'resumeUrl', label: 'Resume link', type: 'text', hint: 'Default /api/resume' },
+      { key: 'bookingUrl', label: 'Calendar link (Book a call)', type: 'text', wide: true, hint: 'Calendly / Cal.com free link daalo — khali chhodne par WhatsApp "callback request" banta hai' },
       { key: 'about', label: 'About — paragraphs', type: 'paras', wide: true, rows: 6, hint: 'Blank line = new paragraph' },
       { key: 'highlights', label: 'Highlights', type: 'lines', wide: true, hint: 'Ek line me ek point' },
       { key: 'languages', label: 'Languages', type: 'lines' },
@@ -589,6 +590,9 @@ const EDITORS = {
       { key: 'image', label: 'Image path', type: 'text', hint: 'Example: /projects/tms.svg' },
       { path: ['links', 'live'], key: 'live', label: 'Live demo URL', type: 'text' },
       { path: ['links', 'source'], key: 'source', label: 'Source code URL', type: 'text' },
+      { path: ['caseStudy', 'problem'], key: 'problem', label: 'Case study — the problem', type: 'area', wide: true, rows: 3, hint: 'Project ki problem page (/work/...) par dikhti hai' },
+      { path: ['caseStudy', 'solution'], key: 'solution', label: 'Case study — the solution', type: 'area', wide: true, rows: 3 },
+      { path: ['caseStudy', 'result'], key: 'result', label: 'Case study — the result', type: 'area', wide: true, rows: 3 },
     ],
     blank: () => ({
       id: 'project-' + Date.now().toString(36),
@@ -815,6 +819,76 @@ const EDITORS = {
     },
   },
 
+  testimonials: {
+    nav: 'testimonials',
+    kind: 'list',
+    topKey: 'testimonials',
+    path: ['testimonials'],
+    title: 'Testimonials',
+    hint: 'Feedback from people you worked with — real names build more trust. List khali = section website par nahi dikhega.',
+    itemTitle: (t, i) => t.name || 'Testimonial ' + (i + 1),
+    itemSub: (t) => [t.role, t.company].filter(Boolean).join(' · '),
+    fields: [
+      { key: 'name', label: 'Name', type: 'text' },
+      { key: 'role', label: 'Role', type: 'text', hint: 'Example: Project Guide / Client' },
+      { key: 'company', label: 'Company / context', type: 'text' },
+      { key: 'rating', label: 'Rating (1-5)', type: 'number' },
+      { key: 'text', label: 'Feedback', type: 'area', wide: true, rows: 4 },
+    ],
+    blank: () => ({ name: 'New person', role: '', company: '', rating: 5, text: '' }),
+  },
+
+  blog: {
+    nav: 'blog',
+    kind: 'group',
+    topKey: 'blog',
+    path: ['blog'],
+    title: 'Notes / Blog',
+    hint: 'Short articles — Google se visitors laate hain. Har note ka apna page banta hai (/blog/...) with SEO tags.',
+    headerFields: [
+      { key: 'title', label: 'Section title', type: 'text' },
+      { key: 'subtitle', label: 'Subtitle', type: 'text', wide: true },
+    ],
+    list: {
+      key: 'posts',
+      itemTitle: (p, i) => p.title || 'Note ' + (i + 1),
+      itemSub: (p) => [p.date, p.readTime, p.slug].filter(Boolean).join(' · '),
+      fields: [
+        { key: 'title', label: 'Title', type: 'text', wide: true },
+        { key: 'slug', label: 'URL slug', type: 'text', hint: 'English me, jaise: my-first-note' },
+        { key: 'date', label: 'Date', type: 'text', hint: 'Example: Oct 2026' },
+        { key: 'readTime', label: 'Read time', type: 'text', hint: 'Example: 4 min read' },
+        { key: 'tags', label: 'Tags', type: 'csv', wide: true },
+        { key: 'excerpt', label: 'Short summary (SEO)', type: 'area', wide: true, rows: 2 },
+        { key: 'body', label: 'Article — paragraphs', type: 'paras', wide: true, rows: 10, hint: 'Blank line = new paragraph' },
+      ],
+      blank: () => ({
+        slug: 'new-note-' + Date.now().toString(36),
+        title: 'New note',
+        date: '',
+        readTime: '4 min read',
+        tags: [],
+        excerpt: '',
+        body: [],
+      }),
+    },
+  },
+
+  seo: {
+    nav: 'seo',
+    kind: 'object',
+    topKey: 'meta',
+    path: ['meta'],
+    title: 'SEO & Alerts',
+    hint: 'Message alerts, social preview image and search engine verification codes.',
+    fields: [
+      { key: 'notifyEmail', label: 'Alert email for new messages', type: 'text', wide: true, hint: 'Contact form ka har message yahan email hoga (free relay — koi account nahi)' },
+      { key: 'google', path: ['verification', 'google'], label: 'Google site verification code', type: 'text', wide: true, hint: 'Google Search Console se milega' },
+      { key: 'bing', path: ['verification', 'bing'], label: 'Bing site verification code', type: 'text', wide: true, hint: 'Bing Webmaster Tools se milega' },
+      { key: 'ogImage', label: 'Social share image', type: 'text', wide: true, hint: 'Default /og.png — WhatsApp/LinkedIn preview' },
+    ],
+  },
+
   faq: {
     nav: 'faq',
     kind: 'list',
@@ -854,6 +928,8 @@ const PAGES = [
       { id: 'services', label: 'Services', icon: 'layers' },
       { id: 'certifications', label: 'Certifications', icon: 'award' },
       { id: 'gallery', label: 'Gallery', icon: 'image' },
+      { id: 'testimonials', label: 'Testimonials', icon: 'user' },
+      { id: 'blog', label: 'Notes / Blog', icon: 'code' },
       { id: 'faq', label: 'FAQ', icon: 'help' },
     ],
   },
@@ -861,6 +937,7 @@ const PAGES = [
     group: 'Site',
     items: [
       { id: 'sections', label: 'Sections & Visibility', icon: 'toggle' },
+      { id: 'seo', label: 'SEO & Alerts', icon: 'sparkle' },
       { id: 'messages', label: 'Messages', icon: 'mail', unread: true },
       { id: 'advanced', label: 'Advanced (JSON)', icon: 'braces' },
       { id: 'settings', label: 'Settings', icon: 'settings' },
@@ -881,6 +958,9 @@ const SUBTITLES = {
   services: 'The services you offer.',
   certifications: 'Courses and certificates.',
   gallery: 'Travel and friends photos.',
+  testimonials: 'Feedback from people you worked with.',
+  blog: 'Notes / Blog — short articles that bring Google visitors.',
+  seo: 'Message alerts and search engine verification.',
   faq: 'Frequently asked questions.',
   sections: 'Choose which sections show on the website.',
   messages: 'Messages from the contact form.',
@@ -1255,6 +1335,11 @@ function pendingTasks() {
   if (placeholders.length) t.push(['Replace ' + placeholders.length + ' placeholder gallery photo(s)', 'Gallery', 'gallery'])
   const noLinks = (content.projects || []).filter((p) => !(p.links && (p.links.live || p.links.source)))
   if (noLinks.length) t.push(['Add a live/source link to ' + noLinks.length + ' project(s)', 'Projects', 'projects'])
+  if (!(content.testimonials || []).length) t.push(['Add a testimonial (social proof)', 'Testimonials', 'testimonials'])
+  if (!((content.blog && content.blog.posts) || []).length) t.push(['Publish your first note', 'Notes / Blog', 'blog'])
+  if (!(content.meta && content.meta.verification && content.meta.verification.google)) {
+    t.push(['Add Google verification code (free traffic data)', 'SEO & Alerts', 'seo'])
+  }
   if (overview && overview.unread) t.push(['Read ' + overview.unread + ' new message(s)', 'Messages', 'messages'])
   if (overview && !overview.resumeReady) t.push(['Upload the resume PDF', 'Settings', 'settings'])
   return t

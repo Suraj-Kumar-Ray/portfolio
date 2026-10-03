@@ -200,6 +200,51 @@ function validateContact(body) {
   }
 }
 
+// --- email alerts (free relay, no account needed) ---------------------------
+// Every new contact message / project enquiry is forwarded to the owner's
+// inbox through FormSubmit's free ajax endpoint — so he learns about a lead
+// immediately instead of finding it days later in the panel. The visitor also
+// gets an instant auto-reply. First use only: FormSubmit sends one activation
+// email to the owner address; click it once and alerts start flowing.
+// Set NOTIFY_DISABLE=true in server/.env to switch alerts off.
+function notifyByEmail(record, kind) {
+  if (String(process.env.NOTIFY_DISABLE || '').toLowerCase() === 'true') return
+  const content = getContent()
+  const to = String(content.meta?.notifyEmail || content.profile?.email || '').trim()
+  if (!EMAIL_RE.test(to)) return
+
+  const payload = {
+    _subject: `Portfolio ${kind} — ${record.subject || record.name}`,
+    _template: 'table',
+    _captcha: 'false',
+    Type: kind,
+    Name: record.name,
+    Email: record.email,
+    Phone: record.phone || '',
+    Message: record.message,
+  }
+  if (record.projectType) {
+    payload['Project type'] = record.projectType
+    payload.Budget = record.budget
+    payload.Timeline = record.timeline
+  }
+  // instant confirmation for the visitor (FormSubmit auto-response)
+  if (EMAIL_RE.test(record.email)) {
+    payload._autoresponse =
+      `Hi ${record.name},\n\nThanks for reaching out through my portfolio! ` +
+      `Your message is in my inbox and I will reply within 24 hours.\n\n` +
+      `— ${content.profile?.name || 'Suraj Kumar'}\n${content.profile?.phone || ''}`
+  }
+
+  fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then((r) => console.log(`[notify] email alert → ${to}: HTTP ${r.status}`))
+    .catch((err) => console.log('[notify] email alert failed (message is still saved):', err.message))
+}
+
 // --- API routes -------------------------------------------------------------
 const api = express.Router()
 
@@ -224,6 +269,7 @@ const CONTENT_KEYS = [
   'codingProfiles',
   'gallery',
   'updates',
+  'blog',
   'testimonials',
   'faq',
 ]
@@ -306,6 +352,7 @@ api.post('/inquiry', inquiryLimit, (req, res) => {
   messages.push(record)
   writeJson(MESSAGES_FILE, messages)
 
+  notifyByEmail(record, 'inquiry')
   console.log(`[inquiry] ${record.name} (${record.email}) → ${record.projectType} · ${record.budget}`)
   res.status(201).json({
     ok: true,
@@ -338,6 +385,7 @@ api.post('/contact', rateLimit, (req, res) => {
   messages.push(record)
   writeJson(MESSAGES_FILE, messages)
 
+  notifyByEmail(record, 'contact')
   console.log(`[contact] new message from ${record.email}: "${record.subject}"`)
   res.status(201).json({
     ok: true,
@@ -790,12 +838,38 @@ app.get('/sitemap.xml', (req, res) => {
     '    <priority>0.5</priority>\n' +
     '  </url>'
 
+  // every case-study page and every blog post is a separate, indexable URL
+  const page = (loc, priority, images = []) =>
+    '  <url>\n' +
+    `    <loc>${escXml(loc)}</loc>\n` +
+    `    <lastmod>${mtime(CONTENT_FILE)}</lastmod>\n` +
+    '    <changefreq>monthly</changefreq>\n' +
+    `    <priority>${priority}</priority>\n` +
+    (images.length ? images.join('\n') + '\n' : '') +
+    '  </url>'
+
+  const extras = []
+  if (sectionOn('projects')) {
+    for (const proj of content.projects || []) {
+      if (!proj.id) continue
+      const images = proj.image ? [imgTag(abs(proj.image), proj.title)] : []
+      extras.push(page(`${base}/work/${proj.id}`, '0.8', images))
+    }
+  }
+  if (sectionOn('blog')) {
+    extras.push(page(`${base}/blog`, '0.7'))
+    for (const post of (content.blog || {}).posts || []) {
+      if (post.slug) extras.push(page(`${base}/blog/${post.slug}`, '0.6'))
+    }
+  }
+
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
     '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
     home +
     (fs.existsSync(RESUME_HTML) ? '\n' + resume : '') +
+    (extras.length ? '\n' + extras.join('\n') : '') +
     '\n</urlset>\n'
   res.type('application/xml').send(xml)
 })
@@ -813,11 +887,23 @@ const CLIENT_DIST = path.join(__dirname, '..', '..', 'client', 'dist')
 //   • ItemList of CreativeWork — every project card (title, description,
 //     thumbnail, tech keywords, year, author → Person), only when the section
 //     is switched on in the panel.
-function seoJsonLd(base) {
+// "Oct 2026" / "2026" style dates → ISO, for schema datePublished fields.
+function isoDate(s) {
+  const months = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 }
+  const str = String(s || '').trim()
+  const m = str.match(/^([A-Za-z]{3,})\s+(\d{4})$/)
+  const mon = m ? months[m[1].slice(0, 3).toLowerCase()] : null
+  if (m && mon) return `${m[2]}-${String(mon).padStart(2, '0')}-01`
+  if (/^\d{4}$/.test(str)) return `${str}-01-01`
+  return undefined
+}
+
+function seoJsonLd(base, reqPath = '/') {
   const content = getContent()
   const p = content.profile || {}
   const meta = content.meta || {}
   const personId = `${base}/#person`
+  const path = String(reqPath || '/').replace(/\/+$/, '') || '/'
   const abs = (u) => (/^https?:/i.test(String(u || '')) ? String(u) : base + (String(u).startsWith('/') ? '' : '/') + u)
   const loc = String(p.location || '')
     .split(',')
@@ -858,34 +944,129 @@ function seoJsonLd(base) {
 
   const graph = [person]
 
-  const projectsSection = (content.sections || []).find((x) => x.key === 'projects')
+  const sectionOn = (key) => {
+    const s = (content.sections || []).find((x) => x.key === key)
+    return !s || s.enabled !== false
+  }
+
+  // Google shows breadcrumb trails in results — one per page type
+  const breadcrumb = (name, url, parentName, parentUrl) => ({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+      ...(parentName ? [{ '@type': 'ListItem', position: 2, name: parentName, item: parentUrl }] : []),
+      { '@type': 'ListItem', position: parentName ? 3 : 2, name, item: url },
+    ],
+  })
+
   const projects = Array.isArray(content.projects) ? content.projects : []
-  if ((!projectsSection || projectsSection.enabled !== false) && projects.length) {
-    graph.push({
-      '@type': 'ItemList',
-      '@id': `${base}/#projects`,
-      name: `Projects by ${person.name}`,
-      numberOfItems: projects.length,
-      itemListElement: projects.map((proj, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        item: {
-          '@type': 'CreativeWork',
-          '@id': `${base}/#project-${String(proj.id || i).replace(/[^a-zA-Z0-9-]/g, '')}`,
-          name: proj.title || undefined,
-          description: proj.description || undefined,
-          image: proj.image ? abs(proj.image) : undefined,
-          // no own page per project → the projects section is the canonical spot
-          url: proj.links?.live ? proj.links.live : `${base}/#projects`,
-          dateCreated: /^\d{4}$/.test(String(proj.year || '')) ? proj.year : undefined,
-          keywords: Array.isArray(proj.tech) && proj.tech.length ? proj.tech.join(', ') : undefined,
-          genre: proj.category || undefined,
+  const posts = (content.blog || {}).posts || []
+  const workMatch = path.match(/^\/work\/([a-zA-Z0-9-]+)$/)
+  const postMatch = path.match(/^\/blog\/([a-zA-Z0-9-]+)$/)
+
+  if (workMatch) {
+    // case-study page → the project itself is the main entity
+    const proj = projects.find((x) => String(x.id) === workMatch[1])
+    if (proj) {
+      graph.push(breadcrumb(proj.title, `${base}/work/${proj.id}`, 'Projects', `${base}/#projects`))
+      graph.push({
+        '@type': 'CreativeWork',
+        '@id': `${base}/work/${proj.id}#work`,
+        name: proj.title || undefined,
+        headline: proj.title || undefined,
+        description: proj.caseStudy
+          ? [proj.caseStudy.problem, proj.caseStudy.solution, proj.caseStudy.result].filter(Boolean).join(' ')
+          : proj.description || undefined,
+        image: proj.image ? abs(proj.image) : undefined,
+        url: `${base}/work/${proj.id}`,
+        dateCreated: /^\d{4}$/.test(String(proj.year || '')) ? proj.year : undefined,
+        keywords: Array.isArray(proj.tech) && proj.tech.length ? proj.tech.join(', ') : undefined,
+        genre: proj.category || undefined,
+        author: { '@id': personId },
+        creator: { '@id': personId },
+        sameAs: proj.links?.source || proj.links?.live || undefined,
+      })
+    }
+  } else if (postMatch) {
+    // blog post → BlogPosting article schema
+    const post = posts.find((x) => x.slug === postMatch[1])
+    if (post) {
+      graph.push(breadcrumb(post.title, `${base}/blog/${post.slug}`, 'Notes', `${base}/blog`))
+      graph.push({
+        '@type': 'BlogPosting',
+        '@id': `${base}/blog/${post.slug}#post`,
+        headline: post.title,
+        description: post.excerpt || undefined,
+        articleBody: Array.isArray(post.body) ? post.body.join('\n\n') : undefined,
+        datePublished: isoDate(post.date),
+        dateModified: isoDate(post.date),
+        keywords: Array.isArray(post.tags) && post.tags.length ? post.tags.join(', ') : undefined,
+        wordCount: Array.isArray(post.body) ? post.body.join(' ').split(/\s+/).length : undefined,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `${base}/blog/${post.slug}` },
+        author: { '@id': personId },
+        publisher: { '@id': personId },
+      })
+    }
+  } else if (path === '/blog') {
+    // notes index → Blog schema listing every post
+    if (posts.length) {
+      graph.push(breadcrumb('Notes', `${base}/blog`))
+      graph.push({
+        '@type': 'Blog',
+        '@id': `${base}/blog#blog`,
+        name: `${(content.blog || {}).title || 'Notes'} — ${p.name || 'Suraj Kumar'}`,
+        description: (content.blog || {}).subtitle || undefined,
+        url: `${base}/blog`,
+        blogPost: posts.map((post) => ({
+          '@type': 'BlogPosting',
+          headline: post.title,
+          url: `${base}/blog/${post.slug}`,
+          datePublished: isoDate(post.date),
           author: { '@id': personId },
-          creator: { '@id': personId },
-          sameAs: proj.links?.source ? proj.links.source : undefined,
-        },
-      })),
-    })
+        })),
+      })
+    }
+  } else {
+    // home page → project showcase + FAQ (both earn rich results)
+    if (sectionOn('projects') && projects.length) {
+      graph.push({
+        '@type': 'ItemList',
+        '@id': `${base}/#projects`,
+        name: `Projects by ${person.name}`,
+        numberOfItems: projects.length,
+        itemListElement: projects.map((proj, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'CreativeWork',
+            '@id': `${base}/#project-${String(proj.id || i).replace(/[^a-zA-Z0-9-]/g, '')}`,
+            name: proj.title || undefined,
+            description: proj.description || undefined,
+            image: proj.image ? abs(proj.image) : undefined,
+            // every project now has its own case-study page
+            url: proj.id ? `${base}/work/${proj.id}` : `${base}/#projects`,
+            dateCreated: /^\d{4}$/.test(String(proj.year || '')) ? proj.year : undefined,
+            keywords: Array.isArray(proj.tech) && proj.tech.length ? proj.tech.join(', ') : undefined,
+            genre: proj.category || undefined,
+            author: { '@id': personId },
+            creator: { '@id': personId },
+            sameAs: proj.links?.source ? proj.links.source : undefined,
+          },
+        })),
+      })
+    }
+    const faq = Array.isArray(content.faq) ? content.faq : []
+    if (sectionOn('faq') && faq.length) {
+      graph.push({
+        '@type': 'FAQPage',
+        '@id': `${base}/#faq`,
+        mainEntity: faq.map((f) => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      })
+    }
   }
 
   return { '@context': 'https://schema.org', '@graph': graph }
@@ -896,20 +1077,85 @@ function sendIndex(req, res) {
     if (err) {
       return res.status(500).send('Client build missing — run: cd client && npm run build')
     }
-    const ld = JSON.stringify(seoJsonLd(siteBase(req))).replace(/</g, '\\u003c')
     const base = siteBase(req)
+    const content = getContent()
+    const meta = content.meta || {}
+    const owner = content.profile?.name || meta.siteName || 'Suraj Kumar'
+    const clean = (() => {
+      const p = String(req.path || '/').replace(/\/+$/, '') || '/'
+      return p === '/index.html' ? '/' : p
+    })()
+
+    // Per-page title / description / canonical: every blog post and case study
+    // is its own search result and its own link-preview card — not a copy of
+    // the homepage. Unknown SPA paths fall back to the homepage metadata.
+    let title = meta.title || owner
+    let description = meta.description || ''
+    let canonical = base + '/'
+    let ogType = 'website'
+    const posts = (content.blog || {}).posts || []
+    const workMatch = clean.match(/^\/work\/([a-zA-Z0-9-]+)$/)
+    const postMatch = clean.match(/^\/blog\/([a-zA-Z0-9-]+)$/)
+    if (workMatch) {
+      const proj = (content.projects || []).find((x) => String(x.id) === workMatch[1])
+      if (proj) {
+        title = `${proj.title} — Case Study · ${owner}`
+        description = proj.description || description
+        canonical = `${base}/work/${proj.id}`
+      }
+    } else if (clean === '/blog') {
+      title = `${(content.blog || {}).title || 'Notes'} · ${owner}`
+      description = (content.blog || {}).subtitle || description
+      canonical = `${base}/blog`
+    } else if (postMatch) {
+      const post = posts.find((x) => x.slug === postMatch[1])
+      if (post) {
+        title = `${post.title} · ${owner}`
+        description = post.excerpt || description
+        canonical = `${base}/blog/${post.slug}`
+        ogType = 'article'
+      }
+    }
+
+    const ld = JSON.stringify(seoJsonLd(base, clean)).replace(/</g, '\\u003c')
+    const ogImageRel = String(meta.ogImage || '/og.png')
+    const ogImage = /^https?:/i.test(ogImageRel)
+      ? ogImageRel
+      : base + (ogImageRel.startsWith('/') ? '' : '/') + ogImageRel
+
+    // Overwrite the static placeholder tags too — scrapers (WhatsApp, LinkedIn,
+    // Google) read the first matching tag and never run the React app.
+    const setMeta = (tag, value) => {
+      html = html.replace(
+        new RegExp(`(<meta\\s+(?:property|name)="${tag}"\\s+content=")[^"]*(")`),
+        (full, a, b) => a + escXml(value) + b,
+      )
+    }
+    setMeta('description', description)
+    setMeta('og:type', ogType)
+    setMeta('og:title', title)
+    setMeta('og:description', description)
+    setMeta('og:image', ogImage)
+    setMeta('twitter:title', title)
+    setMeta('twitter:description', description)
+    setMeta('twitter:image', ogImage)
+    html = html.replace(/<title>[^<]*<\/title>/, () => `<title>${escXml(title)}</title>`)
+
+    const verify = meta.verification || {}
+    const tags = [
+      `<link rel="canonical" href="${escXml(canonical)}" />`,
+      `<meta property="og:url" content="${escXml(canonical)}" />`,
+      `<meta property="og:image:width" content="1200" />`,
+      `<meta property="og:image:height" content="630" />`,
+      `<meta property="og:image:type" content="image/png" />`,
+      verify.google ? `<meta name="google-site-verification" content="${escXml(verify.google)}" />` : '',
+      verify.bing ? `<meta name="msvalidate.01" content="${escXml(verify.bing)}" />` : '',
+      `<script type="application/ld+json">${ld}</script>`,
+    ].filter(Boolean)
+
     res.setHeader('Cache-Control', 'no-cache')
     res.type('html').send(
-      html.replace('</head>', () =>
-        [
-          `<link rel="canonical" href="${escXml(base + '/')}" />`,
-          `<meta property="og:url" content="${escXml(base + '/')}" />`,
-          `<script type="application/ld+json">${ld}</script>`,
-        ]
-          .map((t) => `  ${t}`)
-          .join('\n') +
-          '\n  </head>',
-      ),
+      html.replace('</head>', () => tags.map((t) => `  ${t}`).join('\n') + '\n  </head>'),
     )
   })
 }

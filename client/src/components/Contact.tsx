@@ -1,7 +1,9 @@
-import { useState, type FormEvent } from 'react'
-import { AlertCircle, CheckCircle2, Clock, Mail, MapPin, Phone, Send, UserPlus } from 'lucide-react'
+import { useEffect, useState, type FormEvent } from 'react'
+import { AlertCircle, Calendar, CheckCircle2, Clock, Mail, MapPin, Phone, Send, UserPlus } from 'lucide-react'
+import QRCode from 'qrcode'
 import { Icon } from '../icons'
 import Section from './Section'
+import ShareBar from './ShareBar'
 import { sendContact } from '../api'
 import type { ContactPayload, Profile } from '../types'
 
@@ -113,6 +115,30 @@ export default function Contact({ profile }: { profile: Profile }) {
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
+  // one-tap WhatsApp with a ready-made reason — the visitor never has to think
+  // about what to write
+  const digits = profile.phone.replace(/\D/g, '')
+  const waNumber = digits.length === 10 ? `91${digits}` : digits
+  const first = profile.name.split(' ')[0]
+  const waLink = (text: string) => `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`
+  const intents = [
+    { emoji: '💼', label: 'Job opportunity', text: `Hi ${first}, I have a job opportunity I would like to discuss.` },
+    { emoji: '🤝', label: 'Freelance project', text: `Hi ${first}, I have a project I would like to build with you.` },
+    { emoji: '👋', label: 'Just saying hi', text: `Hi ${first}, I saw your portfolio and would like to connect.` },
+  ]
+  // calendar link if the owner added one (panel → Profile), else a callback ask
+  const bookingHref = profile.bookingUrl || waLink(`Hi ${first}, I would like to schedule a quick call with you.`)
+  const bookingLabel = profile.bookingUrl ? 'Book a call' : 'Request a callback'
+
+  // QR carrying a MECARD — phone cameras open it straight as "add contact"
+  const [qr, setQr] = useState('')
+  useEffect(() => {
+    const card = `MECARD:N:${profile.name};TEL:${profile.phone.replace(/[^\d+]/g, '')};EMAIL:${profile.email};URL:${window.location.origin};;`
+    QRCode.toDataURL(card, { margin: 1, width: 220, color: { dark: '#0b1220ff', light: '#ffffffff' } })
+      .then(setQr)
+      .catch(() => setQr(''))
+  }, [profile])
+
   const details = [
     { icon: <Mail size={18} />, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
     { icon: <Phone size={18} />, label: 'Phone', value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, '')}` },
@@ -178,6 +204,37 @@ export default function Contact({ profile }: { profile: Profile }) {
           <button className="btn btn-ghost save-vcard" type="button" onClick={saveContact}>
             <UserPlus size={17} /> Save my contact
           </button>
+
+          {/* quick WhatsApp with a pre-filled reason — fastest path to a reply */}
+          <div className="wa-intents">
+            <p className="fact-label">Quick WhatsApp</p>
+            <div className="wa-intent-row">
+              {intents.map((it) => (
+                <a
+                  className="wa-chip"
+                  key={it.label}
+                  href={waLink(it.text)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  <span aria-hidden="true">{it.emoji}</span> {it.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <a className="btn btn-primary book-call" href={bookingHref} target="_blank" rel="noreferrer noopener">
+            <Calendar size={17} /> {bookingLabel}
+          </a>
+
+          {qr && (
+            <div className="qr-block">
+              <img className="qr-img" src={qr} alt="QR code with my contact details" />
+              <p className="qr-caption">Scan to save my contact</p>
+            </div>
+          )}
+
+          <ShareBar label="Share my portfolio" />
         </aside>
 
         <form className="contact-form reveal" data-delay="2" onSubmit={onSubmit} noValidate>

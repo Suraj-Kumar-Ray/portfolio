@@ -53,6 +53,9 @@ That icon is deliberately **faded** — a normal visitor does not notice it, and
 | **Coding Profiles** | LeetCode count and **GitHub/LeetCode links** |
 | **Updates** | Timeline — newest achievement at the top |
 | **Achievements / Services / Certifications / FAQ** | All the remaining content |
+| **Testimonials** | Feedback quotes from people you worked with (empty list = hidden) |
+| **Notes / Blog** | Short articles — every note gets its own Google-visible page |
+| **SEO & Alerts** | Message-alert email + Google/Bing verification codes + social share image |
 | **Gallery** | Travel / friends photos |
 | **Sections & Visibility** | Which section shows on the website (ON/OFF switch) |
 | **Messages** | Messages from the contact form (reply / read / delete) |
@@ -79,6 +82,10 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 | Add a new **photo** (gallery / project) | File folder + `REBUILD.bat` | Copy the photo into `client\public\gallery\` → double-click `REBUILD.bat` → refresh |
 | Show the photos in the gallery | Dashboard → **Sections & Visibility** | *Gallery* switch **ON** |
 | Read contact form messages | Dashboard → **Messages** | Read / Reply / Delete |
+| Get an **email** when someone messages | (one-time) Gmail inbox | First message sends a FormSubmit **activation email** to `csesuraj2003@gmail.com` — click **Confirm** once, done |
+| Add a testimonial | Dashboard → **Testimonials** | **+ Add new** → name, role, feedback → Save |
+| Publish a note / blog post | Dashboard → **Notes / Blog** | **+ Add new** → title, slug, date, article → Save |
+| Get found on Google | Dashboard → **SEO & Alerts** | Paste the verification codes from Google Search Console / Bing (see section 7) |
 | Change the site title or description | Dashboard → **Settings** | Edit → Save |
 | Change the dashboard password | Dashboard → **Settings** | *Change password* |
 
@@ -116,6 +123,7 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 | "Too many attempts" error | 15 wrong tries happened — wait 10 minutes, then try again |
 | Forgot the dashboard link | Open the `server\.env` file → it is written after `ADMIN_PATH=` |
 | Content is not saving | Some field was left empty, or there is a comma/quote mistake in the Advanced JSON |
+| Email alerts not arriving | Open the FormSubmit **activation email** in `csesuraj2003@gmail.com` and click Confirm (one time). Messages still save in the panel meanwhile |
 | New photo not showing | Run `REBUILD.bat`, then `Ctrl + F5` in the browser |
 | Port 5000 busy | An old window is still running — close it, then run `START.bat` |
 
@@ -132,6 +140,11 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 
 Notes:
 - Free hosting **sleeps** after ~15 minutes of no visitors — the first opening then takes ~30–50 seconds. Later openings are instant.
+- **One-time free SEO setup (10 minutes, brings Google visitors):**
+  1. [Google Search Console](https://search.google.com/search-console) → Add property (URL prefix) → `https://suraj-portfolio-wjpt.onrender.com` → verification method **HTML tag** → copy the code.
+  2. [Bing Webmaster Tools](https://www.bing.com/webmasters) → same thing → copy the code.
+  3. Dashboard → **SEO & Alerts** → paste both codes → Save → go back to both sites and press **Verify**.
+  4. In both sites → Sitemaps → submit `https://suraj-portfolio-wjpt.onrender.com/sitemap.xml`.
 - **To publish any change:** run `git add -A && git commit -m "update" && git push` — Render rebuilds and puts it live automatically in ~2 minutes.
 - Panel password is the same as local (`CHANGE_ME_ADMIN_PASSWORD`). Inbox messages / dashboard edits reset on every redeploy (free plan limitation) — the base content in the repo always stays.
 

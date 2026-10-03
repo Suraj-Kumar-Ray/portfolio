@@ -25,6 +25,16 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
 import QuickConnect from './components/QuickConnect'
+import { Notes, BlogIndex, BlogPostView } from './components/Blog'
+import CaseStudy from './components/CaseStudy'
+
+// Standalone pages (/work/:id, /blog, /blog/:slug) are real URLs with their
+// own server-injected SEO tags. The app renders them instead of the home page
+// when the path matches; navigation between pages is a normal full page load.
+const PATH = window.location.pathname.replace(/\/+$/, '') || '/'
+const WORK_ID = (PATH.match(/^\/work\/([a-zA-Z0-9-]+)$/) || [])[1] || ''
+const BLOG_SLUG = (PATH.match(/^\/blog\/([a-zA-Z0-9-]+)$/) || [])[1] || ''
+const IS_SUB_PAGE = PATH === '/blog' || Boolean(WORK_ID) || Boolean(BLOG_SLUG)
 
 type State =
   | { status: 'loading' }
@@ -95,9 +105,10 @@ export default function App() {
     return trackSections(['home', 'stats', ...navLinks.map((l) => l.id)])
   }, [ready, navLinks])
 
-  // Keep document metadata in sync with the CMS content
+  // Keep document metadata in sync with the CMS content. Sub-pages carry their
+  // own server-injected <title>/description — their components set them instead.
   useEffect(() => {
-    if (state.status !== 'ready') return
+    if (state.status !== 'ready' || IS_SUB_PAGE) return
     const { meta, profile } = state.content
     document.title = meta.title || `${profile.name} — ${profile.role}`
     const setMeta = (selector: string, attr: string, value: string) => {
@@ -156,9 +167,15 @@ export default function App() {
     codingProfiles,
     gallery,
     updates,
+    blog,
     testimonials,
     faq,
   } = state.content
+
+  // standalone pages — real URLs, own chrome, own SEO (see server sendIndex)
+  if (WORK_ID) return <CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />
+  if (BLOG_SLUG) return <BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />
+  if (PATH === '/blog') return <BlogIndex block={blog || { posts: [] }} profile={profile} />
 
   return (
     <>
@@ -186,6 +203,7 @@ export default function App() {
         {isOn('work') && work && <Work block={work} profile={profile} />}
         {isOn('gallery') && <Gallery block={gallery} />}
         {isOn('testimonials') && testimonials?.length > 0 && <Testimonials testimonials={testimonials} />}
+        {isOn('blog') && blog?.posts?.length > 0 && <Notes block={blog} />}
         {isOn('faq') && <Faq faq={faq} />}
         {isOn('contact') && <Contact profile={profile} />}
       </main>
