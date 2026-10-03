@@ -426,6 +426,17 @@ main {
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
+}
+.logo-name {
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  /* on narrow screens the sub-page bar keeps only the roundel so the brand
+     never wraps to two lines while still showing the way back home */
+  .subpage-bar .logo-name {
+    display: none;
+  }
 }
 
 .logo-mark {
