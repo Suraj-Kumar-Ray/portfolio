@@ -139,7 +139,7 @@ the secret path never appears in the page markup or the JS bundle.
 - `/admin` intentionally 404s into the normal site.
 - The response sends `X-Robots-Tag: noindex, nofollow, noarchive` — search engines never list it.
 - `/robots.txt` deliberately does not mention the path (mentioning it would leak it).
-- **SEO**: every page is served with a canonical URL, `og:url` and a Schema.org `Person` JSON-LD built from `content.json` (name, role, contact, education, skills, socials) — search engines get it without running JavaScript. Set `SITE_URL` in `server/.env` after deploying so absolute URLs point at the real domain.
+- **SEO**: every page is served with a canonical URL, `og:url` and a Schema.org JSON-LD `@graph` built from `content.json` — a `Person` node plus an `ItemList` of all project cards (title, description, thumbnail, tech keywords, year, author → Person; auto-hidden when the section is off). `sitemap.xml` includes per-page `lastmod` and `<image:*>` tags for the avatar + project thumbnails; `robots.txt` allows every real search engine while blocking SEO scraper bots (and never lists the panel). `/resume.html` 301-redirects to `/resume`. Set `SITE_URL` in `server/.env` after deploying so absolute URLs point at the real domain.
 - Login is throttled to 15 attempts per IP per 10 minutes, and tokens are compared in constant time.
 
 | Panel tab | What it does |
