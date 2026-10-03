@@ -1304,6 +1304,11 @@ function sendIndex(req, res) {
     html = html.replace(/<title>[^<]*<\/title>/, () => `<title>${escXml(title)}</title>`)
 
     const verify = meta.verification || {}
+    // Hand the same content the API would return straight to the app in the
+    // HTML. The first paint then needs no /api/content round-trip: no loading
+    // splash, no layout shift, and crawlers see the real content even if they
+    // never run JavaScript. publicContent() keeps the Telegram token out.
+    const inlineContent = JSON.stringify(publicContent()).replace(/</g, '\\u003c')
     const tags = [
       `<link rel="canonical" href="${escXml(canonical)}" />`,
       `<meta property="og:url" content="${escXml(canonical)}" />`,
@@ -1313,6 +1318,7 @@ function sendIndex(req, res) {
       verify.google ? `<meta name="google-site-verification" content="${escXml(verify.google)}" />` : '',
       verify.bing ? `<meta name="msvalidate.01" content="${escXml(verify.bing)}" />` : '',
       `<script type="application/ld+json">${ld}</script>`,
+      `<script>window.__CONTENT__=${inlineContent}</script>`,
     ].filter(Boolean)
 
     res.setHeader('Cache-Control', 'no-cache')
