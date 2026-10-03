@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { initStore, read, write, lastModified, closeStore, backendName } from './store.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -13,10 +14,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ENV_FILE = path.join(__dirname, '..', '.env')
 dotenv.config({ path: ENV_FILE, override: true })
 
+// The mutable documents (content/messages/analytics) are owned by store.js; only
+// the static resume file is addressed directly here.
 const DATA_DIR = path.join(__dirname, '..', 'data')
-const CONTENT_FILE = path.join(DATA_DIR, 'content.json')
-const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json')
-const ANALYTICS_FILE = path.join(DATA_DIR, 'analytics.json')
 
 const envPort = Number(process.env.PORT)
 const PORT = Number.isInteger(envPort) && envPort > 0 ? envPort : 5000
@@ -67,22 +67,11 @@ app.use((req, res, next) => {
 })
 
 // --- data helpers -----------------------------------------------------------
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(fs.readFileSync(file, 'utf8'))
-  } catch (err) {
-    if (err.code !== 'ENOENT') console.error(`[data] could not read ${file}:`, err.message)
-    return fallback
-  }
-}
-
-function writeJson(file, data) {
-  fs.mkdirSync(path.dirname(file), { recursive: true })
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8')
-}
-
-const getContent = () => readJson(CONTENT_FILE, {})
-const getMessages = () => readJson(MESSAGES_FILE, [])
+// Reads come from the in-memory copy loaded at boot (see store.js); writes
+// update that copy and persist it — to local files, or to MongoDB when
+// MONGODB_URI is set, so panel edits and messages survive redeploys.
+const getContent = () => read('content')
+const getMessages = () => read('messages')
 
 // --- analytics storage -------------------------------------------------------
 // Events live in a git-ignored file, pruned to the last 90 days / 8000 events.
@@ -99,13 +88,15 @@ function pruneEvents(list) {
   return kept.length > ANALYTICS_MAX ? kept.slice(-ANALYTICS_MAX) : kept
 }
 
-const getAnalytics = () => pruneEvents(readJson(ANALYTICS_FILE, []))
+const getAnalytics = () => pruneEvents(read('analytics'))
 
 function flushAnalytics() {
   if (!analyticsQueue.length) return
   const events = getAnalytics().concat(analyticsQueue)
   analyticsQueue = []
-  writeJson(ANALYTICS_FILE, pruneEvents(events))
+  write('analytics', pruneEvents(events)).catch((err) =>
+    console.error('[analytics] could not persist events:', err.message)
+  )
 }
 
 function queueEvent(event) {
@@ -396,7 +387,7 @@ function validateInquiry(body) {
   return { errors, value: { name, email, phone, projectType, budget, timeline, message } }
 }
 
-api.post('/inquiry', inquiryLimit, (req, res) => {
+api.post('/inquiry', inquiryLimit, async (req, res) => {
   const body = req.body || {}
 
   // Honeypot: bots fill hidden fields. Pretend success, store nothing.
@@ -419,7 +410,7 @@ api.post('/inquiry', inquiryLimit, (req, res) => {
     createdAt: new Date().toISOString(),
   }
   messages.push(record)
-  writeJson(MESSAGES_FILE, messages)
+  await write('messages', messages)
 
   notifyByEmail(record, 'inquiry')
   notifyByTelegram(record, 'inquiry')
@@ -431,7 +422,7 @@ api.post('/inquiry', inquiryLimit, (req, res) => {
   })
 })
 
-api.post('/contact', rateLimit, (req, res) => {
+api.post('/contact', rateLimit, async (req, res) => {
   const body = req.body || {}
 
   // Honeypot: bots fill hidden fields. Pretend success, store nothing.
@@ -453,7 +444,7 @@ api.post('/contact', rateLimit, (req, res) => {
     createdAt: new Date().toISOString(),
   }
   messages.push(record)
-  writeJson(MESSAGES_FILE, messages)
+  await write('messages', messages)
 
   notifyByEmail(record, 'contact')
   notifyByTelegram(record, 'contact')
@@ -562,12 +553,7 @@ api.get('/admin/overview', requireAdmin, (req, res) => {
   const sections = Array.isArray(content.sections) ? content.sections : []
   const projects = Array.isArray(content.projects) ? content.projects : []
   const messages = getMessages()
-  let stat = null
-  try {
-    stat = fs.statSync(CONTENT_FILE)
-  } catch {
-    stat = null
-  }
+  const contentBytes = Buffer.byteLength(JSON.stringify(content))
   res.json({
     ok: true,
     data: {
@@ -579,9 +565,10 @@ api.get('/admin/overview', requireAdmin, (req, res) => {
       projectsFeatured: projects.filter((p) => p.featured).length,
       messages: messages.length,
       unread: messages.filter((m) => !m.read).length,
-      contentBytes: stat ? stat.size : 0,
-      contentUpdatedAt: stat ? stat.mtime.toISOString() : null,
+      contentBytes,
+      contentUpdatedAt: lastModified('content'),
       resumeReady: fs.existsSync(path.join(DATA_DIR, 'resume.pdf')),
+      storeBackend: backendName(),
       adminPath: ADMIN_PATH,
     },
   })
@@ -709,7 +696,7 @@ api.get('/admin/analytics/export', requireAdmin, (req, res) => {
   res.send(csv)
 })
 
-api.post('/admin/password', adminLimit, requireAdmin, (req, res) => {
+api.post('/admin/password', adminLimit, requireAdmin, async (req, res) => {
   const body = req.body || {}
   const current = String(body.currentToken || '')
   const next = String(body.newToken || '').trim()
@@ -721,6 +708,18 @@ api.post('/admin/password', adminLimit, requireAdmin, (req, res) => {
   }
   ADMIN_TOKEN = next
   process.env.ADMIN_TOKEN = next
+  // Persist the override durably (MongoDB in production) so it survives a
+  // redeploy even though the host's environment variable is unchanged.
+  try {
+    await write('settings', { ...read('settings'), adminToken: next })
+  } catch (err) {
+    return res.status(500).json({
+      ok: false,
+      error: `Password changed for this session, but it could not be saved: ${err.message}`,
+    })
+  }
+  // Best effort: also refresh server/.env for local runs. A host's ephemeral
+  // disk is expected here — the durable copy above is what actually matters.
   try {
     let envText = fs.existsSync(ENV_FILE) ? fs.readFileSync(ENV_FILE, 'utf8') : ''
     if (/^ADMIN_TOKEN=.*$/m.test(envText)) {
@@ -729,11 +728,8 @@ api.post('/admin/password', adminLimit, requireAdmin, (req, res) => {
       envText += `${envText.endsWith('\n') || !envText ? '' : '\n'}ADMIN_TOKEN=${next}\n`
     }
     fs.writeFileSync(ENV_FILE, envText, 'utf8')
-  } catch (err) {
-    return res.status(500).json({
-      ok: false,
-      error: `Password changed for this session, but server/.env could not be updated: ${err.message}`,
-    })
+  } catch {
+    /* ephemeral filesystem on the host — the durable copy above is what matters */
   }
   res.json({ ok: true, message: 'Password updated.' })
 })
@@ -743,18 +739,18 @@ api.get('/admin/content', requireAdmin, (req, res) => {
   res.json({ ok: true, data: getContent() })
 })
 
-api.put('/admin/content', requireAdmin, (req, res) => {
+api.put('/admin/content', requireAdmin, async (req, res) => {
   const body = req.body
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return res.status(400).json({ ok: false, error: 'Body must be a JSON object.' })
   }
   // shallow-merge top-level keys so partial edits are safe
   const merged = { ...getContent(), ...body }
-  writeJson(CONTENT_FILE, merged)
+  await write('content', merged)
   res.json({ ok: true, data: merged })
 })
 
-api.patch('/admin/sections/:key', requireAdmin, (req, res) => {
+api.patch('/admin/sections/:key', requireAdmin, async (req, res) => {
   const { key } = req.params
   const { enabled } = req.body || {}
   if (typeof enabled !== 'boolean') {
@@ -767,7 +763,7 @@ api.patch('/admin/sections/:key', requireAdmin, (req, res) => {
 
   section.enabled = enabled
   content.sections = sections
-  writeJson(CONTENT_FILE, content)
+  await write('content', content)
   console.log(`[sections] ${key} → ${enabled ? 'visible' : 'hidden'}`)
   res.json({ ok: true, data: section })
 })
@@ -777,20 +773,20 @@ api.get('/messages', requireAdmin, (req, res) => {
   res.json({ ok: true, data: messages, total: messages.length })
 })
 
-api.patch('/messages/:id', requireAdmin, (req, res) => {
+api.patch('/messages/:id', requireAdmin, async (req, res) => {
   const messages = getMessages()
   const message = messages.find((m) => m.id === req.params.id)
   if (!message) return res.status(404).json({ ok: false, error: 'Not found.' })
   if (typeof (req.body || {}).read === 'boolean') message.read = req.body.read
-  writeJson(MESSAGES_FILE, messages)
+  await write('messages', messages)
   res.json({ ok: true, data: message })
 })
 
-api.delete('/messages/:id', requireAdmin, (req, res) => {
+api.delete('/messages/:id', requireAdmin, async (req, res) => {
   const messages = getMessages()
   const next = messages.filter((m) => m.id !== req.params.id)
   if (next.length === messages.length) return res.status(404).json({ ok: false, error: 'Not found.' })
-  writeJson(MESSAGES_FILE, next)
+  await write('messages', next)
   res.json({ ok: true })
 })
 
@@ -870,6 +866,7 @@ app.get('/sitemap.xml', (req, res) => {
   const content = getContent()
   const abs = (u) => (/^https?:/i.test(String(u || '')) ? String(u) : base + (String(u).startsWith('/') ? '' : '/') + u)
   const today = new Date().toISOString().slice(0, 10)
+  const contentMod = lastModified('content').slice(0, 10)
   const mtime = (file) => {
     try {
       return fs.statSync(file).mtime.toISOString().slice(0, 10)
@@ -896,7 +893,7 @@ app.get('/sitemap.xml', (req, res) => {
   const home =
     '  <url>\n' +
     `    <loc>${escXml(base + '/')}</loc>\n` +
-    `    <lastmod>${mtime(CONTENT_FILE)}</lastmod>\n` +
+    `    <lastmod>${contentMod}</lastmod>\n` +
     '    <changefreq>monthly</changefreq>\n' +
     '    <priority>1.0</priority>\n' +
     (homeImages.length ? homeImages.join('\n') + '\n' : '') +
@@ -913,7 +910,7 @@ app.get('/sitemap.xml', (req, res) => {
   const page = (loc, priority, images = []) =>
     '  <url>\n' +
     `    <loc>${escXml(loc)}</loc>\n` +
-    `    <lastmod>${mtime(CONTENT_FILE)}</lastmod>\n` +
+    `    <lastmod>${contentMod}</lastmod>\n` +
     '    <changefreq>monthly</changefreq>\n' +
     `    <priority>${priority}</priority>\n` +
     (images.length ? images.join('\n') + '\n' : '') +
@@ -1368,19 +1365,57 @@ function lanAddresses() {
   return found
 }
 
-app.listen(PORT, () => {
-  console.log(`\n  Portfolio site + API  → http://localhost:${PORT}`)
-  const lan = lanAddresses()
-  if (lan.length) {
-    console.log(`  Phone / tablet       → ${lan.map((ip) => `http://${ip}:${PORT}`).join('  ·  ')}  (same Wi-Fi required)`)
+async function start() {
+  const { backend, error } = await initStore()
+
+  // A password changed from the panel is stored durably, so it survives a
+  // redeploy even though the host's environment variable stays as it was.
+  const savedToken = read('settings')?.adminToken
+  if (savedToken) {
+    ADMIN_TOKEN = String(savedToken)
+    process.env.ADMIN_TOKEN = ADMIN_TOKEN
   }
-  console.log(`  Control panel        → http://localhost:${PORT}${ADMIN_PATH}  (just for you)`)
-  console.log(`  Resume (web / PDF)   → http://localhost:${PORT}/resume  ·  /api/resume`)
-  console.log(`  Environment: ${isProduction ? 'production' : 'development'}`)
-  console.log(`  Content file: ${CONTENT_FILE}`)
-  console.log(
-    `  Admin token:  ${
-      process.env.ADMIN_TOKEN ? 'loaded from server/.env' : 'NOT SET — using default admin123 (change it!)'
-    }\n`
-  )
-})
+
+  app.listen(PORT, () => {
+    console.log(`\n  Portfolio site + API  → http://localhost:${PORT}`)
+    const lan = lanAddresses()
+    if (lan.length) {
+      console.log(`  Phone / tablet       → ${lan.map((ip) => `http://${ip}:${PORT}`).join('  ·  ')}  (same Wi-Fi required)`)
+    }
+    console.log(`  Control panel        → http://localhost:${PORT}${ADMIN_PATH}  (just for you)`)
+    console.log(`  Resume (web / PDF)   → http://localhost:${PORT}/resume  ·  /api/resume`)
+    console.log(`  Environment: ${isProduction ? 'production' : 'development'}`)
+    console.log(
+      `  Data store:   ${
+        backend === 'mongo' ? 'MongoDB Atlas — survives redeploys' : 'local files in server/data'
+      }`
+    )
+    if (error) {
+      console.log(`  !! MongoDB unreachable (${error}) — data is NOT safe across redeploys until it connects.`)
+    }
+    console.log(
+      `  Admin token:  ${
+        savedToken
+          ? 'loaded from saved settings'
+          : process.env.ADMIN_TOKEN
+            ? 'loaded from server/.env'
+            : 'NOT SET — using default admin123 (change it!)'
+      }\n`
+    )
+  })
+}
+
+start()
+
+// A host sends SIGTERM on redeploy/scale-down: flush pending writes and close
+// cleanly so the last edits actually reach the database.
+let shuttingDown = false
+async function shutdown() {
+  if (shuttingDown) return
+  shuttingDown = true
+  flushAnalytics()
+  await closeStore().catch(() => {})
+  process.exit(0)
+}
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)

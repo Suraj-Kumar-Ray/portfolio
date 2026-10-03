@@ -152,7 +152,8 @@ Notes:
   3. Dashboard → **SEO & Alerts** → paste both codes → Save → go back to both sites and press **Verify**.
   4. In both sites → Sitemaps → submit `https://suraj-portfolio-wjpt.onrender.com/sitemap.xml`.
 - **To publish any change:** run `git add -A && git commit -m "update" && git push` — Render rebuilds and puts it live automatically in ~2 minutes.
-- Panel password is the same as local (`CHANGE_ME_ADMIN_PASSWORD`). Inbox messages / dashboard edits reset on every redeploy (free plan limitation) — the base content in the repo always stays.
+- Panel password is the same as local (`CHANGE_ME_ADMIN_PASSWORD`).
+- **Inbox messages, analytics and dashboard edits are no longer lost on redeploy** — they are saved to a free MongoDB Atlas database once you set `MONGODB_URI` (see README → **Durable data**). The server prints `Data store: MongoDB Atlas — survives redeploys` on boot when it is active. Until `MONGODB_URI` is set it keeps using local files, so a redeploy still resets them (the base content in the repo always stays).
 
 ---
 
@@ -166,7 +167,8 @@ portfolio/
 │   ├── .env               ← DASHBOARD password + secret link (private file)
 │   ├── admin/admin.html   ← dashboard design
 │   ├── src/index.js       ← backend (API, login, sections)
-│   └── data/content.json  ← 👑 ALL CONTENT LIVES HERE
+│   ├── src/store.js       ← durable storage (files locally, MongoDB in production)
+│   └── data/content.json  ← 👑 ALL CONTENT LIVES HERE (seed for the database)
 ├── client/public/         ← logo, avatar, project photos, gallery photos
 ├── client/src/components/Footer.tsx ← footer + small 🔒 dashboard icon
 ├── resume/resume.html     ← resume source (to build the PDF)
