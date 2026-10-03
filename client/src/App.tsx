@@ -25,8 +25,11 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
 import QuickConnect from './components/QuickConnect'
+import StickyCta from './components/StickyCta'
 import { Notes, BlogIndex, BlogPostView } from './components/Blog'
 import CaseStudy from './components/CaseStudy'
+import Quote from './components/Quote'
+import Audit from './components/Audit'
 
 // Standalone pages (/work/:id, /blog, /blog/:slug) are real URLs with their
 // own server-injected SEO tags. The app renders them instead of the home page
@@ -34,7 +37,9 @@ import CaseStudy from './components/CaseStudy'
 const PATH = window.location.pathname.replace(/\/+$/, '') || '/'
 const WORK_ID = (PATH.match(/^\/work\/([a-zA-Z0-9-]+)$/) || [])[1] || ''
 const BLOG_SLUG = (PATH.match(/^\/blog\/([a-zA-Z0-9-]+)$/) || [])[1] || ''
-const IS_SUB_PAGE = PATH === '/blog' || Boolean(WORK_ID) || Boolean(BLOG_SLUG)
+const IS_QUOTE = PATH === '/quote'
+const IS_AUDIT = PATH === '/audit'
+const IS_SUB_PAGE = PATH === '/blog' || IS_QUOTE || IS_AUDIT || Boolean(WORK_ID) || Boolean(BLOG_SLUG)
 
 type State =
   | { status: 'loading' }
@@ -169,6 +174,7 @@ export default function App() {
     updates,
     blog,
     testimonials,
+    audit,
     faq,
   } = state.content
 
@@ -176,6 +182,8 @@ export default function App() {
   if (WORK_ID) return <CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />
   if (BLOG_SLUG) return <BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />
   if (PATH === '/blog') return <BlogIndex block={blog || { posts: [] }} profile={profile} />
+  if (IS_QUOTE) return <Quote work={work} profile={profile} />
+  if (IS_AUDIT) return <Audit audit={audit} profile={profile} />
 
   return (
     <>
@@ -211,6 +219,7 @@ export default function App() {
       <Footer profile={profile} links={navLinks} />
       <BackToTop />
       <QuickConnect profile={profile} />
+      <StickyCta profile={profile} />
     </>
   )
 }

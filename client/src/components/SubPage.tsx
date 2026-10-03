@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import Footer from './Footer'
 import BackToTop from './BackToTop'
 import QuickConnect from './QuickConnect'
+import StickyCta from './StickyCta'
 import type { Profile } from '../types'
 
 /**
@@ -48,6 +49,7 @@ export default function SubPage({
       <Footer profile={profile} />
       <BackToTop />
       <QuickConnect profile={profile} />
+      <StickyCta profile={profile} />
     </div>
   )
 }

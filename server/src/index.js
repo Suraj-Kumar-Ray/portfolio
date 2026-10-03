@@ -130,8 +130,15 @@ function dayKey(value = new Date()) {
 
 function publicContent() {
   const { meta = {}, profile = {}, ...rest } = getContent()
+  // The Telegram bot token is a secret: the public site only ever learns
+  // whether alerts are on, never the token itself. Only the admin panel (which
+  // reads /api/admin/content behind the password) sees the real value.
+  const safeMeta = { ...meta }
+  if (safeMeta.telegram) {
+    safeMeta.telegram = { enabled: safeMeta.telegram.enabled !== false, chatId: '' }
+  }
   return {
-    meta,
+    meta: safeMeta,
     profile,
     ...rest,
     updatedAt: new Date().toISOString(),
@@ -245,6 +252,66 @@ function notifyByEmail(record, kind) {
     .catch((err) => console.log('[notify] email alert failed (message is still saved):', err.message))
 }
 
+// --- Telegram alerts (free, instant) ----------------------------------------
+// A new enquiry pings the owner's phone seconds after it arrives — replying
+// while the lead is still around is what actually closes projects. Create a bot
+// with @BotFather, paste the token + chat id in the panel (Site → SEO & Alerts)
+// and every message shows up as a Telegram notification. TELEGRAM_BOT_TOKEN /
+// TELEGRAM_CHAT_ID env vars override the panel values, so the config survives a
+// redeploy even on a free host whose disk is wiped.
+function telegramConfig() {
+  const t = getContent().meta?.telegram || {}
+  return {
+    token: String(process.env.TELEGRAM_BOT_TOKEN || t.botToken || '').trim(),
+    chatId: String(process.env.TELEGRAM_CHAT_ID || t.chatId || '').trim(),
+    enabled: t.enabled !== false,
+  }
+}
+
+const tgEscape = (s) =>
+  String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+function notifyByTelegram(record, kind) {
+  if (String(process.env.NOTIFY_DISABLE || '').toLowerCase() === 'true') return
+  const cfg = telegramConfig()
+  if (!cfg.enabled || !cfg.token || !cfg.chatId) return
+
+  const content = getContent()
+  const emoji = kind === 'inquiry' || kind === 'audit' ? '🧑‍💻' : '✉️'
+  const lines = [
+    `${emoji} <b>New ${tgEscape(kind)} — ${tgEscape(content.meta?.siteName || 'Portfolio')}</b>`,
+    '',
+    `<b>Name:</b> ${tgEscape(record.name)}`,
+    `<b>Email:</b> ${tgEscape(record.email)}`,
+  ]
+  if (record.phone) lines.push(`<b>Phone:</b> ${tgEscape(record.phone)}`)
+  if (record.subject) lines.push(`<b>Subject:</b> ${tgEscape(record.subject)}`)
+  if (record.projectType) lines.push(`<b>Project:</b> ${tgEscape(record.projectType)}`)
+  if (record.budget) lines.push(`<b>Budget:</b> ${tgEscape(record.budget)}`)
+  if (record.timeline) lines.push(`<b>Timeline:</b> ${tgEscape(record.timeline)}`)
+  if (record.websiteUrl) lines.push(`<b>Website:</b> ${tgEscape(record.websiteUrl)}`)
+  const msg = String(record.message || '')
+  lines.push('', tgEscape(msg.length > 1200 ? msg.slice(0, 1200) + '…' : msg))
+  const when = new Date(record.createdAt || Date.now())
+  lines.push('', `<i>${when.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })} IST</i>`)
+
+  fetch(`https://api.telegram.org/bot${cfg.token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: cfg.chatId,
+      text: lines.join('\n'),
+      parse_mode: 'HTML',
+      disable_web_page_preview: true,
+    }),
+  })
+    .then((r) => console.log(`[notify] telegram alert → HTTP ${r.status}`))
+    .catch((err) => console.log('[notify] telegram alert failed (message is still saved):', err.message))
+}
+
 // --- API routes -------------------------------------------------------------
 const api = express.Router()
 
@@ -272,6 +339,7 @@ const CONTENT_KEYS = [
   'blog',
   'testimonials',
   'faq',
+  'audit',
 ]
 
 for (const key of CONTENT_KEYS) {
@@ -279,7 +347,7 @@ for (const key of CONTENT_KEYS) {
     const content = getContent()
     const value = content[key]
     // objects (blocks) stay objects, lists fall back to an empty array
-    res.json({ ok: true, data: value ?? (key === 'meta' || key === 'profile' ? {} : []) })
+    res.json({ ok: true, data: value ?? (key === 'meta' || key === 'profile' || key === 'audit' ? {} : []) })
   })
 }
 
@@ -353,6 +421,7 @@ api.post('/inquiry', inquiryLimit, (req, res) => {
   writeJson(MESSAGES_FILE, messages)
 
   notifyByEmail(record, 'inquiry')
+  notifyByTelegram(record, 'inquiry')
   console.log(`[inquiry] ${record.name} (${record.email}) → ${record.projectType} · ${record.budget}`)
   res.status(201).json({
     ok: true,
@@ -386,6 +455,7 @@ api.post('/contact', rateLimit, (req, res) => {
   writeJson(MESSAGES_FILE, messages)
 
   notifyByEmail(record, 'contact')
+  notifyByTelegram(record, 'contact')
   console.log(`[contact] new message from ${record.email}: "${record.subject}"`)
   res.status(201).json({
     ok: true,
@@ -862,6 +932,9 @@ app.get('/sitemap.xml', (req, res) => {
       if (post.slug) extras.push(page(`${base}/blog/${post.slug}`, '0.6'))
     }
   }
+  // lead-generation pages: the quote / packages page and the free-review offer
+  if (sectionOn('work')) extras.push(page(`${base}/quote`, '0.8'))
+  extras.push(page(`${base}/audit`, '0.7'))
 
   const xml =
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
@@ -944,6 +1017,33 @@ function seoJsonLd(base, reqPath = '/') {
 
   const graph = [person]
 
+  // Local-business entity: gives Google a business card for the owner (area
+  // served, price range, contact) so "web developer near me" style searches can
+  // surface the site. Only added when a location is set.
+  if (loc.length) {
+    graph.push({
+      '@type': 'ProfessionalService',
+      '@id': `${base}/#business`,
+      name: person.name,
+      description: meta.description || p.tagline || undefined,
+      url: `${base}/`,
+      image: p.avatar ? abs(p.avatar) : undefined,
+      email: p.email || undefined,
+      telephone: p.phone || undefined,
+      priceRange: '₹₹',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: loc[0],
+        addressRegion: loc[1] || undefined,
+        addressCountry: loc[2] || undefined,
+      },
+      areaServed: p.location || undefined,
+      knowsAbout,
+      sameAs,
+      founder: { '@id': personId },
+    })
+  }
+
   const sectionOn = (key) => {
     const s = (content.sections || []).find((x) => x.key === key)
     return !s || s.enabled !== false
@@ -1007,6 +1107,37 @@ function seoJsonLd(base, reqPath = '/') {
         publisher: { '@id': personId },
       })
     }
+  } else if (path === '/quote') {
+    // pricing / quote page → breadcrumb + the offer as a Service
+    graph.push(breadcrumb('Get a Quote', `${base}/quote`))
+    graph.push({
+      '@type': 'Service',
+      '@id': `${base}/quote#service`,
+      serviceType: 'Website & web application development',
+      provider: { '@id': personId },
+      areaServed: p.location || undefined,
+      offers: ((content.work || {}).packages || []).map((pkg) => ({
+        '@type': 'Offer',
+        name: pkg.title || undefined,
+        description: pkg.description || undefined,
+        url: `${base}/quote`,
+        priceCurrency: 'INR',
+        availability: 'https://schema.org/InStock',
+      })),
+    })
+  } else if (path === '/audit') {
+    // free-review lead magnet → breadcrumb + the offer itself
+    graph.push(breadcrumb('Free Website Review', `${base}/audit`))
+    graph.push({
+      '@type': 'Offer',
+      '@id': `${base}/audit#offer`,
+      name: 'Free website review',
+      description: (content.audit || {}).subtitle || undefined,
+      url: `${base}/audit`,
+      price: '0',
+      priceCurrency: 'INR',
+      seller: { '@id': personId },
+    })
   } else if (path === '/blog') {
     // notes index → Blog schema listing every post
     if (posts.length) {
@@ -1115,6 +1246,18 @@ function sendIndex(req, res) {
         canonical = `${base}/blog/${post.slug}`
         ogType = 'article'
       }
+    } else if (clean === '/quote') {
+      title = `Get a Quote — Websites & Web Apps · ${owner}`
+      description =
+        (content.work || {}).subtitle ||
+        `Fixed-scope website, web-app and tool packages from ${owner}. Tell me what you need and get a reply within 24 hours.`
+      canonical = `${base}/quote`
+    } else if (clean === '/audit') {
+      title = `Free Website Review — ${owner}`
+      description =
+        (content.audit || {}).subtitle ||
+        `Send your website and get a free, no-obligation review from ${owner} — speed, mobile, SEO and what to fix first.`
+      canonical = `${base}/audit`
     }
 
     const ld = JSON.stringify(seoJsonLd(base, clean)).replace(/</g, '\\u003c')

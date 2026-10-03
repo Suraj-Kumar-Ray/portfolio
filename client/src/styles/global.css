@@ -3368,6 +3368,93 @@ html {
   }
 }
 
+/* ---------- quote page / free-audit lead magnet ---------- */
+.quote-grid {
+  margin-bottom: 34px;
+}
+
+.audit-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.audit-points li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+.audit-ic {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: rgba(99, 102, 241, 0.16);
+  color: var(--accent-2);
+}
+
+/* ---------- mobile sticky CTA bar ----------
+   Phones get one always-visible action bar (quote / WhatsApp / call) instead
+   of the floating rail, so a lead never has to hunt for how to reach out. */
+.sticky-cta {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .quick-connect {
+    display: none;
+  }
+  .sticky-cta {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 950;
+    gap: 8px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+    background: rgba(6, 10, 20, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+  }
+  .sticky-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 46px;
+    border-radius: 13px;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .sticky-quote {
+    flex: 1;
+    background: var(--grad);
+    color: #05070f;
+  }
+  .sticky-wa,
+  .sticky-call {
+    width: 52px;
+    flex-shrink: 0;
+  }
+  .sticky-wa {
+    background: #25d366;
+    color: #052914;
+  }
+  .sticky-call {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .footer {
+    padding-bottom: 84px;
+  }
+}
+
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html {

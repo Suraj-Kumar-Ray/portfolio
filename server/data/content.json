@@ -20,6 +20,11 @@
     "verification": {
       "google": "",
       "bing": ""
+    },
+    "telegram": {
+      "enabled": true,
+      "botToken": "",
+      "chatId": ""
     }
   },
   "sections": [
@@ -552,6 +557,8 @@
     "eyebrow": "Work With Me",
     "title": "Have an idea? Let's build it together.",
     "subtitle": "Websites, web apps and small tools for startups, shops and students — clean code, quick delivery and honest communication.",
+    "quoteTitle": "Get a clear quote within 24 hours",
+    "quoteSub": "Pick a package or describe your idea. Share the pages, features and deadline you have in mind — you'll get a fixed scope, price and timeline before any work starts.",
     "formTitle": "Start a project",
     "formSub": "Tell me what you need. Send the details — I reply within 24 hours.",
     "note": "Small job or big — we talk first, then scope, cost and timeline are fixed. No advance payment; pay after delivery.",
@@ -796,6 +803,18 @@
         ]
       }
     ]
+  },
+  "audit": {
+    "title": "Get a free website review",
+    "subtitle": "Send me your website — I'll review speed, mobile experience and SEO, then send a short written summary of the three fixes that would help most. Completely free, no obligation.",
+    "badge": "Free · no obligation",
+    "points": [
+      "Speed — what loads slowly and the biggest cause",
+      "Mobile — where the layout breaks on a phone",
+      "SEO basics — title, description, headings and indexing",
+      "The 3 highest-impact fixes, in priority order"
+    ],
+    "note": "One review per website. I reply within 24 hours with a short written summary — no pushy sales call."
   },
   "faq": [
     {

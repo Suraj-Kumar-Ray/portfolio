@@ -55,7 +55,9 @@ That icon is deliberately **faded** — a normal visitor does not notice it, and
 | **Achievements / Services / Certifications / FAQ** | All the remaining content |
 | **Testimonials** | Feedback quotes from people you worked with (empty list = hidden) |
 | **Notes / Blog** | Short articles — every note gets its own Google-visible page |
-| **SEO & Alerts** | Message-alert email + Google/Bing verification codes + social share image |
+| **Packages & Quote** | Your service packages, prices and the `/quote` page heading |
+| **Free Website Review** | The free-review offer shown on `/audit` |
+| **SEO & Alerts** | Message-alert email + Telegram alerts + Google/Bing verification codes + social share image |
 | **Gallery** | Travel / friends photos |
 | **Sections & Visibility** | Which section shows on the website (ON/OFF switch) |
 | **Messages** | Messages from the contact form (reply / read / delete) |
@@ -83,6 +85,10 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 | Show the photos in the gallery | Dashboard → **Sections & Visibility** | *Gallery* switch **ON** |
 | Read contact form messages | Dashboard → **Messages** | Read / Reply / Delete |
 | Get an **email** when someone messages | (one-time) Gmail inbox | First message sends a FormSubmit **activation email** to `csesuraj2003@gmail.com` — click **Confirm** once, done |
+| Get a **phone ping** the second someone messages | Dashboard → **SEO & Alerts** | Telegram → @BotFather se bot token, @userinfobot se chat id → dono paste karo → Save |
+| Set a **price** on your packages | Dashboard → **Packages & Quote** | Open a package → *Price* (e.g. ₹4,999) → Save |
+| Share a **quote link** on WhatsApp | Send this link | `https://suraj-portfolio-wjpt.onrender.com/quote` — packages + form ek hi page par |
+| Offer a **free website review** (leads ke liye) | Send this link | `https://suraj-portfolio-wjpt.onrender.com/audit` — visitor abhi kharidne ready na ho to bhi message kar dega |
 | Add a testimonial | Dashboard → **Testimonials** | **+ Add new** → name, role, feedback → Save |
 | Publish a note / blog post | Dashboard → **Notes / Blog** | **+ Add new** → title, slug, date, article → Save |
 | Get found on Google | Dashboard → **SEO & Alerts** | Paste the verification codes from Google Search Console / Bing (see section 7) |
