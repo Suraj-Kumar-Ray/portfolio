@@ -4,7 +4,9 @@ services:
   - type: web
     name: suraj-portfolio
     runtime: node
-    region: singapore
+    plan: free
+    # free instances are only offered in oregon
+    region: oregon
     autoDeploy: true
     # devDependencies (typescript, vite) are required to build the client,
     # so --include=dev is mandatory: NODE_ENV=production applies at build time too.
