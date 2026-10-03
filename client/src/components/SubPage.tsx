@@ -37,7 +37,7 @@ export default function SubPage({
                 .slice(0, 2)
                 .join('')}
             </span>
-            {profile.name}
+            <span className="logo-name">{profile.name}</span>
           </a>
           <div className="subpage-actions">
             <ThemeToggle />
