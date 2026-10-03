@@ -150,6 +150,11 @@
         "icon": "linkedin"
       },
       {
+        "label": "GitHub",
+        "url": "https://github.com/Suraj-Kumar-Ray",
+        "icon": "github"
+      },
+      {
         "label": "Email",
         "url": "mailto:csesuraj2003@gmail.com",
         "icon": "mail"
@@ -634,20 +639,20 @@
       },
       {
         "platform": "GitHub",
-        "handle": "",
+        "handle": "Suraj-Kumar-Ray",
         "icon": "github",
-        "description": "Code for my projects and practice repos. Add your profile link to show it off.",
+        "description": "Code for my projects and practice repos — including the source of this portfolio.",
         "stats": [
           {
-            "label": "Repositories",
-            "value": "Coming soon"
+            "label": "Profile",
+            "value": "@Suraj-Kumar-Ray"
           },
           {
-            "label": "Link",
-            "value": "Add profile"
+            "label": "Status",
+            "value": "Open to work"
           }
         ],
-        "url": ""
+        "url": "https://github.com/Suraj-Kumar-Ray"
       }
     ]
   },
