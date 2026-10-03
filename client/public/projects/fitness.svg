@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1b1230"/>
+      <stop offset="100%" stop-color="#0a0a1e"/>
+    </linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="140" cy="110" r="130" fill="#f472b6" opacity="0.14"/>
+
+  <rect x="300" y="70" width="200" height="320" rx="34" fill="#ffffff" opacity="0.07"/>
+  <rect x="316" y="86" width="168" height="288" rx="26" fill="#0a0f1f"/>
+  <rect x="360" y="96" width="80" height="8" rx="4" fill="#94a3b8" opacity="0.4"/>
+
+  <circle cx="400" cy="190" r="56" fill="none" stroke="url(#a)" stroke-width="14" stroke-linecap="round"
+          stroke-dasharray="270 90" transform="rotate(-90 400 190)"/>
+  <text x="400" y="200" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="800"
+        fill="#e9eefb" text-anchor="middle">78%</text>
+
+  <rect x="340" y="272" width="120" height="12" rx="6" fill="url(#a)"/>
+  <rect x="340" y="298" width="150" height="10" rx="5" fill="#94a3b8" opacity="0.45"/>
+  <rect x="340" y="320" width="100" height="10" rx="5" fill="#94a3b8" opacity="0.35"/>
+  <rect x="340" y="348" width="120" height="26" rx="13" fill="url(#a)" opacity="0.85"/>
+
+  <g fill="#22d3ee" opacity="0.85">
+    <path d="M180 250 l10 24 l24 10 l-24 10 l-10 24 l-10 -24 l-24 -10 l24 -10 z"/>
+    <path d="M630 140 l8 19 l19 8 l-19 8 l-8 19 l-8 -19 l-19 -8 l19 -8 z"/>
+  </g>
+</svg>

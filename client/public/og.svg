@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080d1c"/>
+      <stop offset="100%" stop-color="#0b1226"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="20%" cy="10%" r="70%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g opacity="0.16" stroke="#94a3b8" stroke-width="1">
+    <path d="M0 126H1200M0 252H1200M0 378H1200M0 504H1200"/>
+    <path d="M150 0V630M300 0V630M450 0V630M600 0V630M750 0V630M900 0V630M1050 0V630"/>
+  </g>
+
+  <rect x="90" y="180" width="110" height="110" rx="30" fill="url(#accent)"/>
+  <text x="145" y="252" font-family="Segoe UI, Arial, sans-serif" font-size="52" font-weight="800"
+        fill="#05070f" text-anchor="middle">SK</text>
+
+  <text x="90" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="76" font-weight="800" fill="#e9eefb">Suraj Kumar</text>
+  <text x="90" y="436" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="600" fill="#818cf8">Full-Stack Developer</text>
+  <text x="90" y="500" font-family="Segoe UI, Arial, sans-serif" font-size="26" fill="#93a1ba">React · TypeScript · Node.js · Cloud</text>
+
+  <rect x="90" y="540" width="330" height="4" rx="2" fill="url(#accent)"/>
+</svg>

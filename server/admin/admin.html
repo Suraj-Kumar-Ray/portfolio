@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Dashboard · Portfolio</title>
+<style>
+  :root {
+    --bg: #070b16;
+    --panel: #0d1424;
+    --panel-2: #111a2d;
+    --line: rgba(148, 163, 184, 0.16);
+    --line-2: rgba(148, 163, 184, 0.28);
+    --text: #e8eefc;
+    --muted: #8a99b5;
+    --accent: #6366f1;
+    --accent-2: #22d3ee;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+    --radius: 16px;
+    --side: 254px;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+    font-size: 14.5px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .muted { color: var(--muted); }
+  .hidden { display: none !important; }
+  .ic { width: 18px; height: 18px; flex: 0 0 auto; }
+
+  /* ---------------- login ---------------- */
+  .login-wrap {
+    min-height: 100vh; display: grid; place-items: center; padding: 24px;
+    background:
+      radial-gradient(900px 520px at 15% -10%, rgba(99, 102, 241, 0.22), transparent 62%),
+      radial-gradient(820px 460px at 88% 6%, rgba(34, 211, 238, 0.15), transparent 64%);
+  }
+  .login-card {
+    width: min(430px, 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 32px 28px 26px;
+    box-shadow: 0 30px 70px rgba(2, 6, 18, 0.6);
+    backdrop-filter: blur(14px);
+  }
+  .lock {
+    width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #05070f; margin-bottom: 18px;
+  }
+  .lock .ic { width: 26px; height: 26px; }
+  .login-card h1 { font-size: 1.35rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+  .login-card p.sub { margin: 0 0 22px; color: var(--muted); font-size: 0.9rem; }
+
+  /* ---------------- shell ---------------- */
+  .app { display: flex; min-height: 100vh; }
+  .side {
+    width: var(--side); flex: 0 0 var(--side);
+    background: linear-gradient(180deg, #0b1220, #080e1c);
+    border-right: 1px solid var(--line);
+    padding: 18px 14px 22px;
+    display: flex; flex-direction: column; gap: 6px;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .side-brand { display: flex; align-items: center; gap: 11px; padding: 6px 8px 16px; }
+  .side-brand .mark {
+    width: 38px; height: 38px; border-radius: 12px; flex: 0 0 auto;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #05070f; font-weight: 800; display: grid; place-items: center; font-size: 0.95rem;
+  }
+  .side-brand strong { display: block; font-size: 0.95rem; letter-spacing: -0.01em; }
+  .side-brand small { color: var(--muted); font-size: 0.74rem; }
+  .nav-group { margin-top: 12px; }
+  .nav-label {
+    font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: #5f6f8c; padding: 4px 10px 8px; font-weight: 700;
+  }
+  .nav-item {
+    width: 100%; display: flex; align-items: center; gap: 11px;
+    padding: 9px 11px; border-radius: 11px; border: 1px solid transparent;
+    background: transparent; color: #c3cfe4; font: inherit; font-size: 0.89rem;
+    cursor: pointer; text-align: left; transition: all 0.16s ease;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .nav-item.active {
+    background: linear-gradient(135deg, rgba(99,102,241,0.22), rgba(34,211,238,0.12));
+    border-color: rgba(99,102,241,0.4); color: #fff; font-weight: 600;
+  }
+  .nav-item .ic { color: currentColor; opacity: 0.85; }
+  .ni-label { flex: 1; }
+  .ni-badge {
+    background: var(--danger); color: #240808; font-size: 0.7rem; font-weight: 800;
+    min-width: 20px; text-align: center; padding: 1px 6px; border-radius: 999px;
+  }
+  .side-foot { margin-top: auto; padding-top: 18px; display: grid; gap: 8px; }
+
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .top {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 14px 26px; border-bottom: 1px solid var(--line);
+    background: rgba(7, 11, 22, 0.86); backdrop-filter: blur(12px);
+  }
+  .page-title { flex: 1; min-width: 180px; }
+  .page-title h1 { margin: 0; font-size: 1.14rem; letter-spacing: -0.02em; }
+  .page-title p { margin: 2px 0 0; font-size: 0.82rem; color: var(--muted); }
+  .top-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .view { padding: 24px 26px 80px; max-width: 1120px; width: 100%; margin: 0 auto; }
+
+  /* ---------------- buttons ---------------- */
+  .btn {
+    font: inherit; font-size: 0.86rem; font-weight: 600; cursor: pointer;
+    padding: 9px 16px; border-radius: 11px; border: 1px solid var(--line-2);
+    background: rgba(255,255,255,0.05); color: var(--text);
+    display: inline-flex; align-items: center; gap: 8px; transition: all 0.16s ease;
+    text-decoration: none;
+  }
+  .btn:hover { border-color: var(--accent); background: rgba(99,102,241,0.16); text-decoration: none; }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #05070f; border-color: transparent;
+  }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.ghost { background: transparent; }
+  .btn.tiny { padding: 6px 12px; font-size: 0.8rem; border-radius: 9px; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .icon-btn {
+    width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+    border: 1px solid var(--line); background: rgba(255,255,255,0.04);
+    color: #b9c6de; cursor: pointer; transition: all 0.15s ease; padding: 0;
+  }
+  .icon-btn:hover { border-color: var(--line-2); color: #fff; background: rgba(255,255,255,0.09); }
+  .icon-btn.sm { width: 30px; height: 30px; }
+  .icon-btn.sm .ic { width: 15px; height: 15px; }
+  .icon-btn.danger:hover { border-color: var(--danger); color: var(--danger); background: rgba(248,113,113,0.12); }
+  .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .burger { display: none; }
+
+  /* ---------------- panels ---------------- */
+  .panel {
+    background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px 20px 22px; margin-bottom: 18px;
+  }
+  .panel-head { margin-bottom: 16px; }
+  .panel-head h2 { margin: 0; font-size: 1rem; letter-spacing: -0.01em; display: flex; align-items: center; gap: 9px; }
+  .panel-head h2 .ic { color: var(--accent-2); }
+  .panel-head p { margin: 6px 0 0; font-size: 0.84rem; color: var(--muted); }
+  .panel-head.split { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .fld { display: flex; flex-direction: column; gap: 6px; }
+  .fld.wide { grid-column: 1 / -1; }
+  .fld label { font-size: 0.82rem; font-weight: 600; color: #b8c5dc; }
+  .fhint { display: block; font-weight: 400; color: #6f7f9c; font-size: 0.75rem; margin-top: 2px; }
+  .fld input[type=text], .fld input[type=number], .fld input[type=password], .fld input[type=email],
+  .fld textarea, .fld select {
+    width: 100%; padding: 10px 12px; border-radius: 11px;
+    background: rgba(4, 8, 18, 0.7); border: 1px solid var(--line);
+    color: var(--text); font: inherit; font-size: 0.88rem;
+    appearance: none; -webkit-appearance: none;
+  }
+  /* keep Chrome's autofill from painting the inputs white */
+  .fld input:-webkit-autofill, .fld input:-webkit-autofill:hover, .fld input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px #0a1120 inset;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+  .fld textarea { resize: vertical; min-height: 88px; line-height: 1.6; }
+  .fld input:focus, .fld textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99,102,241,0.15); }
+  .fld.mono textarea, .fld.mono input { font-family: 'Consolas', 'SF Mono', monospace; font-size: 12.5px; }
+  .check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.88rem; }
+  .check input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+  .rows-fld .rows { display: grid; gap: 8px; }
+  .row-item { display: flex; gap: 8px; align-items: center; }
+  .row-item .cell { flex: 1; min-width: 0; }
+  .row-item input {
+    width: 100%; padding: 8px 11px; border-radius: 10px; background: rgba(4,8,18,0.62);
+    border: 1px solid var(--line); color: var(--text); font: inherit; font-size: 0.84rem;
+  }
+
+  /* ---------------- item cards ---------------- */
+  .items { display: grid; gap: 10px; }
+  .item {
+    border: 1px solid var(--line); border-radius: 14px;
+    background: rgba(9, 14, 27, 0.7); overflow: hidden;
+  }
+  .item-head {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .item-head:hover { background: rgba(255,255,255,0.035); }
+  .item-title { flex: 1; min-width: 0; }
+  .item-title strong { display: block; font-size: 0.92rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-title .muted { font-size: 0.78rem; }
+  .item-tools { display: flex; gap: 6px; }
+  .chev { color: #6f7f9c; display: grid; place-items: center; transition: transform 0.18s ease; }
+  .chev.open { transform: rotate(90deg); color: var(--accent-2); }
+  .chev .ic { width: 16px; height: 16px; }
+  .item-form { padding: 4px 14px 18px; border-top: 1px solid var(--line); margin-top: 2px; padding-top: 16px; }
+  .empty { font-size: 0.86rem; padding: 10px 2px; }
+
+  /* ---------------- stats ---------------- */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 13px; }
+  .stat {
+    border: 1px solid var(--line); border-radius: 15px; padding: 15px 16px;
+    background: linear-gradient(160deg, rgba(99,102,241,0.12), rgba(255,255,255,0.02));
+  }
+  .stat .label { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; }
+  .stat .value { font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; margin-top: 4px; }
+  .stat .sub { color: var(--muted); font-size: 0.78rem; }
+
+  .tasks { display: grid; gap: 9px; }
+  .task {
+    display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px;
+    border: 1px solid var(--line); background: rgba(251, 191, 36, 0.07); cursor: pointer;
+  }
+  .task:hover { border-color: rgba(251,191,36,0.45); }
+  .task .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--warn); flex: 0 0 auto; }
+  .task .t-label { flex: 1; font-size: 0.89rem; }
+  .task .t-go { color: var(--muted); font-size: 0.78rem; }
+  .allgood {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px;
+    border: 1px solid rgba(52,211,153,0.35); background: rgba(52,211,153,0.08); color: #6ee7b7; font-size: 0.89rem;
+  }
+
+  /* ---------------- sections ---------------- */
+  .sec-list { display: grid; gap: 9px; }
+  .sec-row {
+    display: flex; align-items: center; gap: 14px; padding: 12px 15px; border-radius: 13px;
+    background: rgba(9, 14, 27, 0.6); border: 1px solid var(--line);
+  }
+  .sec-row.live { border-color: rgba(52,211,153,0.32); background: rgba(52,211,153,0.055); }
+  .sec-name { font-weight: 600; font-size: 0.92rem; }
+  .sec-key { font-family: 'Consolas', monospace; font-size: 0.74rem; color: var(--muted); }
+  .badge { font-size: 0.72rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .sec-row.live .badge { color: var(--ok); border-color: rgba(52,211,153,0.4); }
+  .switch { position: relative; width: 50px; height: 27px; flex: 0 0 auto; }
+  .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .slider { position: absolute; inset: 0; border-radius: 999px; cursor: pointer; background: rgba(148,163,184,0.25); transition: background 0.22s ease; }
+  .slider::before { content: ''; position: absolute; height: 19px; width: 19px; left: 4px; top: 4px; border-radius: 50%; background: #fff; transition: transform 0.22s ease; }
+  .switch input:checked + .slider { background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .switch input:checked + .slider::before { transform: translateX(23px); }
+
+  /* ---------------- messages ---------------- */
+  .msg {
+    border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+    background: rgba(9, 14, 27, 0.6);
+  }
+  .msg.unread { border-color: rgba(99,102,241,0.45); background: rgba(99,102,241,0.07); }
+  .msg h4 { margin: 0 0 3px; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+  .msg .meta2 { color: var(--muted); font-size: 0.79rem; margin-bottom: 9px; word-break: break-word; }
+  .msg p { margin: 0 0 12px; font-size: 0.89rem; white-space: pre-wrap; }
+  .dot-new { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-2); display: inline-block; }
+
+  /* analytics */
+  .ana-chart { display: flex; align-items: stretch; gap: 6px; height: 150px; }
+  .ana-col { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+  .ana-n { font-size: 0.68rem; color: var(--muted); }
+  .ana-fill { width: 100%; min-height: 3px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, #22d3ee, #6366f1); }
+  .ana-d { font-size: 0.6rem; color: var(--muted); }
+  .ana-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .ana-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); font-weight: 700; margin-bottom: 4px; }
+  .ana-list { display: grid; }
+  .ana-row { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(148,163,184,0.1); font-size: 0.85rem; }
+  .ana-row:last-child { border-bottom: 0; }
+  .ana-row b { font-weight: 600; }
+  .ana-row span { color: var(--muted); text-align: right; flex-shrink: 0; }
+  @media (max-width: 700px) { .ana-cols { grid-template-columns: 1fr; } }
+  .msg-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .kv { display: grid; gap: 9px; }
+  .kv-row { display: flex; justify-content: space-between; gap: 14px; font-size: 0.86rem; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .kv-row span:first-child { color: var(--muted); }
+  .kv-row span:last-child { text-align: right; word-break: break-all; font-family: 'Consolas', monospace; font-size: 0.8rem; }
+
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(18px);
+    background: #101a2e; border: 1px solid var(--line-2); color: var(--text);
+    padding: 12px 20px; border-radius: 13px; font-size: 0.88rem; opacity: 0;
+    transition: all 0.28s ease; pointer-events: none; z-index: 90; max-width: 90vw;
+    box-shadow: 0 18px 40px rgba(2, 6, 18, 0.6);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.ok { border-color: rgba(52,211,153,0.5); color: #6ee7b7; }
+  .toast.err { border-color: rgba(248,113,113,0.55); color: #fca5a5; }
+
+  .pill {
+    font-size: 0.76rem; padding: 5px 11px; border-radius: 999px; font-weight: 700;
+    border: 1px solid rgba(251,191,36,0.45); background: rgba(251,191,36,0.12); color: #fcd34d;
+  }
+  .scrim {
+    position: fixed; inset: 0; background: rgba(3, 6, 14, 0.68); z-index: 28; display: none;
+  }
+  .scrim.on { display: block; }
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width: 1000px) {
+    .side {
+      position: fixed; left: 0; top: 0; z-index: 30; transform: translateX(-102%);
+      transition: transform 0.24s ease; height: 100vh; box-shadow: 0 0 60px rgba(0,0,0,0.6);
+    }
+    .side.open { transform: translateX(0); }
+    .burger { display: grid; }
+    .view { padding: 18px 16px 90px; }
+    .top { padding: 12px 16px; gap: 10px; }
+    .page-title { order: 3; flex-basis: 100%; }
+    .page-title p { display: none; }
+  }
+  @media (max-width: 560px) {
+    .top-actions .btn .txt { display: none; }
+    .top-actions .btn { padding: 9px 12px; }
+    .stat .value { font-size: 1.55rem; }
+    .row-item { flex-wrap: wrap; }
+    .row-item .cell { flex: 1 1 40%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= login ================= -->
+<div class="login-wrap" id="login">
+  <div class="login-card">
+    <div class="lock" id="lockIcon"></div>
+    <h1>Private Dashboard</h1>
+    <p class="sub">Just for you. Enter the password to continue.</p>
+    <div class="fld">
+      <label for="tokenInput">Password</label>
+      <input id="tokenInput" type="password" placeholder="••••••••••••" autocomplete="current-password" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn primary" id="connectBtn" style="flex:1;justify-content:center">Unlock dashboard</button>
+      <button class="btn ghost" id="showBtn" type="button">Show</button>
+    </div>
+    <p class="muted" style="font-size:0.78rem;margin:14px 0 0">
+      The password is <code>ADMIN_TOKEN</code> in <code>server/.env</code>. You can change it from the Settings tab.
+    </p>
+  </div>
+</div>
+
+<!-- ================= app ================= -->
+<div class="app hidden" id="app">
+  <aside class="side" id="side"></aside>
+  <div class="scrim" id="scrim"></div>
+  <main class="main">
+    <header class="top">
+      <button class="icon-btn burger" id="burger" title="Menu"></button>
+      <div class="page-title">
+        <h1 id="pageTitle">Overview</h1>
+        <p id="pageSub"></p>
+      </div>
+      <div class="top-actions">
+        <span class="pill hidden" id="dirtyPill">Unsaved changes</span>
+        <button class="btn primary" id="saveBtn"></button>
+        <a class="btn ghost" href="/" target="_blank" rel="noreferrer" id="viewSite"></a>
+        <button class="btn ghost" id="logoutBtn"></button>
+      </div>
+    </header>
+    <div class="view" id="view"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================== icons ============================== */
+const ICON_PATHS = {
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/>',
+  briefcase: '<rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M3 12h18"/>',
+  cap: '<path d="M3 9.5 12 5l9 4.5-9 4.5-9-4.5Z"/><path d="M7 11.6V16c0 1.2 2.2 2.4 5 2.4s5-1.2 5-2.4v-4.4"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
+  code: '<path d="m9 6-5 6 5 6M15 6l5 6-5 6"/>',
+  refresh: '<path d="M4 12a8 8 0 0 1 13.6-5.7L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.6 5.7L4 16"/><path d="M4 20v-4h4"/>',
+  award: '<circle cx="12" cy="10" r="5"/><path d="m8.6 14.2-1.6 7 5-2.6 5 2.6-1.6-7"/>',
+  image: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 1 1 3.6 2.4c-.8.4-1.1 1-1.1 1.9"/><path d="M12 17h.01"/>',
+  toggle: '<rect x="2.5" y="7" width="19" height="10" rx="5"/><circle cx="9" cy="12" r="3"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>',
+  braces: '<path d="M8 4H7a2 2 0 0 0-2 2v3.5L3.5 12 5 14.5V18a2 2 0 0 0 2 2h1"/><path d="M16 4h1a2 2 0 0 1 2 2v3.5L20.5 12 19 14.5V18a2 2 0 0 1-2 2h-1"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+  trash: '<path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/>',
+  up: '<path d="m6 14 6-6 6 6"/>',
+  down: '<path d="m6 10 6 6 6-6"/>',
+  chevron: '<path d="m9 6 6 6-6 6"/>',
+  save: '<path d="M4 4h11l5 5v11H4z"/><path d="M8 4v6h7V4M8 20v-6h8v6"/>',
+  logout: '<path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 8l-4 4 4 4M6 12h10"/>',
+  external: '<path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  lock: '<rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10"/>',
+  check: '<path d="m5 13 4 4L19 7"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/>',
+  db: '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
+  sparkle: '<path d="M12 3v6M12 15v6M3 12h6M15 12h6"/>',
+  activity: '<path d="M3 12h4l3-7 4 14 3-7h4"/>',
+}
+function icon(name, cls = '') {
+  const p = ICON_PATHS[name] || ICON_PATHS.grid
+  return '<svg class="ic ' + cls + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>'
+}
+
+/* ============================== helpers ============================== */
+const $ = (s, r = document) => r.querySelector(s)
+const esc = (s = '') =>
+  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+const clone = (o) => JSON.parse(JSON.stringify(o))
+const deepGet = (o, path) => path.reduce((a, k) => (a == null ? a : a[k]), o)
+function deepSet(o, path, v) {
+  const last = path[path.length - 1]
+  const target = path.slice(0, -1).reduce((a, k) => {
+    if (a[k] == null) a[k] = {}
+    return a[k]
+  }, o)
+  target[last] = v
+}
+const swap = (arr, i, j) => {
+  const t = arr[i]
+  arr[i] = arr[j]
+  arr[j] = t
+}
+const bytes = (n) => (n > 1024 * 1024 ? (n / 1024 / 1024).toFixed(1) + ' MB' : (n / 1024).toFixed(1) + ' KB')
+const when = (iso) => {
+  if (!iso) return '—'
+  try {
+    return new Date(iso).toLocaleString()
+  } catch {
+    return iso
+  }
+}
+
+const STORE_KEY = 'portfolio-admin-token'
+let token = localStorage.getItem(STORE_KEY) || ''
+let content = null
+let overview = null
+let page = 'overview'
+const dirty = new Set()
+const ui = { open: {}, side: false }
+
+const refs = new Map()
+const acts = new Map()
+let refSeq = 0
+let actSeq = 0
+
+function bind(el, setter) {
+  const id = 'f' + ++refSeq
+  el.dataset.fid = id
+  refs.set(id, setter)
+  return el
+}
+function on(fn) {
+  const id = 'a' + ++actSeq
+  acts.set(id, fn)
+  return id
+}
+
+/* ============================== api ============================== */
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, {
+    method: opts.method || 'GET',
+    headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+    body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok || data.ok === false) {
+    throw new Error(data.error || (data.errors || []).join(', ') || 'Request failed (' + res.status + ')')
+  }
+  return data
+}
+
+let toastTimer
+function toast(message, kind = '') {
+  const el = $('#toast')
+  el.textContent = message
+  el.className = 'toast show ' + kind
+  clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => (el.className = 'toast ' + kind), 2800)
+}
+
+/* ============================== schemas ============================== */
+const PROF_ICONS = ['layout', 'server', 'gauge', 'code', 'monitor', 'cloud', 'award', 'briefcase', 'education']
+
+const EDITORS = {
+  profile: {
+    nav: 'profile',
+    kind: 'object',
+    topKey: 'profile',
+    path: ['profile'],
+    title: 'Profile & Hero',
+    hint: 'These details appear in the hero, the About section and the contact card.',
+    fields: [
+      { key: 'name', label: 'Full name', type: 'text' },
+      { key: 'role', label: 'Role / headline', type: 'text' },
+      { key: 'shortIntro', label: 'Small greeting', type: 'text', hint: 'Example: Hi, I am Suraj' },
+      { key: 'tagline', label: 'Intro paragraph (hero)', type: 'area', wide: true },
+      { key: 'location', label: 'Location', type: 'text' },
+      { key: 'email', label: 'Email', type: 'text' },
+      { key: 'phone', label: 'Phone', type: 'text' },
+      { key: 'availability', label: 'Availability badge', type: 'text', wide: true },
+      { key: 'avatar', label: 'Profile photo', type: 'text', hint: 'Path: /avatar.jpg?v=3' },
+      { key: 'yearsOfExperience', label: 'Years of experience', type: 'number' },
+      { key: 'resumeUrl', label: 'Resume link', type: 'text', hint: 'Default /api/resume' },
+      { key: 'about', label: 'About — paragraphs', type: 'paras', wide: true, rows: 6, hint: 'Blank line = new paragraph' },
+      { key: 'highlights', label: 'Highlights', type: 'lines', wide: true, hint: 'Ek line me ek point' },
+      { key: 'languages', label: 'Languages', type: 'lines' },
+      {
+        key: 'stats',
+        label: 'Stat cards (below the hero)',
+        type: 'rows',
+        wide: true,
+        rowFields: [
+          { key: 'label', label: 'Label' },
+          { key: 'value', label: 'Value', type: 'number' },
+          { key: 'suffix', label: 'Suffix (+, %)' },
+        ],
+      },
+      {
+        key: 'socials',
+        label: 'Social links',
+        type: 'rows',
+        wide: true,
+        rowFields: [
+          { key: 'label', label: 'Label' },
+          { key: 'url', label: 'Link / URL' },
+          { key: 'icon', label: 'Icon (linkedin, github, mail, phone)' },
+        ],
+      },
+    ],
+  },
+
+  projects: {
+    nav: 'projects',
+    kind: 'list',
+    topKey: 'projects',
+    path: ['projects'],
+    title: 'Projects',
+    hint: 'New projects are added at the top — image path comes from the /projects/ folder.',
+    itemTitle: (p, i) => p.title || 'Project ' + (i + 1),
+    itemSub: (p) => [p.category, p.year, p.featured ? 'featured' : ''].filter(Boolean).join(' · '),
+    fields: [
+      { key: 'title', label: 'Project title', type: 'text' },
+      { key: 'category', label: 'Category', type: 'text' },
+      { key: 'year', label: 'Year', type: 'text' },
+      { key: 'featured', label: 'Show on home page', type: 'bool' },
+      { key: 'description', label: 'Description', type: 'area', wide: true, rows: 4 },
+      { key: 'highlights', label: 'Highlights', type: 'lines', wide: true },
+      { key: 'tech', label: 'Technologies', type: 'csv', wide: true, hint: 'Separate values with commas' },
+      { key: 'image', label: 'Image path', type: 'text', hint: 'Example: /projects/tms.svg' },
+      { path: ['links', 'live'], key: 'live', label: 'Live demo URL', type: 'text' },
+      { path: ['links', 'source'], key: 'source', label: 'Source code URL', type: 'text' },
+    ],
+    blank: () => ({
+      id: 'project-' + Date.now().toString(36),
+      title: 'New project',
+      category: 'Full-Stack',
+      featured: false,
+      year: String(new Date().getFullYear()),
+      description: '',
+      highlights: [],
+      tech: [],
+      image: '',
+      links: { live: '', source: '' },
+    }),
+  },
+
+  experience: {
+    nav: 'experience',
+    kind: 'list',
+    topKey: 'experience',
+    path: ['experience'],
+    title: 'Experience',
+    hint: 'Internship / job entries. New entries appear at the top.',
+    itemTitle: (e, i) => e.role || 'Role ' + (i + 1),
+    itemSub: (e) => [e.company, e.period].filter(Boolean).join(' · '),
+    fields: [
+      { key: 'role', label: 'Role', type: 'text' },
+      { key: 'company', label: 'Company', type: 'text' },
+      { key: 'period', label: 'Period', type: 'text', hint: 'Example: 2024 or Jun 2024 — Aug 2024' },
+      { key: 'location', label: 'Location', type: 'text' },
+      { key: 'type', label: 'Type', type: 'text', hint: 'Internship / Full-time' },
+      { key: 'description', label: 'Summary', type: 'area', wide: true, rows: 3 },
+      { key: 'highlights', label: 'What you did', type: 'lines', wide: true },
+      { key: 'technologies', label: 'Skills used', type: 'csv', wide: true },
+    ],
+    blank: () => ({
+      role: 'New role',
+      company: '',
+      period: '',
+      location: '',
+      type: 'Internship',
+      description: '',
+      highlights: [],
+      technologies: [],
+    }),
+  },
+
+  education: {
+    nav: 'education',
+    kind: 'list',
+    topKey: 'education',
+    path: ['education'],
+    title: 'Education',
+    hint: 'Degree, school and marks.',
+    itemTitle: (e, i) => e.degree || 'Degree ' + (i + 1),
+    itemSub: (e) => [e.school, e.period].filter(Boolean).join(' · '),
+    fields: [
+      { key: 'degree', label: 'Degree', type: 'text' },
+      { key: 'school', label: 'Institute', type: 'text' },
+      { key: 'period', label: 'Period', type: 'text' },
+      { key: 'description', label: 'Details', type: 'area', wide: true, rows: 3 },
+    ],
+    blank: () => ({ degree: 'New degree', school: '', period: '', description: '' }),
+  },
+
+  skills: {
+    nav: 'skills',
+    kind: 'list',
+    topKey: 'skills',
+    path: ['skills'],
+    title: 'Skills',
+    hint: 'Set the skills in each group and their level (0–100) — the bar updates from it.',
+    itemTitle: (s, i) => s.category || 'Group ' + (i + 1),
+    itemSub: (s) => ((s.items || []).length || 0) + ' skills',
+    fields: [
+      { key: 'category', label: 'Group name', type: 'text' },
+      { key: 'icon', label: 'Icon', type: 'text', hint: 'code, monitor, server, cloud' },
+      {
+        key: 'items',
+        label: 'Skills',
+        type: 'rows',
+        wide: true,
+        rowFields: [
+          { key: 'name', label: 'Skill name' },
+          { key: 'level', label: 'Level 0-100', type: 'number' },
+        ],
+      },
+    ],
+    blank: () => ({ category: 'New group', icon: 'code', items: [] }),
+  },
+
+  coding: {
+    nav: 'coding',
+    kind: 'group',
+    topKey: 'codingProfiles',
+    path: ['codingProfiles'],
+    title: 'Coding Profiles',
+    hint: 'Add your LeetCode / GitHub links here — the card becomes clickable.',
+    headerFields: [
+      { key: 'title', label: 'Section title', type: 'text' },
+      { key: 'subtitle', label: 'Subtitle', type: 'text', wide: true },
+    ],
+    list: {
+      key: 'profiles',
+      itemTitle: (p, i) => p.platform || 'Profile ' + (i + 1),
+      itemSub: (p) => p.url || 'no link yet',
+      fields: [
+        { key: 'platform', label: 'Platform', type: 'text' },
+        { key: 'handle', label: 'Username / handle', type: 'text' },
+        { key: 'url', label: 'Profile URL', type: 'text', wide: true, hint: 'Isse card clickable ban jayega' },
+        { key: 'icon', label: 'Icon', type: 'text', hint: 'code / github / linkedin' },
+        { key: 'description', label: 'Description', type: 'area', wide: true, rows: 3 },
+        {
+          key: 'stats',
+          label: 'Stats',
+          type: 'rows',
+          wide: true,
+          rowFields: [
+            { key: 'label', label: 'Label' },
+            { key: 'value', label: 'Value' },
+          ],
+        },
+      ],
+      blank: () => ({ platform: 'New profile', handle: '', icon: 'code', description: '', stats: [], url: '' }),
+    },
+  },
+
+  updates: {
+    nav: 'updates',
+    kind: 'group',
+    topKey: 'updates',
+    path: ['updates'],
+    title: 'Updates / Timeline',
+    hint: 'New achievements are added at the top — they show like a news feed.',
+    headerFields: [
+      { key: 'title', label: 'Section title', type: 'text' },
+      { key: 'subtitle', label: 'Subtitle', type: 'text', wide: true },
+    ],
+    list: {
+      key: 'items',
+      itemTitle: (u, i) => u.title || 'Update ' + (i + 1),
+      itemSub: (u) => [u.date, u.type].filter(Boolean).join(' · '),
+      fields: [
+        { key: 'date', label: 'Date', type: 'text', hint: 'Example: Oct 2026' },
+        { key: 'type', label: 'Type', type: 'text', hint: 'award / education / briefcase / code' },
+        { key: 'title', label: 'Title', type: 'text' },
+        { key: 'description', label: 'Description', type: 'area', wide: true, rows: 3 },
+      ],
+      blank: () => ({ date: '', type: 'award', title: 'New update', description: '' }),
+    },
+  },
+
+  achievements: {
+    nav: 'achievements',
+    kind: 'list',
+    topKey: 'achievements',
+    path: ['achievements'],
+    title: 'Achievements',
+    hint: 'Awards, hackathons and recognitions.',
+    itemTitle: (a, i) => a.title || 'Achievement ' + (i + 1),
+    itemSub: (a) => a.icon || '',
+    fields: [
+      { key: 'title', label: 'Title', type: 'text' },
+      { key: 'icon', label: 'Icon', type: 'text', hint: 'award, briefcase, code, education' },
+      { key: 'description', label: 'Description', type: 'area', wide: true, rows: 3 },
+    ],
+    blank: () => ({ title: 'New achievement', icon: 'award', description: '' }),
+  },
+
+  services: {
+    nav: 'services',
+    kind: 'list',
+    topKey: 'services',
+    path: ['services'],
+    title: 'Services',
+    hint: 'The services you offer — 4 cards.',
+    itemTitle: (s, i) => s.title || 'Service ' + (i + 1),
+    itemSub: (s) => s.icon || '',
+    fields: [
+      { key: 'title', label: 'Title', type: 'text' },
+      { key: 'icon', label: 'Icon', type: 'text', hint: PROF_ICONS.join(', ') },
+      { key: 'description', label: 'Description', type: 'area', wide: true, rows: 3 },
+    ],
+    blank: () => ({ title: 'New service', icon: 'layout', description: '' }),
+  },
+
+  certifications: {
+    nav: 'certifications',
+    kind: 'list',
+    topKey: 'certifications',
+    path: ['certifications'],
+    title: 'Certifications',
+    hint: 'Courses and training.',
+    itemTitle: (c, i) => c.name || 'Certification ' + (i + 1),
+    itemSub: (c) => [c.issuer, c.year].filter(Boolean).join(' · '),
+    fields: [
+      { key: 'name', label: 'Certificate name', type: 'text' },
+      { key: 'issuer', label: 'Issued by', type: 'text' },
+      { key: 'year', label: 'Year', type: 'text' },
+    ],
+    blank: () => ({ name: 'New certificate', issuer: '', year: '' }),
+  },
+
+  gallery: {
+    nav: 'gallery',
+    kind: 'group',
+    topKey: 'gallery',
+    path: ['gallery'],
+    title: 'Gallery',
+    hint: 'Put photos in the client/public/gallery/ folder, then write their path here.',
+    headerFields: [
+      { key: 'title', label: 'Section title', type: 'text' },
+      { key: 'subtitle', label: 'Subtitle', type: 'text', wide: true },
+    ],
+    list: {
+      key: 'items',
+      itemTitle: (g, i) => g.caption || 'Photo ' + (i + 1),
+      itemSub: (g) => [g.tag, g.image].filter(Boolean).join(' · '),
+      fields: [
+        { key: 'image', label: 'Photo path', type: 'text', wide: true, hint: 'Example: /gallery/travel-1.jpg' },
+        { key: 'caption', label: 'Caption', type: 'text' },
+        { key: 'tag', label: 'Tag', type: 'text', hint: 'Travel / Friends / Campus' },
+      ],
+      blank: () => ({ image: '/gallery/photo-1.svg', caption: 'New photo', tag: 'Travel' }),
+    },
+  },
+
+  faq: {
+    nav: 'faq',
+    kind: 'list',
+    topKey: 'faq',
+    path: ['faq'],
+    title: 'FAQ',
+    hint: 'Common questions recruiters ask.',
+    itemTitle: (f, i) => f.question || 'Question ' + (i + 1),
+    itemSub: () => '',
+    fields: [
+      { key: 'question', label: 'Question', type: 'text', wide: true },
+      { key: 'answer', label: 'Answer', type: 'area', wide: true, rows: 4 },
+    ],
+    blank: () => ({ question: 'New question', answer: '' }),
+  },
+}
+
+const PAGES = [
+  {
+    group: 'Dashboard',
+    items: [
+      { id: 'overview', label: 'Overview', icon: 'grid' },
+      { id: 'analytics', label: 'Analytics', icon: 'activity' },
+    ],
+  },
+  {
+    group: 'Website content',
+    items: [
+      { id: 'profile', label: 'Profile & Hero', icon: 'user' },
+      { id: 'projects', label: 'Projects', icon: 'briefcase' },
+      { id: 'experience', label: 'Experience', icon: 'briefcase' },
+      { id: 'education', label: 'Education', icon: 'cap' },
+      { id: 'skills', label: 'Skills', icon: 'layers' },
+      { id: 'coding', label: 'Coding Profiles', icon: 'code' },
+      { id: 'updates', label: 'Updates', icon: 'refresh' },
+      { id: 'achievements', label: 'Achievements', icon: 'award' },
+      { id: 'services', label: 'Services', icon: 'layers' },
+      { id: 'certifications', label: 'Certifications', icon: 'award' },
+      { id: 'gallery', label: 'Gallery', icon: 'image' },
+      { id: 'faq', label: 'FAQ', icon: 'help' },
+    ],
+  },
+  {
+    group: 'Site',
+    items: [
+      { id: 'sections', label: 'Sections & Visibility', icon: 'toggle' },
+      { id: 'messages', label: 'Messages', icon: 'mail', unread: true },
+      { id: 'advanced', label: 'Advanced (JSON)', icon: 'braces' },
+      { id: 'settings', label: 'Settings', icon: 'settings' },
+    ],
+  },
+]
+
+const SUBTITLES = {
+  overview: 'A full summary of your website — at a glance.',
+  profile: 'Name, photo, intro and contact details.',
+  projects: 'Add, edit or delete projects.',
+  experience: 'Internships and jobs.',
+  education: 'Degrees, school and marks.',
+  skills: 'Skill groups and their levels.',
+  coding: 'LeetCode, GitHub and the other profiles.',
+  updates: 'Timeline — newest update at the top.',
+  achievements: 'Awards and hackathons.',
+  services: 'The services you offer.',
+  certifications: 'Courses and certificates.',
+  gallery: 'Travel and friends photos.',
+  faq: 'Frequently asked questions.',
+  sections: 'Choose which sections show on the website.',
+  messages: 'Messages from the contact form.',
+  analytics: 'Visitors, popular sections and recent activity.',
+  advanced: 'All content as raw JSON — for power users.',
+  settings: 'Password, site title and technical info.',
+}
+
+/* ============================== field rendering ============================== */
+function markDirty(topKey) {
+  if (topKey) dirty.add(topKey)
+  refreshDirty()
+}
+
+function refreshDirty() {
+  const has = dirty.size > 0
+  $('#dirtyPill').classList.toggle('hidden', !has)
+  $('#saveBtn').disabled = !has
+}
+
+function renderField(holder, field, topKey) {
+  const path = field.path || [field.key]
+  const value = deepGet(holder, path)
+  const wrap = document.createElement('div')
+  wrap.className = 'fld' + (field.wide ? ' wide' : '')
+  const id = 'i' + ++refSeq
+
+  const hintHtml = field.hint ? '<span class="fhint">' + esc(field.hint) + '</span>' : ''
+
+  if (field.type === 'bool') {
+    wrap.innerHTML =
+      '<label class="check"><input type="checkbox" id="' + id + '"' + (value ? ' checked' : '') + '>' +
+      '<span>' + esc(field.label) + '</span></label>' +
+      (field.hint ? '<span class="fhint">' + esc(field.hint) + '</span>' : '')
+    bind(wrap.querySelector('input'), (v) => {
+      deepSet(holder, path, v)
+      markDirty(topKey)
+    })
+    return wrap
+  }
+
+  if (field.type === 'rows') return renderRows(holder, field, topKey)
+
+  const isTextarea = field.type === 'area' || field.type === 'lines' || field.type === 'paras'
+  const text =
+    value == null
+      ? ''
+      : Array.isArray(value)
+        ? field.type === 'csv'
+          ? value.join(', ')
+          : value.join('\n')
+        : String(value)
+
+  wrap.innerHTML =
+    '<label for="' + id + '">' + esc(field.label) + hintHtml + '</label>' +
+    (isTextarea
+      ? '<textarea id="' + id + '" rows="' + (field.rows || 4) + '">' + esc(text) + '</textarea>'
+      : '<input id="' + id + '" type="' + (field.type === 'number' ? 'number' : 'text') + '" value="' + esc(text) + '" autocomplete="off" />')
+
+  bind(wrap.querySelector(isTextarea ? 'textarea' : 'input'), (raw) => {
+    let out = raw
+    if (field.type === 'number') out = Number(raw) || 0
+    else if (field.type === 'lines') out = String(raw).split('\n').map((s) => s.trim()).filter(Boolean)
+    else if (field.type === 'csv') out = String(raw).split(',').map((s) => s.trim()).filter(Boolean)
+    else if (field.type === 'paras') out = String(raw).split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean)
+    deepSet(holder, path, out)
+    markDirty(topKey)
+  })
+  return wrap
+}
+
+function blankRow(rowFields) {
+  const row = {}
+  rowFields.forEach((rf) => (row[rf.key] = rf.type === 'number' ? 0 : ''))
+  return row
+}
+
+function renderRows(holder, field, topKey) {
+  const path = field.path || [field.key]
+  let arr = deepGet(holder, path)
+  if (!Array.isArray(arr)) {
+    arr = []
+    deepSet(holder, path, arr)
+  }
+  const box = document.createElement('div')
+  box.className = 'fld wide rows-fld'
+  box.innerHTML =
+    '<label>' + esc(field.label) + (field.hint ? '<span class="fhint">' + esc(field.hint) + '</span>' : '') + '</label>' +
+    '<div class="rows"></div>'
+  const list = box.querySelector('.rows')
+
+  if (!arr.length) {
+    const p = document.createElement('p')
+    p.className = 'muted empty'
+    p.textContent = 'No rows yet — press "Add row".'
+    list.appendChild(p)
+  }
+
+  arr.forEach((row, i) => {
+    const r = document.createElement('div')
+    r.className = 'row-item'
+    ;(field.rowFields || []).forEach((rf) => {
+      const cell = document.createElement('div')
+      cell.className = 'cell'
+      const input = document.createElement('input')
+      input.type = rf.type === 'number' ? 'number' : 'text'
+      input.placeholder = rf.label
+      input.value = row[rf.key] == null ? '' : row[rf.key]
+      bind(input, (v) => {
+        row[rf.key] = rf.type === 'number' ? Number(v) || 0 : v
+        markDirty(topKey)
+      })
+      cell.appendChild(input)
+      r.appendChild(cell)
+    })
+    const del = document.createElement('button')
+    del.className = 'icon-btn sm danger'
+    del.type = 'button'
+    del.title = 'Remove row'
+    del.innerHTML = icon('trash')
+    del.dataset.act = on(() => {
+      arr.splice(i, 1)
+      markDirty(topKey)
+      render()
+    })
+    r.appendChild(del)
+    list.appendChild(r)
+  })
+
+  const add = document.createElement('button')
+  add.className = 'btn tiny'
+  add.type = 'button'
+  add.style.marginTop = '8px'
+  add.innerHTML = icon('plus') + '<span>Add row</span>'
+  add.dataset.act = on(() => {
+    arr.push(blankRow(field.rowFields || []))
+    markDirty(topKey)
+    render()
+  })
+  box.appendChild(add)
+  return box
+}
+
+function panel(title, hint, iconName) {
+  const el = document.createElement('section')
+  el.className = 'panel'
+  el.innerHTML =
+    '<div class="panel-head"><h2>' + (iconName ? icon(iconName) : '') + esc(title) + '</h2>' +
+    (hint ? '<p>' + esc(hint) + '</p>' : '') + '</div>'
+  return el
+}
+
+function renderAddButton(items, listSpec, topKey, uid) {
+  const btn = document.createElement('button')
+  btn.className = 'btn primary tiny'
+  btn.type = 'button'
+  btn.innerHTML = icon('plus') + '<span>Add new</span>'
+  btn.dataset.act = on(() => {
+    items.unshift(listSpec.blank())
+    ui.open[uid + ':0'] = true
+    markDirty(topKey)
+    render()
+  })
+  return btn
+}
+
+function renderItemList(items, listSpec, topKey, uid) {
+  const box = document.createElement('div')
+  box.className = 'items'
+  if (!items.length) {
+    box.innerHTML = '<p class="muted empty">Nothing here yet — press "Add new".</p>'
+    return box
+  }
+
+  items.forEach((item, i) => {
+    const openKey = uid + ':' + i
+    const isOpen = ui.open[openKey] === undefined ? i === 0 : ui.open[openKey]
+
+    const card = document.createElement('div')
+    card.className = 'item'
+
+    const head = document.createElement('div')
+    head.className = 'item-head'
+    head.innerHTML =
+      '<span class="chev' + (isOpen ? ' open' : '') + '">' + icon('chevron') + '</span>' +
+      '<div class="item-title"><strong>' + esc(listSpec.itemTitle(item, i)) + '</strong>' +
+      '<span class="muted">' + esc((listSpec.itemSub ? listSpec.itemSub(item, i) : '') || '') + '</span></div>'
+
+    const tools = document.createElement('div')
+    tools.className = 'item-tools'
+    const mk = (ic, title, fn, extra = '') => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.className = 'icon-btn sm ' + extra
+      b.title = title
+      b.innerHTML = icon(ic)
+      b.dataset.act = on(fn)
+      return b
+    }
+
+    const upBtn = mk('up', 'Move up', () => {
+      swap(items, i, i - 1)
+      markDirty(topKey)
+      render()
+    })
+    if (i === 0) upBtn.disabled = true
+
+    const downBtn = mk('down', 'Move down', () => {
+      swap(items, i, i + 1)
+      markDirty(topKey)
+      render()
+    })
+    if (i === items.length - 1) downBtn.disabled = true
+
+    const delBtn = mk(
+      'trash',
+      'Delete',
+      () => {
+        const name = listSpec.itemTitle(item, i)
+        if (!window.confirm('Delete "' + name + '"?')) return
+        items.splice(i, 1)
+        markDirty(topKey)
+        render()
+        toast('Deleted — press Save', 'ok')
+      },
+      'danger'
+    )
+
+    tools.append(upBtn, downBtn, delBtn)
+    head.appendChild(tools)
+    head.dataset.act = on(() => {
+      ui.open[openKey] = !isOpen
+      render()
+    })
+    card.appendChild(head)
+
+    if (isOpen) {
+      const form = document.createElement('div')
+      form.className = 'grid item-form'
+      listSpec.fields.forEach((f) => form.appendChild(renderField(item, f, topKey)))
+      card.appendChild(form)
+    }
+
+    box.appendChild(card)
+  })
+
+  return box
+}
+
+function renderObjectEditor(spec) {
+  const holder = deepGet(content, spec.path)
+  const el = panel(spec.title, spec.hint, 'user')
+  const grid = document.createElement('div')
+  grid.className = 'grid'
+  spec.fields.forEach((f) => grid.appendChild(renderField(holder, f, spec.topKey)))
+  el.appendChild(grid)
+  return el
+}
+
+function renderListEditor(spec) {
+  let items = deepGet(content, spec.path)
+  if (!Array.isArray(items)) {
+    items = []
+    deepSet(content, spec.path, items)
+  }
+  const el = panel(spec.title, spec.hint, 'layers')
+  el.querySelector('.panel-head').classList.add('split')
+  el.querySelector('.panel-head').appendChild(renderAddButton(items, spec, spec.topKey, spec.topKey))
+  el.appendChild(renderItemList(items, spec, spec.topKey, spec.topKey))
+  return el
+}
+
+function renderGroupEditor(spec) {
+  const holder = deepGet(content, spec.path)
+  const el = panel(spec.title, spec.hint, 'layers')
+  const grid = document.createElement('div')
+  grid.className = 'grid'
+  spec.headerFields.forEach((f) => grid.appendChild(renderField(holder, f, spec.topKey)))
+  el.appendChild(grid)
+
+  let items = holder[spec.list.key]
+  if (!Array.isArray(items)) {
+    items = []
+    holder[spec.list.key] = items
+  }
+  const sub = document.createElement('div')
+  sub.style.marginTop = '20px'
+  const bar = document.createElement('div')
+  bar.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px'
+  bar.innerHTML = '<strong style="font-size:0.9rem">Entries (' + items.length + ')</strong>'
+  bar.appendChild(renderAddButton(items, spec.list, spec.topKey, spec.topKey))
+  sub.appendChild(bar)
+  sub.appendChild(renderItemList(items, spec.list, spec.topKey, spec.topKey))
+  el.appendChild(sub)
+  return el
+}
+
+/* ============================== pages ============================== */
+function renderOverview() {
+  const frag = document.createDocumentFragment()
+  const o = overview || {}
+
+  const stats = document.createElement('section')
+  stats.className = 'panel'
+  stats.innerHTML =
+    '<div class="panel-head"><h2>' + icon('grid') + 'Overview</h2><p>The website\'s current state.</p></div>' +
+    '<div class="stats">' +
+    statCard('Projects', o.projects ?? 0, (o.projectsFeatured ?? 0) + ' featured on home') +
+    statCard('Sections live', o.sectionsVisible ?? 0, 'of ' + (o.sectionsTotal ?? 0) + ' total') +
+    statCard('Messages', o.messages ?? 0, (o.unread ?? 0) + ' unread') +
+    statCard('Content size', bytes(o.contentBytes || 0), 'last saved ' + when(o.contentUpdatedAt)) +
+    '</div>'
+  frag.appendChild(stats)
+
+  const todo = document.createElement('section')
+  todo.className = 'panel'
+  todo.innerHTML = '<div class="panel-head"><h2>' + icon('check') + 'Pending tasks</h2><p>Complete these and the website will look stronger.</p></div><div class="tasks"></div>'
+  const tasks = todo.querySelector('.tasks')
+  const list = pendingTasks()
+  if (!list.length) {
+    tasks.innerHTML = '<div class="allgood">' + icon('check') + '<span>Everything is set! The website is fully ready. 🎉</span></div>'
+  } else {
+    list.forEach((t) => {
+      const el = document.createElement('div')
+      el.className = 'task'
+      el.innerHTML = '<span class="dot"></span><span class="t-label">' + esc(t[0]) + '</span><span class="t-go">' + esc(t[1]) + ' →</span>'
+      el.dataset.act = on(() => go(t[2]))
+      tasks.appendChild(el)
+    })
+  }
+  frag.appendChild(todo)
+
+  const quick = document.createElement('section')
+  quick.className = 'panel'
+  quick.innerHTML = '<div class="panel-head"><h2>' + icon('sparkle') + 'Quick actions</h2><p>One-click actions.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"></div>'
+  const row = quick.querySelector('div:last-child')
+  const qa = (label, ic, fn) => {
+    const b = document.createElement('button')
+    b.className = 'btn'
+    b.type = 'button'
+    b.innerHTML = icon(ic) + '<span>' + esc(label) + '</span>'
+    b.dataset.act = on(fn)
+    return b
+  }
+  row.append(
+    qa('Add a project', 'plus', () => go('projects')),
+    qa('Post an update', 'plus', () => go('updates')),
+    qa('Add a certificate', 'plus', () => go('certifications')),
+    qa('Hide / show sections', 'toggle', () => go('sections')),
+    qa('Open live site', 'external', () => window.open('/', '_blank'))
+  )
+  frag.appendChild(quick)
+
+  return frag
+}
+
+function statCard(label, value, sub) {
+  return (
+    '<div class="stat"><div class="label">' + esc(label) + '</div><div class="value">' + esc(String(value)) +
+    '</div><div class="sub">' + esc(sub || '') + '</div></div>'
+  )
+}
+
+function pendingTasks() {
+  const t = []
+  const cp = (content.codingProfiles && content.codingProfiles.profiles) || []
+  const gh = cp.find((p) => /github/i.test(p.platform || ''))
+  const lc = cp.find((p) => /leetcode/i.test(p.platform || ''))
+  if (gh && !gh.url) t.push(['Add your GitHub profile link', 'Coding Profiles', 'coding'])
+  if (lc && !lc.url) t.push(['Add your LeetCode profile link', 'Coding Profiles', 'coding'])
+  const placeholders = ((content.gallery && content.gallery.items) || []).filter((i) => /\.svg$/i.test(i.image || ''))
+  if (placeholders.length) t.push(['Replace ' + placeholders.length + ' placeholder gallery photo(s)', 'Gallery', 'gallery'])
+  const noLinks = (content.projects || []).filter((p) => !(p.links && (p.links.live || p.links.source)))
+  if (noLinks.length) t.push(['Add a live/source link to ' + noLinks.length + ' project(s)', 'Projects', 'projects'])
+  if (overview && overview.unread) t.push(['Read ' + overview.unread + ' new message(s)', 'Messages', 'messages'])
+  if (overview && !overview.resumeReady) t.push(['Upload the resume PDF', 'Settings', 'settings'])
+  return t
+}
+
+function go(id) {
+  page = id
+  ui.side = false
+  closeSide()
+  render()
+}
+
+function renderSections() {
+  const el = panel('Sections & Visibility', 'Switch ON = it shows on the website. OFF = it is hidden completely.', 'toggle')
+  const box = document.createElement('div')
+  box.className = 'sec-list'
+  const sections = content.sections || []
+  if (!sections.length) {
+    box.innerHTML = '<p class="muted empty">No section found in content.json.</p>'
+  }
+  sections.forEach((s, i) => {
+    const row = document.createElement('div')
+    row.className = 'sec-row' + (s.enabled ? ' live' : '')
+    row.innerHTML =
+      '<div style="flex:1;min-width:0"><div class="sec-name">' + (i + 1) + '. ' + esc(s.label || s.key) + '</div>' +
+      '<div class="sec-key">' + esc(s.key) + '</div></div>' +
+      '<span class="badge">' + (s.enabled ? 'Visible' : 'Hidden') + '</span>' +
+      '<label class="switch"><input type="checkbox"' + (s.enabled ? ' checked' : '') + '><span class="slider"></span></label>'
+
+    const input = row.querySelector('input')
+    input.addEventListener('change', async () => {
+      const wanted = input.checked
+      try {
+        await api('/admin/sections/' + encodeURIComponent(s.key), { method: 'PATCH', body: { enabled: wanted } })
+        s.enabled = wanted
+        row.classList.toggle('live', wanted)
+        row.querySelector('.badge').textContent = wanted ? 'Visible' : 'Hidden'
+        const live = (content.sections || []).filter((x) => x.enabled).length
+        if (overview) overview.sectionsVisible = live
+        toast((s.label || s.key) + ' → ' + (wanted ? 'visible' : 'hidden'), 'ok')
+      } catch (err) {
+        input.checked = !wanted
+        toast(err.message, 'err')
+      }
+    })
+    box.appendChild(row)
+  })
+  el.appendChild(box)
+  return el
+}
+
+function renderAnalytics() {
+  const frag = document.createDocumentFragment()
+
+  const stats = document.createElement('section')
+  stats.className = 'panel'
+  stats.innerHTML =
+    '<div class="panel-head"><h2>' + icon('activity') + 'Visitors</h2><p>Private analytics — no cookies, no third party, stored only on your server.</p></div>' +
+    '<div class="stats"><p class="muted">Loading…</p></div>'
+  frag.appendChild(stats)
+
+  const chart = document.createElement('section')
+  chart.className = 'panel'
+  chart.innerHTML =
+    '<div class="panel-head"><h2>' + icon('grid') + 'Last 14 days</h2><p>Visits per day.</p></div>' +
+    '<div class="ana-chart"><p class="muted">Loading…</p></div>'
+  frag.appendChild(chart)
+
+  const lists = document.createElement('section')
+  lists.className = 'panel'
+  lists.innerHTML =
+    '<div class="panel-head"><h2>' + icon('layers') + 'What people open</h2><p>Popular sections and where visitors came from (last 30 days).</p></div>' +
+    '<div class="ana-cols">' +
+    '<div><div class="ana-h">Top sections</div><div class="ana-list" data-ana="sections"></div></div>' +
+    '<div><div class="ana-h">Where they came from</div><div class="ana-list" data-ana="refs"></div></div>' +
+    '</div>'
+  frag.appendChild(lists)
+
+  const recent = document.createElement('section')
+  recent.className = 'panel'
+  recent.innerHTML =
+    '<div class="panel-head"><h2>' + icon('eye') + 'Recent visits</h2><p>The last 15 beacons — who popped in and what they read.</p></div>' +
+    '<div class="ana-list" data-ana="recent"></div>'
+  frag.appendChild(recent)
+
+  const pretty = (id) =>
+    id ? id.replace(/([A-Z])/g, ' $1').replace(/^./, (c) => c.toUpperCase()) : ''
+  const empty = '<p class="muted empty">Nothing recorded yet — visitors will appear here.</p>'
+  // capture the boxes while they are still inside the fragment — a fragment
+  // empties itself once its children are appended to the page
+  const boxSections = lists.querySelector('[data-ana="sections"]')
+  const boxRefs = lists.querySelector('[data-ana="refs"]')
+  const boxRecent = recent.querySelector('[data-ana="recent"]')
+
+  api('/admin/analytics')
+    .then(({ data }) => {
+      const t = data.totals
+      stats.querySelector('.stats').innerHTML =
+        statCard('Visits today', t.today, t.d7 + ' in the last 7 days') +
+        statCard('Last 7 days', t.d7, t.unique7 + ' unique visitor' + (t.unique7 === 1 ? '' : 's')) +
+        statCard('Last 30 days', t.d30, 'mobile ' + (data.devices.Mobile || 0) + ' · desktop ' + (data.devices.Desktop || 0)) +
+        statCard('All time', t.all, 'tracked without cookies')
+
+      const max = Math.max(1, ...data.daily.map((d) => d.v))
+      chart.querySelector('.ana-chart').innerHTML = data.daily
+        .map(
+          (d) =>
+            '<div class="ana-col">' +
+            '<span class="ana-n">' + (d.v || '') + '</span>' +
+            '<div class="ana-fill" style="height:' + Math.max(3, Math.round((d.v / max) * 100)) + '%" title="' + esc(d.d) + ' — ' + d.v + ' visits"></div>' +
+            '<span class="ana-d">' + esc(d.d.slice(5)) + '</span>' +
+            '</div>',
+        )
+        .join('')
+
+      boxSections.innerHTML = data.sections.length
+        ? data.sections
+            .map((s) => '<div class="ana-row"><b>' + esc(pretty(s.k)) + '</b><span>' + s.v + ' views</span></div>')
+            .join('')
+        : empty
+
+      boxRefs.innerHTML = data.refs.length
+        ? data.refs
+            .map((r) => '<div class="ana-row"><b>' + esc(r.k) + '</b><span>' + r.v + ' visits</span></div>')
+            .join('')
+        : empty
+
+      boxRecent.innerHTML = data.recent.length
+        ? data.recent
+            .map(
+              (e) =>
+                '<div class="ana-row"><b>' + esc(e.ip || '—') + ' · ' + esc(e.dv || '') + '</b><span>' +
+                esc(when(e.t)) + (e.s ? ' · read ' + esc(pretty(e.s)) : '') +
+                '</span></div>',
+            )
+            .join('')
+        : empty
+    })
+    .catch((err) => {
+      stats.querySelector('.stats').innerHTML = '<p class="muted">' + esc(err.message) + '</p>'
+    })
+
+  return frag
+}
+
+function renderMessages() {
+  const el = panel('Messages', 'Messages from the contact form.', 'mail')
+  const box = document.createElement('div')
+  box.innerHTML = '<p class="muted">Loading…</p>'
+  el.appendChild(box)
+
+  api('/messages')
+    .then(({ data }) => {
+      if (!data.length) {
+        box.innerHTML = '<p class="muted empty">No messages yet.</p>'
+        return
+      }
+      box.innerHTML = ''
+      data.forEach((m) => {
+        const item = document.createElement('div')
+        item.className = 'msg' + (m.read ? '' : ' unread')
+        item.innerHTML =
+          '<h4>' + (m.read ? '' : '<span class="dot-new"></span>') + esc(m.subject || 'Portfolio enquiry') + '</h4>' +
+          '<div class="meta2">' + esc(m.name) + ' · <a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a> · ' + esc(when(m.createdAt)) + '</div>' +
+          '<p>' + esc(m.message) + '</p>' +
+          '<div class="msg-actions"></div>'
+        const actions = item.querySelector('.msg-actions')
+
+        const reply = document.createElement('a')
+        reply.className = 'btn tiny'
+        reply.href = 'mailto:' + m.email + '?subject=' + encodeURIComponent('Re: ' + (m.subject || 'Your message'))
+        reply.innerHTML = icon('mail') + '<span>Reply</span>'
+        actions.appendChild(reply)
+
+        const readBtn = document.createElement('button')
+        readBtn.className = 'btn tiny'
+        readBtn.type = 'button'
+        readBtn.innerHTML = icon('check') + '<span>' + (m.read ? 'Mark unread' : 'Mark read') + '</span>'
+        readBtn.dataset.act = on(async () => {
+          try {
+            await api('/messages/' + m.id, { method: 'PATCH', body: { read: !m.read } })
+            refreshOverview()
+            render()
+          } catch (err) {
+            toast(err.message, 'err')
+          }
+        })
+        actions.appendChild(readBtn)
+
+        const del = document.createElement('button')
+        del.className = 'btn tiny'
+        del.type = 'button'
+        del.innerHTML = icon('trash') + '<span>Delete</span>'
+        del.dataset.act = on(async () => {
+          if (!window.confirm('Delete this message?')) return
+          try {
+            await api('/messages/' + m.id, { method: 'DELETE' })
+            refreshOverview()
+            render()
+            toast('Message deleted', 'ok')
+          } catch (err) {
+            toast(err.message, 'err')
+          }
+        })
+        actions.appendChild(del)
+
+        box.appendChild(item)
+      })
+    })
+    .catch((err) => {
+      box.innerHTML = '<p class="muted">' + esc(err.message) + '</p>'
+    })
+
+  return el
+}
+
+function renderAdvanced() {
+  const el = panel('Advanced — full JSON', 'All the content in one place. Press Format, then Save. Invalid JSON will not be saved.', 'braces')
+  const ta = document.createElement('textarea')
+  ta.className = 'json-area'
+  ta.spellcheck = false
+  ta.value = JSON.stringify(content, null, 2)
+  ta.style.cssText =
+    'width:100%;min-height:52vh;padding:14px;border-radius:13px;background:rgba(4,8,18,0.72);border:1px solid var(--line);color:var(--text);font-family:Consolas,monospace;font-size:12.5px;line-height:1.55'
+  el.appendChild(ta)
+
+  const bar = document.createElement('div')
+  bar.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px'
+  const badge = document.createElement('span')
+  badge.className = 'badge'
+
+  const size = () => (badge.textContent = bytes(new Blob([ta.value]).size))
+  ta.addEventListener('input', size)
+  size()
+
+  const format = document.createElement('button')
+  format.className = 'btn tiny'
+  format.type = 'button'
+  format.textContent = 'Format'
+  format.dataset.act = on(() => {
+    try {
+      ta.value = JSON.stringify(JSON.parse(ta.value), null, 2)
+      size()
+      toast('Formatted', 'ok')
+    } catch (err) {
+      toast('JSON is invalid: ' + err.message, 'err')
+    }
+  })
+
+  const reload = document.createElement('button')
+  reload.className = 'btn tiny'
+  reload.type = 'button'
+  reload.textContent = 'Reload from server'
+  reload.dataset.act = on(async () => {
+    await loadContent()
+    ta.value = JSON.stringify(content, null, 2)
+    size()
+    toast('Reloaded', 'ok')
+  })
+
+  const save = document.createElement('button')
+  save.className = 'btn tiny primary'
+  save.type = 'button'
+  save.textContent = 'Save all'
+  save.dataset.act = on(async () => {
+    let parsed
+    try {
+      parsed = JSON.parse(ta.value)
+    } catch (err) {
+      return toast('JSON is invalid: ' + err.message, 'err')
+    }
+    try {
+      const { data } = await api('/admin/content', { method: 'PUT', body: parsed })
+      content = data
+      dirty.clear()
+      refreshDirty()
+      await refreshOverview()
+      ta.value = JSON.stringify(content, null, 2)
+      size()
+      toast('Saved — website updated ✅', 'ok')
+    } catch (err) {
+      toast(err.message, 'err')
+    }
+  })
+
+  bar.append(save, format, reload, badge)
+  el.appendChild(bar)
+  return el
+}
+
+function renderSettings() {
+  const frag = document.createDocumentFragment()
+  const o = overview || {}
+
+  const meta = panel('Site title & SEO', 'What shows in Google and the browser tab.', 'settings')
+  const grid = document.createElement('div')
+  grid.className = 'grid'
+  ;[
+    { key: 'siteName', label: 'Site name', type: 'text' },
+    { key: 'title', label: 'Browser tab title', type: 'text', wide: true },
+    { key: 'description', label: 'Description (SEO)', type: 'area', wide: true, rows: 3 },
+    { key: 'keywords', label: 'Keywords', type: 'csv', wide: true, hint: 'Comma se alag' },
+  ].forEach((f) => grid.appendChild(renderField(content.meta, f, 'meta')))
+  meta.appendChild(grid)
+  frag.appendChild(meta)
+
+  const pw = panel('Change password', 'This is the dashboard password. Keep it at least 8 characters long.', 'lock')
+  const g2 = document.createElement('div')
+  g2.className = 'grid'
+  g2.innerHTML =
+    '<div class="fld"><label for="pwCur">Current password</label><input id="pwCur" type="password" autocomplete="current-password" /></div>' +
+    '<div class="fld"><label for="pwNew">New password</label><input id="pwNew" type="password" autocomplete="new-password" /></div>' +
+    '<div class="fld"><label for="pwCon">Confirm new password</label><input id="pwCon" type="password" autocomplete="new-password" /></div>'
+  pw.appendChild(g2)
+  const pwBtn = document.createElement('button')
+  pwBtn.className = 'btn primary'
+  pwBtn.type = 'button'
+  pwBtn.style.marginTop = '14px'
+  pwBtn.innerHTML = icon('save') + '<span>Update password</span>'
+  pwBtn.dataset.act = on(async () => {
+    const cur = $('#pwCur').value.trim()
+    const next = $('#pwNew').value.trim()
+    const con = $('#pwCon').value.trim()
+    if (next.length < 8) return toast('The new password must be at least 8 characters long.', 'err')
+    if (next !== con) return toast('The two new passwords do not match.', 'err')
+    try {
+      await api('/admin/password', { method: 'POST', body: { currentToken: cur, newToken: next } })
+      token = next
+      localStorage.setItem(STORE_KEY, token)
+      $('#pwCur').value = $('#pwNew').value = $('#pwCon').value = ''
+      toast('Password changed ✅', 'ok')
+    } catch (err) {
+      toast(err.message, 'err')
+    }
+  })
+  pw.appendChild(pwBtn)
+  frag.appendChild(pw)
+
+  const info = panel('Technical info', 'Handy once in a while.', 'db')
+  const kv = document.createElement('div')
+  kv.className = 'kv'
+  const row = (k, v) => '<div class="kv-row"><span>' + esc(k) + '</span><span>' + esc(v) + '</span></div>'
+  kv.innerHTML =
+    row('Dashboard URL (secret)', location.origin + (o.adminPath || '')) +
+    row('Website URL', location.origin) +
+    row('Resume PDF', o.resumeReady ? 'Ready ✔ /api/resume' : 'Missing') +
+    row('Content file size', bytes(o.contentBytes || 0)) +
+    row('Last saved', when(o.contentUpdatedAt)) +
+    row('Sections live', (o.sectionsVisible ?? 0) + ' / ' + (o.sectionsTotal ?? 0))
+  info.appendChild(kv)
+
+  const links = document.createElement('div')
+  links.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;margin-top:14px'
+  ;[
+    ['Open website', '/', 'external'],
+    ['View resume', '/resume', 'external'],
+    ['Download resume PDF', '/api/resume', 'save'],
+  ].forEach(([label, href, ic]) => {
+    const a = document.createElement('a')
+    a.className = 'btn tiny'
+    a.href = href
+    a.target = '_blank'
+    a.rel = 'noreferrer'
+    a.innerHTML = icon(ic) + '<span>' + esc(label) + '</span>'
+    links.appendChild(a)
+  })
+  info.appendChild(links)
+  frag.appendChild(info)
+
+  return frag
+}
+
+/* ============================== shell render ============================== */
+function renderNav() {
+  const side = $('#side')
+  const brand = document.createElement('div')
+  brand.className = 'side-brand'
+  brand.innerHTML =
+    '<span class="mark">SK</span><div><strong>' + esc((content.profile && content.profile.name) || 'Portfolio') +
+    '</strong><small>Control dashboard</small></div>'
+
+  side.innerHTML = ''
+  side.appendChild(brand)
+
+  PAGES.forEach((group) => {
+    const g = document.createElement('div')
+    g.className = 'nav-group'
+    g.innerHTML = '<div class="nav-label">' + esc(group.group) + '</div>'
+    group.items.forEach((item) => {
+      const b = document.createElement('button')
+      b.className = 'nav-item' + (item.id === page ? ' active' : '')
+      b.type = 'button'
+      b.dataset.nav = item.id
+      const count = item.unread && overview ? overview.unread : 0
+      b.innerHTML =
+        icon(item.icon) + '<span class="ni-label">' + esc(item.label) + '</span>' +
+        (count ? '<span class="ni-badge">' + count + '</span>' : '')
+      g.appendChild(b)
+    })
+    side.appendChild(g)
+  })
+
+  const foot = document.createElement('div')
+  foot.className = 'side-foot'
+  const view = document.createElement('a')
+  view.className = 'btn ghost'
+  view.href = '/'
+  view.target = '_blank'
+  view.rel = 'noreferrer'
+  view.style.justifyContent = 'center'
+  view.innerHTML = icon('external') + '<span>View website</span>'
+  const out = document.createElement('button')
+  out.className = 'btn ghost'
+  out.type = 'button'
+  out.style.justifyContent = 'center'
+  out.dataset.act = on(logout)
+  out.innerHTML = icon('logout') + '<span>Lock dashboard</span>'
+  foot.append(view, out)
+  side.appendChild(foot)
+
+  side.classList.toggle('open', !!ui.side)
+  $('#scrim').classList.toggle('on', !!ui.side)
+}
+
+function render() {
+  refs.clear()
+  acts.clear()
+  renderNav()
+
+  const all = PAGES.flatMap((g) => g.items)
+  const info = all.find((i) => i.id === page) || all[0]
+  $('#pageTitle').textContent = info.label
+  $('#pageSub').textContent = SUBTITLES[page] || ''
+
+  const view = $('#view')
+  view.innerHTML = ''
+
+  if (page === 'overview') view.appendChild(renderOverview())
+  else if (page === 'analytics') view.appendChild(renderAnalytics())
+  else if (page === 'sections') view.appendChild(renderSections())
+  else if (page === 'messages') view.appendChild(renderMessages())
+  else if (page === 'advanced') view.appendChild(renderAdvanced())
+  else if (page === 'settings') view.appendChild(renderSettings())
+  else {
+    const spec = EDITORS[page]
+    if (!spec) view.innerHTML = '<p class="muted">Nothing here.</p>'
+    else if (spec.kind === 'object') view.appendChild(renderObjectEditor(spec))
+    else if (spec.kind === 'list') view.appendChild(renderListEditor(spec))
+    else view.appendChild(renderGroupEditor(spec))
+  }
+
+  $('#dirtyPill').classList.toggle('hidden', dirty.size === 0)
+  $('#saveBtn').disabled = dirty.size === 0
+  window.scrollTo({ top: 0 })
+}
+
+function closeSide() {
+  ui.side = false
+  $('#side').classList.remove('open')
+  $('#scrim').classList.remove('on')
+}
+
+/* ============================== data ============================== */
+async function loadContent() {
+  const { data } = await api('/admin/content')
+  content = data
+  return content
+}
+
+async function refreshOverview() {
+  try {
+    const { data } = await api('/admin/overview')
+    overview = data
+  } catch {
+    /* ignore */
+  }
+}
+
+async function saveAll() {
+  const keys = Array.from(dirty)
+  if (!keys.length) return toast('No changes to save', '')
+  const payload = {}
+  keys.forEach((k) => (payload[k] = content[k]))
+  try {
+    const { data } = await api('/admin/content', { method: 'PUT', body: payload })
+    content = data
+    dirty.clear()
+    refreshDirty()
+    await refreshOverview()
+    render()
+    toast('Saved — website updated ✅', 'ok')
+  } catch (err) {
+    toast(err.message, 'err')
+  }
+}
+
+function logout() {
+  if (dirty.size && !window.confirm('Unsaved changes hain — lock karne par wo chale jayenge. Continue?')) return
+  localStorage.removeItem(STORE_KEY)
+  token = ''
+  dirty.clear()
+  content = null
+  overview = null
+  $('#app').classList.add('hidden')
+  $('#login').classList.remove('hidden')
+  $('#tokenInput').value = ''
+  toast('Dashboard locked', 'ok')
+}
+
+/* ============================== events ============================== */
+document.addEventListener('input', (e) => {
+  const fid = e.target.dataset && e.target.dataset.fid
+  if (!fid) return
+  const fn = refs.get(fid)
+  if (fn) fn(e.target.type === 'checkbox' ? e.target.checked : e.target.value)
+})
+
+document.addEventListener('change', (e) => {
+  const fid = e.target.dataset && e.target.dataset.fid
+  if (!fid || e.target.type !== 'checkbox') return
+  const fn = refs.get(fid)
+  if (fn) fn(e.target.checked)
+})
+
+document.addEventListener('click', (e) => {
+  const nav = e.target.closest('[data-nav]')
+  if (nav) {
+    go(nav.dataset.nav)
+    return
+  }
+  const act = e.target.closest('[data-act]')
+  if (act && !act.disabled) {
+    const fn = acts.get(act.dataset.act)
+    if (fn) {
+      e.preventDefault()
+      fn(act, e)
+    }
+  }
+})
+
+$('#burger').addEventListener('click', () => {
+  ui.side = !ui.side
+  $('#side').classList.toggle('open', ui.side)
+  $('#scrim').classList.toggle('on', ui.side)
+})
+$('#scrim').addEventListener('click', closeSide)
+$('#saveBtn').addEventListener('click', saveAll)
+$('#logoutBtn').addEventListener('click', logout)
+
+$('#showBtn').addEventListener('click', () => {
+  const input = $('#tokenInput')
+  const showing = input.type === 'text'
+  input.type = showing ? 'password' : 'text'
+  $('#showBtn').textContent = showing ? 'Show' : 'Hide'
+})
+
+$('#tokenInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $('#connectBtn').click()
+})
+
+$('#connectBtn').addEventListener('click', async () => {
+  const value = $('#tokenInput').value.trim()
+  if (!value) return toast('Enter the password', 'err')
+  try {
+    await api('/admin/login', { method: 'POST', body: { token: value } })
+    token = value
+    localStorage.setItem(STORE_KEY, token)
+    await boot()
+    toast('Welcome back 👋', 'ok')
+  } catch (err) {
+    toast(err.message, 'err')
+  }
+})
+
+window.addEventListener('beforeunload', (e) => {
+  if (dirty.size) {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+})
+
+/* ============================== boot ============================== */
+async function boot() {
+  await Promise.all([loadContent(), refreshOverview()])
+  dirty.clear()
+  $('#login').classList.add('hidden')
+  $('#app').classList.remove('hidden')
+  $('#saveBtn').innerHTML = icon('save') + '<span class="txt">Save changes</span>'
+  $('#viewSite').innerHTML = icon('external') + '<span class="txt">View site</span>'
+  $('#logoutBtn').innerHTML = icon('logout') + '<span class="txt">Lock</span>'
+  $('#burger').innerHTML = icon('menu')
+  $('#lockIcon').innerHTML = icon('lock')
+  render()
+}
+
+$('#lockIcon').innerHTML = icon('lock')
+$('#viewSite').innerHTML = icon('external') + '<span class="txt">View site</span>'
+$('#logoutBtn').innerHTML = icon('logout') + '<span class="txt">Lock</span>'
+$('#saveBtn').innerHTML = icon('save') + '<span class="txt">Save changes</span>'
+$('#burger').innerHTML = icon('menu')
+$('#saveBtn').disabled = true
+
+if (token) {
+  $('#tokenInput').value = token
+  boot().catch(() => {
+    localStorage.removeItem(STORE_KEY)
+    token = ''
+    $('#tokenInput').value = ''
+  })
+}
+</script>
+</body>
+</html>

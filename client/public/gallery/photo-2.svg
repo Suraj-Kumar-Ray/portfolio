@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a1c46"/>
+      <stop offset="100%" stop-color="#0e1226"/>
+    </linearGradient>
+    <linearGradient id="a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="140" cy="480" r="150" fill="#f472b6" opacity="0.16"/>
+  <g>
+    <circle cx="250" cy="270" r="54" fill="url(#a)" opacity="0.9"/>
+    <path d="M170 470 q80 -110 160 0 z" fill="url(#a)" opacity="0.9"/>
+    <circle cx="400" cy="240" r="62" fill="#22d3ee" opacity="0.85"/>
+    <path d="M310 470 q90 -125 180 0 z" fill="#22d3ee" opacity="0.85"/>
+    <circle cx="560" cy="275" r="52" fill="#fbbf24" opacity="0.85"/>
+    <path d="M485 470 q75 -105 150 0 z" fill="#fbbf24" opacity="0.85"/>
+  </g>
+  <text x="400" y="550" font-family="Segoe UI, Arial" font-size="22" font-weight="700" fill="#e9eefb" text-anchor="middle" opacity="0.85">Replace with a photo with friends</text>
+</svg>

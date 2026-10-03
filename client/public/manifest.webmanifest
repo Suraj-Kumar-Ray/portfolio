@@ -1,0 +1,56 @@
+{
+  "name": "Suraj Kumar — Full-Stack Developer",
+  "short_name": "Suraj Kumar",
+  "description": "Portfolio of Suraj Kumar, full-stack developer (React.js, JavaScript, PHP, MySQL). Projects, resume and project enquiries.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#060a14",
+  "theme_color": "#060a14",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "categories": ["portfolio", "business", "developer", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Work with me",
+      "short_name": "Hire me",
+      "url": "/?source=pwa#work",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "url": "/?source=pwa#projects",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "url": "/?source=pwa#contact",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
