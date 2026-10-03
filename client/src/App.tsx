@@ -9,6 +9,7 @@ import ScrollProgress from './components/ScrollProgress'
 import Testimonials from './components/Testimonials'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import TrustStrip from './components/TrustStrip'
 import Stats from './components/Stats'
 import About from './components/About'
 import Services from './components/Services'
@@ -178,6 +179,7 @@ export default function App() {
     blog,
     testimonials,
     process,
+    trust,
     audit,
     faq,
   } = state.content
@@ -206,6 +208,7 @@ export default function App() {
 
       <main id="main">
         <Hero profile={profile} />
+        <TrustStrip block={trust} />
         <Stats stats={profile.stats} />
         {isOn('about') && <About profile={profile} />}
         {isOn('services') && <Services services={services} />}

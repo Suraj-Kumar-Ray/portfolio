@@ -168,6 +168,22 @@ export interface ProcessStep {
   description: string
 }
 
+/** A company, university or training provider in the hero trust strip. */
+export interface TrustItem {
+  name: string
+  role?: string
+  year?: string
+  /** Short monogram shown in the mark (e.g. "HAL"). Falls back to initials. */
+  short?: string
+}
+
+/** Credibility strip under the hero: where I've worked/studied + a few wins. */
+export interface TrustBlock {
+  eyebrow?: string
+  items?: TrustItem[]
+  highlights?: string[]
+}
+
 /** The free-website-review lead magnet (/audit). */
 export interface AuditBlock {
   title?: string
@@ -253,6 +269,7 @@ export interface Content {
   blog: BlogBlock
   testimonials: Testimonial[]
   process: ProcessStep[]
+  trust?: TrustBlock
   audit: AuditBlock
   faq: Faq[]
   updatedAt: string

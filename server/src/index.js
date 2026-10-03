@@ -331,6 +331,7 @@ const CONTENT_KEYS = [
   'testimonials',
   'faq',
   'process',
+  'trust',
   'audit',
 ]
 
@@ -339,7 +340,10 @@ for (const key of CONTENT_KEYS) {
     const content = getContent()
     const value = content[key]
     // objects (blocks) stay objects, lists fall back to an empty array
-    res.json({ ok: true, data: value ?? (key === 'meta' || key === 'profile' || key === 'audit' ? {} : []) })
+    res.json({
+      ok: true,
+      data: value ?? (key === 'meta' || key === 'profile' || key === 'audit' || key === 'trust' ? {} : []),
+    })
   })
 }
 

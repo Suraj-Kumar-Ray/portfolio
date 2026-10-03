@@ -10,6 +10,7 @@ A production-ready, recruiter-friendly portfolio site with a **React + TypeScrip
 
 **Frontend**
 - Hero with animated avatar ring, availability badge and CTAs (contact + resume download)
+- **Trust strip** right under the hero: the organisations behind the work (HAL, universities, training) with monogram marks, plus a couple of concrete wins
 - Animated stat counters, about + quick-facts card, services grid
 - Skill groups with animated proficiency bars + infinite tools marquee
 - Experience timeline, education and certifications
@@ -31,6 +32,7 @@ A production-ready, recruiter-friendly portfolio site with a **React + TypeScrip
 - **Instant Telegram alerts** — the same lead pings the owner's phone within seconds via a free Telegram bot (token + chat id in the panel's **SEO & Alerts**; env `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` override it and survive redeploys). The bot token is a secret and is stripped from the public `/api/content`.
 - **Lead-magnet pages:** a shareable **`/quote`** page (packages + qualifying form) and a **`/audit`** free website-review offer — both post into the same inbox with the same alerts.
 - **Mobile sticky CTA bar** — on phones a fixed bottom bar (Get a quote / WhatsApp / Call) replaces the floating rail so a lead never has to hunt for how to reach out.
+- **Durable data** — a storage layer ([server/src/store.js](server/src/store.js)) keeps content, messages and analytics on a free MongoDB Atlas cluster when `MONGODB_URI` is set, so a redeploy on ephemeral hosting loses nothing. Local dev keeps using the JSON files; an unreachable database falls back to files instead of taking the site down.
 - **Private dashboard** on a secret, non-indexable URL with token auth, login throttling and form-based editors
 - Resume download, health check, security headers, SPA fallback, serves the built frontend in production
 
