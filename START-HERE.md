@@ -123,9 +123,17 @@ Until you press Save, the yellow "Unsaved changes" tag stays visible.
 
 ## 7. Going live on the internet (when sending it to companies)
 
-Right now the website only runs on **your laptop** (`localhost`). To show it to the world it needs hosting (a free platform like Render / Railway) — then you get a link like `https://surajkumar.onrender.com`, and the dashboard works from there too, from any phone.
+**✅ Already live!** Anyone can open it:
 
-It is only 3 steps (push the repo to GitHub → connect the platform → deploy). When you are ready, tell me and I will do the full deploy.
+| | Link |
+|---|---|
+| 🌐 **Website** (for companies / shared) | https://suraj-portfolio-wjpt.onrender.com |
+| 🔒 **Dashboard** (FOR YOU ONLY) | https://suraj-portfolio-wjpt.onrender.com/CHANGE_ME_ADMIN_PATH |
+
+Notes:
+- Free hosting **sleeps** after ~15 minutes of no visitors — the first opening then takes ~30–50 seconds. Later openings are instant.
+- **To publish any change:** run `git add -A && git commit -m "update" && git push` — Render rebuilds and puts it live automatically in ~2 minutes.
+- Panel password is the same as local (`CHANGE_ME_ADMIN_PASSWORD`). Inbox messages / dashboard edits reset on every redeploy (free plan limitation) — the base content in the repo always stays.
 
 ---
 

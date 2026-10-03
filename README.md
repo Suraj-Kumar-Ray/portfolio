@@ -229,23 +229,24 @@ portfolio/
 
 ## 🚢 Deploying
 
-**Single server (recommended):** build, then run Express with `NODE_ENV=production` on Render / Railway / Fly / a VPS — it serves both the API and the built frontend.
+**Single server (recommended):** Express serves both the API and the built frontend — one service does everything.
 
-### Render (free, easiest — step by step)
+### Render (already deployed ✅)
 
-1. **Push to GitHub** — only the `portfolio/` folder (never let the repo root be your home folder, or the whole user folder goes in).
-2. **render.com → New → Web Service** → connect the repo.
-3. Fill in the settings:
-   - **Build Command:** `npm run install:all && npm run build`
-   - **Start Command:** `NODE_ENV=production npm run start`
-4. **Environment → Add Environment Variable:**
-   - `ADMIN_TOKEN` = your strong password (on hosting this is **required** — without it the server refuses to start)
-   - `ADMIN_PATH` = `/CHANGE_ME_ADMIN_PATH` (or your own secret path)
-5. Deploy → live in 2–3 minutes. Panel: `https://<app>.onrender.com/<ADMIN_PATH>`
+**Live site:** `https://suraj-portfolio-wjpt.onrender.com`  
+**Panel:** `https://suraj-portfolio-wjpt.onrender.com/CHANGE_ME_ADMIN_PATH`
+
+Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprint**):
+
+1. Repo: `github.com/Suraj-Kumar-Ray/portfolio` (private, `main` branch) → Render **New → Blueprint**.
+2. `render.yaml` declares the Node web service: free plan, build command (`npm install --prefix server --include=dev && npm install --prefix client --include=dev && npm run build`), start (`npm start`), `NODE_ENV=production`, `ADMIN_PATH`, and `healthCheckPath: /api/health`.
+3. `ADMIN_TOKEN` + `SITE_URL` live in the Render **Environment** tab (never in git).
+4. **Auto-deploy:** every `git push` to `main` redeploys automatically.
 
 **Important hosting notes:**
-- Render's free-tier disk is **temporary** — every redeploy resets `messages.json` (the inbox). Content (`content.json`) lives there too, so edits made in the panel are lost on redeploy. For long-term use, take a paid disk or a database.
-- After the domain is set, make `og:image` absolute: in `client/index.html` change `/og.svg` to `https://<domain>/og.svg`.
+- Render's free-tier disk is **temporary** — every redeploy resets `messages.json` (the inbox) and any panel edits to `content.json` back to the committed version; analytics.json too. For long-term data, take a paid disk or a database.
+- Free instances **spin down** after ~15 min idle — first request then takes ~50 s (subsequent ones are fast).
+- `SITE_URL` env var pins the absolute URLs used by sitemap / canonical / JSON-LD (falls back to the request host if unset).
 - The server **does not boot** in production without `ADMIN_TOKEN` (deliberate — opening the panel with a default password would be too easy).
 
 **Split hosting:** deploy `client/dist` to Vercel/Netlify and the `server/` to Render; set `CLIENT_ORIGIN` to your frontend URL and point the client's API base at it.
