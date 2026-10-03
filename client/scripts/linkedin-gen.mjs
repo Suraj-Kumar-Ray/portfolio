@@ -59,10 +59,10 @@ const banner = `<svg width="1584" height="396" viewBox="0 0 1584 396" xmlns="htt
   <rect x="380" y="48" width="322" height="54" rx="27" fill="#16a34a" fill-opacity="0.18" stroke="#22c55e" stroke-opacity="0.7"/>
   <circle cx="412" cy="75" r="8" fill="#22c55e"/>
   <text x="432" y="84" font-family="${FONT}" font-size="25" font-weight="600" fill="#4ade80">OPEN TO WORK</text>
-  <text x="380" y="182" font-family="${FONT}" font-size="78" font-weight="700" fill="#e9eefb">Suraj Kumar</text>
-  <text x="380" y="236" font-family="${FONT}" font-size="31" font-weight="600" fill="#818cf8">Full-Stack Developer · React.js · JavaScript · PHP · MySQL</text>
-  <text x="380" y="292" font-family="${FONT}" font-size="25" fill="#b9c4d8">Portfolio: ${SITE} · Email: csesuraj2003@gmail.com</text>
-  <text x="380" y="338" font-family="${FONT}" font-size="22" fill="#93a1ba">Phone: +91 7795253485 · M.E. CSE @ Chandigarh University · replies within 24 hours</text>
+  <text x="380" y="196" font-family="${FONT}" font-size="92" font-weight="700" fill="#e9eefb">Suraj Kumar</text>
+  <text x="380" y="256" font-family="${FONT}" font-size="31" font-weight="600" fill="#818cf8">Full-Stack Developer · React.js · JavaScript · PHP · MySQL</text>
+  <text x="380" y="312" font-family="${FONT}" font-size="25" fill="#b9c4d8">Portfolio: ${SITE} · Email: csesuraj2003@gmail.com</text>
+  <text x="380" y="352" font-family="${FONT}" font-size="22" fill="#93a1ba">M.E. CSE @ Chandigarh University · replies within 24 hours</text>
   <circle cx="1425" cy="196" r="112" fill="#6366f1" fill-opacity="0.15" stroke="url(#acc)" stroke-width="5"/>
   <text x="1425" y="228" text-anchor="middle" font-family="${FONT}" font-size="86" font-weight="700" fill="#e9eefb">SK</text>
   <rect x="0" y="386" width="1584" height="10" fill="url(#acc)"/>
