@@ -756,19 +756,26 @@ api.put('/admin/content', requireAdmin, async (req, res) => {
 
 api.patch('/admin/sections/:key', requireAdmin, async (req, res) => {
   const { key } = req.params
-  const { enabled } = req.body || {}
-  if (typeof enabled !== 'boolean') {
-    return res.status(400).json({ ok: false, error: '`enabled` must be true or false.' })
+  const { enabled, label } = req.body || {}
+  if (typeof enabled !== 'boolean' && typeof label !== 'string') {
+    return res.status(400).json({ ok: false, error: 'Send `enabled` (true/false) or `label`.' })
   }
   const content = getContent()
   const sections = Array.isArray(content.sections) ? content.sections : []
   const section = sections.find((s) => s.key === key)
   if (!section) return res.status(404).json({ ok: false, error: `Section "${key}" not found.` })
 
-  section.enabled = enabled
+  if (typeof enabled === 'boolean') section.enabled = enabled
+  if (typeof label === 'string') {
+    const clean = label.trim().replace(/\s+/g, ' ').slice(0, 60)
+    if (!clean) return res.status(400).json({ ok: false, error: 'The label cannot be empty.' })
+    section.label = clean
+  }
   content.sections = sections
   await write('content', content)
-  console.log(`[sections] ${key} → ${enabled ? 'visible' : 'hidden'}`)
+  console.log(
+    `[sections] ${key} → ${typeof enabled === 'boolean' ? (enabled ? 'visible' : 'hidden') : 'label: ' + section.label}`
+  )
   res.json({ ok: true, data: section })
 })
 

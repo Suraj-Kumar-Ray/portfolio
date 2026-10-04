@@ -250,9 +250,19 @@ export interface Faq {
   answer: string
 }
 
+/** Editable section heading (eyebrow / title / sub) — overrides the built-in copy.
+ *  The title supports `**accent**` markers for the gradient phrase. */
+export interface SectionHeading {
+  key: string
+  eyebrow?: string
+  title?: string
+  sub?: string
+}
+
 export interface Content {
   meta: Meta
   sections: SectionConfig[]
+  headings?: SectionHeading[]
   profile: Profile
   services: Service[]
   skills: SkillGroup[]
