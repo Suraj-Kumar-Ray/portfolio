@@ -88,7 +88,7 @@ export default function Hero({ profile }: { profile: Profile }) {
               <Mail size={15} /> {profile.email}
             </span>
             <span>
-              <Briefcase size={15} /> {profile.yearsOfExperience}+ years experience
+              <Briefcase size={15} /> Fresher · open to full-time roles
             </span>
           </div>
         </div>
