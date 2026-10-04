@@ -577,34 +577,6 @@
       }
     },
     {
-      "id": "prostate-cancer",
-      "title": "Prostate Cancer Hybrid Model",
-      "category": "AI / Research",
-      "featured": false,
-      "year": "2025",
-      "description": "Hybrid CNN + attention + KNN pipeline for prostate cancer classification from histopathology images, with comparative model experiments.",
-      "highlights": [
-        "Hybrid CNN + Attention + KNN architecture",
-        "Experiments documented in executed notebooks"
-      ],
-      "tech": [
-        "Python",
-        "CNN",
-        "Attention",
-        "KNN"
-      ],
-      "image": "/projects/prostate-cancer.webp",
-      "caseStudy": {
-        "problem": "Classifying cancer from histopathology images means spotting subtle tissue patterns — and single-model pipelines either overfit or fail to explain their decisions.",
-        "solution": "A hybrid pipeline: CNN feature extraction, an attention layer that focuses on the informative regions, and a KNN classifier on top — compared model-by-model in executed notebooks.",
-        "result": "Documented comparative results showing where attention helps, plus visual evidence of the regions the model focuses on — making the predictions easier to trust and explain."
-      },
-      "links": {
-        "live": "",
-        "source": ""
-      }
-    },
-    {
       "id": "portfolio-platform",
       "title": "Portfolio & Resume Platform",
       "category": "Full-Stack",
