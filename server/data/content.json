@@ -628,8 +628,8 @@
         "result": "A live, zero-maintenance-cost portfolio with instant contact options (WhatsApp, call, vCard, email alerts) and full search-engine visibility — everything running on free tiers."
       },
       "links": {
-        "live": "",
-        "source": ""
+        "live": "https://suraj-portfolio-wjpt.onrender.com",
+        "source": "https://github.com/Suraj-Kumar-Ray/portfolio"
       }
     }
   ],
