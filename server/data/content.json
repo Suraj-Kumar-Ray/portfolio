@@ -116,7 +116,7 @@
       "key": "skills",
       "eyebrow": "My Skills",
       "title": "The **tech stack** I work with",
-      "sub": "Years of hands-on experience across the modern web stack."
+      "sub": "Hands-on with the modern web stack — built, tested and shipped real projects."
     },
     {
       "key": "codingProfiles",
@@ -191,9 +191,9 @@
     "resumeUrl": "/api/resume",
     "bookingUrl": "",
     "availability": "Open to work · replies within 24 hours",
-    "yearsOfExperience": 1,
+    "yearsOfExperience": 0,
     "about": [
-      "I'm a full-stack developer with expertise in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
+      "I'm a fresher full-stack developer with hands-on experience in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
       "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I've interned at Hindustan Aeronautics Limited, where I developed and validated navigation-system software."
     ],
     "highlights": [
@@ -409,10 +409,10 @@
     {
       "role": "Software Engineering Intern",
       "company": "Hindustan Aeronautics Limited (HAL)",
-      "period": "2024",
+      "period": "Aug — Oct 2023",
       "location": "On-site, India",
       "type": "Internship",
-      "description": "Contributed to aerospace software delivery on navigation systems — development, validation and technical documentation.",
+      "description": "Three-month internship contributing to aerospace software delivery on navigation systems — development, validation and technical documentation.",
       "highlights": [
         "Developed navigation system software and contributed to aerospace project delivery",
         "Performed functional testing and validation of navigation modules",
@@ -783,7 +783,7 @@
         "description": "Began post-graduation in Computer Science & Engineering (UID 25MCS10032), focusing on applied machine learning."
       },
       {
-        "date": "2024",
+        "date": "2023",
         "type": "briefcase",
         "title": "Software Engineering Internship at HAL",
         "description": "Developed and validated navigation-system software at Hindustan Aeronautics Limited."
@@ -893,7 +893,7 @@
         "name": "Hindustan Aeronautics Limited",
         "short": "HAL",
         "role": "Software Engineering Intern",
-        "year": "2024"
+        "year": "2023"
       },
       {
         "name": "Chandigarh University",
@@ -960,7 +960,7 @@
     },
     {
       "question": "Do you have industry experience?",
-      "answer": "Yes — I completed a Software Engineering Internship at Hindustan Aeronautics Limited (HAL), where I developed navigation-system software, performed functional testing and validation, and prepared technical documentation for aerospace project delivery."
+      "answer": "I'm a fresher, and I completed a 3-month Software Engineering Internship at Hindustan Aeronautics Limited (HAL) in 2023, where I developed navigation-system software, performed functional testing and validation, and prepared technical documentation for aerospace project delivery."
     },
     {
       "question": "What testing do you do?",

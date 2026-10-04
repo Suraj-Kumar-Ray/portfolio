@@ -7,7 +7,7 @@ export default function About({ profile }: { profile: Profile }) {
     { icon: <MapPin size={18} />, label: 'Location', value: profile.location },
     { icon: <Mail size={18} />, label: 'Email', value: profile.email },
     { icon: <Phone size={18} />, label: 'Phone', value: profile.phone },
-    { icon: <Briefcase size={18} />, label: 'Experience', value: `${profile.yearsOfExperience}+ years` },
+    { icon: <Briefcase size={18} />, label: 'Experience', value: 'Fresher · Internship at HAL' },
     { icon: <Languages size={18} />, label: 'Languages', value: profile.languages?.join(' · ') || 'English · Hindi' },
     { icon: <Sparkles size={18} />, label: 'Status', value: profile.availability },
   ]
