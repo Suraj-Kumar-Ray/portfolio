@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { getContent } from './api'
+import { setHeadings } from './headings'
 import { trackVisit, trackSections } from './analytics'
 import { useReveal } from './hooks/useReveal'
 import { NAV_EVENT } from './navigation'
@@ -65,7 +66,11 @@ export default function App() {
     setState({ status: 'loading' })
     try {
       const res = await getContent()
-      if (res.ok && res.data) setState({ status: 'ready', content: res.data })
+      if (res.ok && res.data) {
+        // hand the editable section headings to <Section> before it renders
+        setHeadings(res.data.headings)
+        setState({ status: 'ready', content: res.data })
+      }
       else setState({ status: 'error', message: res.error || 'Could not load portfolio content.' })
     } catch {
       setState({ status: 'error', message: 'The API is unreachable. Make sure the backend is running.' })

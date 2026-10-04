@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { accentTitle, headingFor } from '../headings'
 
 interface SectionProps {
   id: string
@@ -12,6 +13,13 @@ interface SectionProps {
 }
 
 export default function Section({ id, eyebrow, title, sub, alt, center, children, className = '' }: SectionProps) {
+  // Every heading can be overridden from the dashboard (content.json → headings).
+  // With no saved override we fall back to the copy shipped in the component.
+  const override = headingFor(id)
+  const shownEyebrow = override?.eyebrow || eyebrow
+  const shownTitle = override?.title ? accentTitle(override.title) : title
+  const shownSub = override?.sub || sub
+
   return (
     <section id={id} className={`section ${alt ? 'section-alt' : ''} ${className}`.trim()}>
       <div className="container">
@@ -19,10 +27,10 @@ export default function Section({ id, eyebrow, title, sub, alt, center, children
           <span className="eyebrow">
             {/* CSS counter → 01, 02, … as you scroll; hidden from screen readers */}
             <span className="eyebrow-num" aria-hidden="true" />
-            {eyebrow}
+            {shownEyebrow}
           </span>
-          <h2 className="section-title">{title}</h2>
-          {sub && <p className="section-sub">{sub}</p>}
+          <h2 className="section-title">{shownTitle}</h2>
+          {shownSub && <p className="section-sub">{shownSub}</p>}
         </header>
         {children}
       </div>

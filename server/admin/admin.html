@@ -886,6 +886,8 @@ const EDITORS = {
       { key: 'google', path: ['verification', 'google'], label: 'Google site verification code', type: 'text', wide: true, hint: 'Google Search Console se milega' },
       { key: 'bing', path: ['verification', 'bing'], label: 'Bing site verification code', type: 'text', wide: true, hint: 'Bing Webmaster Tools se milega' },
       { key: 'ogImage', label: 'Social share image', type: 'text', wide: true, hint: 'Default /og.png — WhatsApp/LinkedIn preview' },
+      { key: 'themeColor', label: 'Mobile browser bar colour', type: 'text', hint: 'Example: #060a14' },
+      { key: 'favicon', label: 'Favicon path', type: 'text', hint: 'Default /favicon.svg' },
       { key: 'telegramEnabled', path: ['telegram', 'enabled'], label: 'Telegram alerts ON', type: 'bool', hint: 'Naya message aane par phone pe turant notification' },
       { key: 'telegramBot', path: ['telegram', 'botToken'], label: 'Telegram bot token', type: 'text', wide: true, hint: 'Telegram me @BotFather ko /newbot bhejo — token milega (123456:ABC...). Secret hai, website par kabhi nahi jata' },
       { key: 'telegramChat', path: ['telegram', 'chatId'], label: 'Telegram chat ID', type: 'text', wide: true, hint: '@userinfobot ko message karo, apna chat ID milega (123456789)' },
@@ -900,9 +902,13 @@ const EDITORS = {
     title: 'Packages & Quote',
     hint: 'Aapke service packages, price aur /quote page ki heading. Home ka "Work With Me" section aur /quote page dono isi data se bante hain.',
     headerFields: [
+      { key: 'eyebrow', label: 'Small label (eyebrow)', type: 'text', hint: 'Default: Work With Me' },
       { key: 'title', label: 'Home section title', type: 'text', wide: true },
+      { key: 'subtitle', label: 'Home section intro', type: 'area', wide: true, rows: 2 },
       { key: 'quoteTitle', label: 'Quote page heading', type: 'text', wide: true },
       { key: 'quoteSub', label: 'Quote page intro', type: 'area', wide: true, rows: 3 },
+      { key: 'formTitle', label: 'Quote form heading', type: 'text', wide: true },
+      { key: 'formSub', label: 'Quote form intro', type: 'area', wide: true, rows: 2 },
       { key: 'note', label: '"Why work with me" note', type: 'area', wide: true, rows: 3 },
       { key: 'points', label: 'Guarantee points', type: 'lines', wide: true, hint: 'Ek line me ek point' },
     ],
@@ -1001,6 +1007,40 @@ const EDITORS = {
     ],
     blank: () => ({ question: 'New question', answer: '' }),
   },
+
+  headings: {
+    nav: 'headings',
+    kind: 'list',
+    topKey: 'headings',
+    path: ['headings'],
+    title: 'Section Headings',
+    hint: 'Har section ka upar wala chhota label (eyebrow), bada heading aur intro line. Heading me **do star** ke beech ka hissa gradient colour me dikhta hai — jaise Featured **projects**.',
+    itemTitle: (h, i) => h.eyebrow || h.key || 'Heading ' + (i + 1),
+    itemSub: (h) => [h.key, h.title].filter(Boolean).join(' · '),
+    fields: [
+      {
+        key: 'key',
+        label: 'Section id',
+        type: 'text',
+        hint: 'about, services, skills, codingProfiles, experience, projects, achievements, updates, gallery, testimonials, blog, faq, contact — isi se judta hai, isliye aam taur par na badlein',
+      },
+      { key: 'eyebrow', label: 'Small label (eyebrow)', type: 'text' },
+      { key: 'title', label: 'Section heading', type: 'text', wide: true, hint: 'Gradient word ko **double star** me rakho' },
+      { key: 'sub', label: 'Intro line (optional)', type: 'area', wide: true, rows: 2, hint: 'Khali chhodne par section ka default intro dikhta hai' },
+    ],
+  },
+
+  tools: {
+    nav: 'tools',
+    kind: 'object',
+    topKey: 'tools',
+    path: [],
+    title: 'Tools & Technologies',
+    hint: 'Woh tools ka scrolling list jo Skills section ke neeche chalta hai.',
+    fields: [
+      { key: 'tools', label: 'Tools / technologies', type: 'lines', wide: true, hint: 'Ek line me ek tool — jaise Java, React, MySQL' },
+    ],
+  },
 }
 
 const PAGES = [
@@ -1015,10 +1055,12 @@ const PAGES = [
     group: 'Website content',
     items: [
       { id: 'profile', label: 'Profile & Hero', icon: 'user' },
+      { id: 'headings', label: 'Section Headings', icon: 'layout' },
       { id: 'projects', label: 'Projects', icon: 'briefcase' },
       { id: 'experience', label: 'Experience', icon: 'briefcase' },
       { id: 'education', label: 'Education', icon: 'cap' },
       { id: 'skills', label: 'Skills', icon: 'layers' },
+      { id: 'tools', label: 'Tools & Technologies', icon: 'layers' },
       { id: 'coding', label: 'Coding Profiles', icon: 'code' },
       { id: 'updates', label: 'Updates', icon: 'refresh' },
       { id: 'achievements', label: 'Achievements', icon: 'award' },
@@ -1049,6 +1091,8 @@ const PAGES = [
 const SUBTITLES = {
   overview: 'A full summary of your website — at a glance.',
   profile: 'Name, photo, intro and contact details.',
+  headings: 'Every section heading, label and intro line — change any text here.',
+  tools: 'The scrolling tools list in the Skills section.',
   projects: 'Add, edit or delete projects.',
   experience: 'Internships and jobs.',
   education: 'Degrees, school and marks.',
@@ -1474,11 +1518,30 @@ function renderSections() {
     row.className = 'sec-row' + (s.enabled ? ' live' : '')
     row.innerHTML =
       '<div style="flex:1;min-width:0"><div class="sec-name">' + (i + 1) + '. ' + esc(s.label || s.key) + '</div>' +
+      '<input class="sec-label" type="text" value="' + esc(s.label || '') + '" autocomplete="off" ' +
+        'aria-label="Nav label for ' + esc(s.key) + '" ' +
+        'style="margin-top:6px;width:100%;max-width:320px;padding:7px 10px;border-radius:9px;background:rgba(6,10,20,0.55);border:1px solid var(--line);color:var(--text);font-size:0.82rem" />' +
       '<div class="sec-key">' + esc(s.key) + '</div></div>' +
       '<span class="badge">' + (s.enabled ? 'Visible' : 'Hidden') + '</span>' +
       '<label class="switch"><input type="checkbox"' + (s.enabled ? ' checked' : '') + '><span class="slider"></span></label>'
 
-    const input = row.querySelector('input')
+    // renaming the section updates the navbar link (and the footer) instantly
+    const labelInput = row.querySelector('.sec-label')
+    labelInput.addEventListener('change', async () => {
+      const next = labelInput.value.trim() || s.key
+      if (next === (s.label || '')) return
+      try {
+        await api('/admin/sections/' + encodeURIComponent(s.key), { method: 'PATCH', body: { label: next } })
+        s.label = next
+        row.querySelector('.sec-name').textContent = (i + 1) + '. ' + next
+        toast('Nav link renamed → ' + next, 'ok')
+      } catch (err) {
+        labelInput.value = s.label || ''
+        toast(err.message, 'err')
+      }
+    })
+
+    const input = row.querySelector('.switch input')
     input.addEventListener('change', async () => {
       const wanted = input.checked
       try {

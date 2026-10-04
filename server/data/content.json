@@ -99,6 +99,86 @@
       "enabled": true
     }
   ],
+  "headings": [
+    {
+      "key": "about",
+      "eyebrow": "About Me",
+      "title": "Passionate developer who turns **ideas into products**",
+      "sub": ""
+    },
+    {
+      "key": "services",
+      "eyebrow": "What I Do",
+      "title": "Services I **offer**",
+      "sub": "End-to-end capability — from the first component to the production deploy."
+    },
+    {
+      "key": "skills",
+      "eyebrow": "My Skills",
+      "title": "The **tech stack** I work with",
+      "sub": "Years of hands-on experience across the modern web stack."
+    },
+    {
+      "key": "codingProfiles",
+      "eyebrow": "Practice & Code",
+      "title": "Where I **practice & build**",
+      "sub": ""
+    },
+    {
+      "key": "experience",
+      "eyebrow": "My Journey",
+      "title": "Internship & **education**",
+      "sub": "Where I've interned, what I shipped and what I learned along the way."
+    },
+    {
+      "key": "projects",
+      "eyebrow": "Portfolio",
+      "title": "Featured **projects**",
+      "sub": "A selection of products I've designed, built and shipped."
+    },
+    {
+      "key": "achievements",
+      "eyebrow": "Recognition",
+      "title": "Achievements & **milestones**",
+      "sub": "Awards, hackathons, training and research work beyond the classroom."
+    },
+    {
+      "key": "updates",
+      "eyebrow": "Latest",
+      "title": "What’s **new**",
+      "sub": ""
+    },
+    {
+      "key": "gallery",
+      "eyebrow": "Gallery",
+      "title": "Life **beyond code**",
+      "sub": ""
+    },
+    {
+      "key": "testimonials",
+      "eyebrow": "Testimonials",
+      "title": "What people **say about me**",
+      "sub": "Feedback from managers, founders and clients I've worked with."
+    },
+    {
+      "key": "blog",
+      "eyebrow": "Notes",
+      "title": "Latest **notes**",
+      "sub": ""
+    },
+    {
+      "key": "faq",
+      "eyebrow": "FAQ",
+      "title": "Frequently asked **questions**",
+      "sub": ""
+    },
+    {
+      "key": "contact",
+      "eyebrow": "Get In Touch",
+      "title": "Let's **work together**",
+      "sub": "Have a role, a project or just a question? Drop a message and I'll get back to you within 24 hours."
+    }
+  ],
   "profile": {
     "name": "Suraj Kumar",
     "role": "Full-Stack Developer",
