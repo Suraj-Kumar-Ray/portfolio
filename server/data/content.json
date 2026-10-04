@@ -493,6 +493,36 @@
   ],
   "projects": [
     {
+      "id": "school-portal",
+      "title": "School Management Portal",
+      "category": "Full-Stack",
+      "featured": true,
+      "year": "2026",
+      "description": "A complete school platform — a public website plus private portals for the school office, teachers and parents — served by one Node + Express + SQLite service.",
+      "highlights": [
+        "Four front-ends on one codebase: public site, admin panel, parent app, teacher app",
+        "Role-based access — a teacher only opens the sections and classes the office grants",
+        "Printable result and fee sheets, phone alerts and PWA install, with no build step"
+      ],
+      "tech": [
+        "Node.js",
+        "Express",
+        "SQLite",
+        "EJS",
+        "JavaScript"
+      ],
+      "image": "/projects/school-portal.webp",
+      "caseStudy": {
+        "problem": "Admissions, fees, marks and notices lived on paper and in phone calls: parents had to visit the office to learn a result or a pending month, and a teacher had no way to see even their own class list.",
+        "solution": "One Node + Express + SQLite service serving four front-ends — a public website with admission enquiry and a class-wise fee structure, an office admin panel that owns every record, and mobile-first parent and teacher portals. Access is role-based: a teacher sees only the sections and classes the office ticks, and every child's record is reached through the parent's own login. Results, fees and sheets are generated from the same data.",
+        "result": "A single deployable service with no build step and no external database. Every family can see results, timetable, month-by-month fee status and notices online, the office runs everything from one dashboard, and printed result and fee sheets come straight out of the same records. The live demo runs a fictional demo school on generated data."
+      },
+      "links": {
+        "live": "https://school-portal-demo-cgjm.onrender.com",
+        "source": "https://github.com/Suraj-Kumar-Ray/school-portal"
+      }
+    },
+    {
       "id": "teachers-management",
       "title": "Teachers Management System",
       "category": "Full-Stack",
