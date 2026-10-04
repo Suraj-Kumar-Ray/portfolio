@@ -1,8 +1,27 @@
-# 🚀 Personal Portfolio — React + Express
+# Suraj Kumar — Portfolio & Private CMS
 
-A production-ready, recruiter-friendly portfolio site with a **React + TypeScript (Vite)** frontend and a **Node.js/Express** backend. Dark navy theme with an indigo→cyan accent, fully responsive, animated, and SEO-ready.
+A production-ready, recruiter-friendly portfolio with a **React 18 + TypeScript (Vite)** front end
+and a **Node.js / Express** back end that also serves a **password-protected admin panel** — so every
+section of the site is editable without touching code.
 
-![stack](https://img.shields.io/badge/React-18-61dafb) ![ts](https://img.shields.io/badge/TypeScript-5-blue) ![vite](https://img.shields.io/badge/Vite-5-646cff) ![express](https://img.shields.io/badge/Express-4-000000)
+[![Live site](https://img.shields.io/badge/live-suraj--portfolio--wjpt.onrender.com-6366f1?logo=render&logoColor=white)](https://suraj-portfolio-wjpt.onrender.com)
+![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
+![Node](https://img.shields.io/badge/Node-24-339933?logo=nodedotjs&logoColor=white)
+
+> **Live:** https://suraj-portfolio-wjpt.onrender.com  
+> **Panel:** the site origin + your `ADMIN_PATH` (kept out of git — see [server/.env](server/.env))
+
+### Highlights
+- **One content file, one API** — all copy, projects, skills and notes come from `content.json` via `GET /api/content`.
+- **Private dashboard** on a secret, non-indexable URL with token auth, login throttling and form editors.
+- **Lead capture everywhere** — contact form, `/quote` and `/audit` pages, WhatsApp/Call rail, with instant email + Telegram alerts.
+- **Self-hosted analytics** with a date-range filter and CSV export — no third-party trackers.
+- **SEO-ready** — dynamic sitemap, robots, JSON-LD (`Person`, `ProfessionalService`, `Service`), per-note OG cards.
+- **Durable data** — a small storage layer uses MongoDB Atlas in production and JSON files locally.
 
 ---
 
