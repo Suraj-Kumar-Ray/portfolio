@@ -11,9 +11,15 @@ section of the site is editable without touching code.
 ![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 ![Node](https://img.shields.io/badge/Node-24-339933?logo=nodedotjs&logoColor=white)
+[![CI](https://github.com/Suraj-Kumar-Ray/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Suraj-Kumar-Ray/portfolio/actions/workflows/ci.yml)
+![License: MIT](https://img.shields.io/badge/license-MIT-3da639)
 
 > **Live:** https://suraj-portfolio-wjpt.onrender.com  
 > **Panel:** the site origin + your `ADMIN_PATH` (kept out of git — see [server/.env](server/.env))
+
+## Preview
+
+![Suraj Kumar — portfolio home page](docs/preview-hero.png)
 
 ### Highlights
 - **One content file, one API** — all copy, projects, skills and notes come from `content.json` via `GET /api/content`.

@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Typecheck, build & server check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install client dependencies
+        working-directory: client
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck & build the client
+        working-directory: client
+        run: npm run build
+
+      - name: Check the server entry point parses
+        working-directory: server
+        run: node --check src/index.js
+
+      - name: Validate the content file is well-formed JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('server/data/content.json','utf8')); console.log('content.json OK')"
