@@ -33,6 +33,9 @@
 
   --nav-h: 72px;
   --max-w: 1160px;
+  /* vertical padding of every .section. Kept as a token so the anchor-jump
+     offset below can cancel it exactly and land the heading just under the nav. */
+  --section-pad: clamp(64px, 9vw, 112px);
 
   /* translucent chrome — redefined for the light theme below */
   --glass: rgba(6, 10, 20, 0.82);
@@ -56,6 +59,12 @@
   --err-bg: rgba(248, 113, 113, 0.1);
   --err-border: rgba(248, 113, 113, 0.4);
   --err-text: #fca5a5;
+
+  /* Accent-coloured chip / label text. These pale tints read well on navy but
+     vanish on a white card, so the light theme deepens them (see below). */
+  --chip-cyan: #67e8f9;
+  --chip-indigo: #c3caff;
+  --chip-indigo-strong: #c7cbff;
 }
 
 /* ---------- light theme ----------
@@ -105,6 +114,11 @@
   --err-bg: rgba(220, 38, 38, 0.09);
   --err-border: rgba(220, 38, 38, 0.35);
   --err-text: #b91c1c;
+
+  /* deep indigo / teal instead of pale lavender / sky, so chips stay AA on white */
+  --chip-cyan: #0e7490;
+  --chip-indigo: #3730a3;
+  --chip-indigo-strong: #3730a3;
 }
 
 /* ambient background is much lighter on a bright canvas */
@@ -133,7 +147,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--nav-h) + 16px);
+  scroll-padding-top: calc(var(--nav-h) + 12px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -229,8 +243,14 @@ ol {
 }
 
 .section {
-  padding: clamp(64px, 9vw, 112px) 0;
+  padding: var(--section-pad) 0;
   position: relative;
+  /* Jumping to a section must land on its HEADING, not on the top of the section.
+     The heading sits a full --section-pad below the section's top edge, so we
+     scroll past that padding (negative margin) to cancel it. With
+     scroll-padding-top: nav + 12px on <html>, the heading then lands exactly
+     nav-height + 12px from the top instead of a padded empty band below the nav. */
+  scroll-margin-top: calc(-1 * var(--section-pad));
 }
 
 /* every other section gets a faint lift + hairline rules, so the scroll has a
@@ -387,7 +407,7 @@ main {
   border-radius: 999px;
   background: rgba(99, 102, 241, 0.12);
   border: 1px solid rgba(99, 102, 241, 0.32);
-  color: #c3caff;
+  color: var(--chip-indigo);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -700,6 +720,47 @@ main {
   gap: 14px;
   flex-wrap: wrap;
   margin-bottom: 36px;
+}
+
+/* direct contact row in the hero — one tap to email, phone, LinkedIn, GitHub */
+.hero-socials {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.hero-socials-list {
+  display: flex;
+  gap: 10px;
+}
+
+.hero-social {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: var(--text-soft);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease,
+    box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.hero-social:hover {
+  color: #fff;
+  border-color: transparent;
+  background: var(--grad);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-glow);
+}
+
+.hero-socials-hint {
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
 }
 
 .hero-meta {
@@ -1471,7 +1532,7 @@ main {
   border-radius: 999px;
   background: rgba(34, 211, 238, 0.1);
   border: 1px solid rgba(34, 211, 238, 0.3);
-  color: #67e8f9;
+  color: var(--chip-cyan);
   font-size: 0.78rem;
   font-weight: 600;
   white-space: nowrap;
@@ -1745,7 +1806,7 @@ main {
   border-radius: 999px;
   background: rgba(34, 211, 238, 0.15);
   border: 1px solid rgba(34, 211, 238, 0.4);
-  color: #67e8f9;
+  color: var(--chip-cyan);
   font-size: 0.73rem;
   font-weight: 600;
 }
@@ -1829,7 +1890,7 @@ main {
 .project-links a.primary {
   background: rgba(99, 102, 241, 0.16);
   border-color: rgba(99, 102, 241, 0.45);
-  color: #c7cbff;
+  color: var(--chip-indigo-strong);
 }
 
 /* ---------- testimonials ---------- */
@@ -2736,7 +2797,7 @@ main {
   border-radius: 999px;
   background: rgba(34, 211, 238, 0.1);
   border: 1px solid rgba(34, 211, 238, 0.3);
-  color: #67e8f9;
+  color: var(--chip-cyan);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -2744,7 +2805,7 @@ main {
 .work-chip.price {
   background: rgba(99, 102, 241, 0.14);
   border-color: rgba(99, 102, 241, 0.36);
-  color: #c7cbff;
+  color: var(--chip-indigo-strong);
 }
 
 .work-cta {
@@ -2848,6 +2909,7 @@ select.input option {
   }
   .hero-tagline,
   .hero-actions,
+  .hero-socials,
   .hero-meta {
     margin-inline: auto;
     justify-content: center;
@@ -2920,6 +2982,7 @@ select.input option {
      a phone. These trims alone remove roughly three screens. */
   .section {
     padding: 44px 0;
+    scroll-margin-top: -44px;
   }
 
   .section-head {

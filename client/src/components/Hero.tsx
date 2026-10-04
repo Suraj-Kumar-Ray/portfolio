@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { ArrowUpRight, Download, MapPin, Mail, Briefcase } from 'lucide-react'
+import { Icon } from '../icons'
 import { goToSection } from '../navigation'
 import type { Profile } from '../types'
 
@@ -54,6 +55,30 @@ export default function Hero({ profile }: { profile: Profile }) {
               <span className="label-short">Resume</span>
             </a>
           </div>
+
+          {/* One tap to the channels a recruiter actually uses — email, phone,
+              LinkedIn, GitHub. Every one of them is a free, direct route to me,
+              so they sit in the hero instead of only at the bottom of the page. */}
+          {profile.socials?.length > 0 && (
+            <div className="hero-socials reveal" data-delay="4">
+              <div className="hero-socials-list">
+                {profile.socials.map((social) => (
+                  <a
+                    key={social.label}
+                    className="hero-social"
+                    href={social.url}
+                    target={social.url.startsWith('mailto:') || social.url.startsWith('tel:') ? undefined : '_blank'}
+                    rel="noreferrer noopener"
+                    aria-label={`${social.label} — contact Suraj`}
+                    title={social.label}
+                  >
+                    <Icon name={social.icon} size={17} />
+                  </a>
+                ))}
+              </div>
+              <span className="hero-socials-hint">Direct — no forms, no waiting</span>
+            </div>
+          )}
 
           <div className="hero-meta reveal" data-delay="4">
             <span>
