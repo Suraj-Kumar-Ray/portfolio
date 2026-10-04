@@ -24,7 +24,7 @@ export default function TrustStrip({ block }: { block?: TrustBlock }) {
   if (!items.length && !highlights.length) return null
 
   return (
-    <section className="trust-strip" aria-label={block?.eyebrow || 'Experience and education'}>
+    <section className="trust-strip" aria-label={block?.eyebrow || 'Internship and education'}>
       <div className="container trust-inner reveal">
         <div className="trust-head">
           {block?.eyebrow && <span className="trust-eyebrow">{block.eyebrow}</span>}

@@ -50,7 +50,7 @@
     },
     {
       "key": "experience",
-      "label": "Experience",
+      "label": "Internship",
       "enabled": true
     },
     {
@@ -805,7 +805,7 @@
     ]
   },
   "trust": {
-    "eyebrow": "Experience & education",
+    "eyebrow": "Internship & education",
     "items": [
       {
         "name": "Hindustan Aeronautics Limited",

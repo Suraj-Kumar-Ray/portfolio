@@ -16,10 +16,10 @@ export default function Experience({ experience, education, certifications }: Pr
       eyebrow="My Journey"
       title={
         <>
-          Experience &amp; <span className="gradient-text">education</span>
+          Internship &amp; <span className="gradient-text">education</span>
         </>
       }
-      sub="Where I've worked, what I shipped and what I learned along the way."
+      sub="Where I've interned, what I shipped and what I learned along the way."
     >
       <Collapse className="timeline" count={experience.length} limit={3}>
         {experience.map((job, i) => (
