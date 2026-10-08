@@ -1,7 +1,7 @@
 # Hi, I'm Suraj Kumar 👋
 
 **Full-Stack Developer** — React.js · JavaScript · PHP · MySQL
-M.E. CSE @ Chandigarh University · ex-Software Engineering Intern at Hindustan Aeronautics Limited (HAL)
+M.E. CSE @ Chandigarh University · ex-Intern at Hindustan Aeronautics Limited (HAL), MCSRDC
 
 🌐 **Portfolio:** [suraj-portfolio-wjpt.onrender.com](https://suraj-portfolio-wjpt.onrender.com) · 📄 [Résumé](https://suraj-portfolio-wjpt.onrender.com/resume)
 
