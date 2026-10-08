@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "Suraj Kumar",
     "title": "Suraj Kumar — Full-Stack Developer | React, PHP & MySQL",
-    "description": "Portfolio of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL), M.E. CSE at Chandigarh University, ex-Software Engineering Intern at Hindustan Aeronautics Limited (HAL).",
+    "description": "Portfolio of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL), M.E. CSE at Chandigarh University, ex-Intern at Hindustan Aeronautics Limited (HAL), MCSRDC.",
     "keywords": [
       "Suraj Kumar",
       "Full-Stack Developer",
@@ -182,7 +182,7 @@
   "profile": {
     "name": "Suraj Kumar",
     "role": "Full-Stack Developer",
-    "tagline": "M.E. CSE @ Chandigarh University · I build responsive, scalable web apps with React.js, JavaScript, PHP & MySQL — ex-Software Engineering Intern at HAL.",
+    "tagline": "M.E. CSE @ Chandigarh University — I build responsive, scalable web apps with React.js, JavaScript, PHP & MySQL — ex-Intern at HAL (MCSRDC).",
     "shortIntro": "Hi, I'm Suraj",
     "location": "Ludhiana, Punjab, India",
     "email": "csesuraj2003@gmail.com",
@@ -194,10 +194,10 @@
     "yearsOfExperience": 0,
     "about": [
       "I'm a fresher full-stack developer with hands-on experience in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
-      "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I've interned at Hindustan Aeronautics Limited, where I developed and validated navigation-system software."
+      "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I completed an internship at Hindustan Aeronautics Limited (MCSRDC, Design Complex), where I worked on navigation-systems software, functional testing and technical documentation."
     ],
     "highlights": [
-      "Software Engineering Intern at Hindustan Aeronautics Limited (HAL)",
+      "Intern at Hindustan Aeronautics Limited (HAL) — MCSRDC, Design Complex",
       "M.E. CSE at Chandigarh University · B.E. CSE with CGPA 8.7",
       "Full-stack builds in React.js, PHP & MySQL with end-to-end testing",
       "Winner — Intra-College Science Exhibition · DevHacks 1.0 participant"
@@ -407,17 +407,17 @@
   ],
   "experience": [
     {
-      "role": "Software Engineering Intern",
+      "role": "Intern — MCSRDC, Design Complex",
       "company": "Hindustan Aeronautics Limited (HAL)",
-      "period": "Aug — Oct 2023",
-      "location": "On-site, India",
+      "period": "Aug – Sep 2023",
+      "location": "Bengaluru, India",
       "type": "Internship",
-      "description": "Three-month internship contributing to aerospace software delivery on navigation systems — development, validation and technical documentation.",
+      "description": "Internship at MCSRDC, Design Complex — HAL's Mission & Combat Systems R&D Centre, Bengaluru. Worked with the senior engineering team on a navigation-systems project in a mission-critical, process-driven environment.",
       "highlights": [
-        "Developed navigation system software and contributed to aerospace project delivery",
-        "Performed functional testing and validation of navigation modules",
-        "Conducted technical research, documentation and cross-team collaboration",
-        "Prepared detailed technical documentation and reports, maintaining accuracy and consistency of records"
+        "Worked with senior engineers on a navigation-systems project, following established review and documentation practices",
+        "Assisted with functional testing and validation of software modules, and documented the findings",
+        "Wrote shell scripts to automate routine build and data-handling tasks",
+        "Took part in team planning and documentation reviews in a mission-critical environment"
       ],
       "technologies": [
         "Software Development",
@@ -785,8 +785,8 @@
       {
         "date": "2023",
         "type": "briefcase",
-        "title": "Software Engineering Internship at HAL",
-        "description": "Developed and validated navigation-system software at Hindustan Aeronautics Limited."
+        "title": "Internship at HAL (MCSRDC, Design Complex)",
+        "description": "Completed an internship at MCSRDC, Design Complex — Hindustan Aeronautics Limited, Bengaluru."
       },
       {
         "date": "May 2024",
@@ -874,9 +874,9 @@
           "Testing",
           "Career"
         ],
-        "excerpt": "Working on navigation-system software at Hindustan Aeronautics Limited changed how I think about 'it works on my machine'.",
+        "excerpt": "Working on navigation-systems software at Hindustan Aeronautics Limited changed how I think about 'it works on my machine'.",
         "body": [
-          "During my Software Engineering Internship at Hindustan Aeronautics Limited I worked on navigation-system software — development, validation and technical documentation for aerospace project delivery.",
+          "During my internship at Hindustan Aeronautics Limited (MCSRDC, Design Complex) I worked on navigation-systems software — testing, validation and technical documentation for aerospace project delivery.",
           "The biggest surprise was the amount of testing. Every module is validated against its requirements, and the documentation is part of the deliverable, not an afterthought. 'It runs' is the beginning of the conversation, not the end.",
           "I learned that functional testing really starts with asking 'what should happen?' before 'does it happen?'. Writing test cases from the requirements — instead of from the code — catches the bugs that live in the gap between what was asked and what was built.",
           "The documentation discipline stuck with me too. Reports have to be accurate and consistent, because months later someone else will make decisions based on them. Writing for that future reader changes what you write.",
@@ -892,7 +892,7 @@
       {
         "name": "Hindustan Aeronautics Limited",
         "short": "HAL",
-        "role": "Software Engineering Intern",
+        "role": "Intern — MCSRDC, Design Complex",
         "year": "2023"
       },
       {
@@ -960,7 +960,7 @@
     },
     {
       "question": "Do you have industry experience?",
-      "answer": "I'm a fresher, and I completed a 3-month Software Engineering Internship at Hindustan Aeronautics Limited (HAL) in 2023, where I developed navigation-system software, performed functional testing and validation, and prepared technical documentation for aerospace project delivery."
+      "answer": "I'm a fresher, and I completed an internship at Hindustan Aeronautics Limited (HAL) — MCSRDC, Design Complex — from August to September 2023, where I worked on navigation-systems software, assisted with functional testing and validation, and prepared technical documentation."
     },
     {
       "question": "What testing do you do?",
