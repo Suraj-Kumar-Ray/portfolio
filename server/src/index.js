@@ -316,6 +316,7 @@ const CONTENT_KEYS = [
   'meta',
   'sections',
   'profile',
+  'snapshot',
   'services',
   'work',
   'skills',
@@ -342,7 +343,11 @@ for (const key of CONTENT_KEYS) {
     // objects (blocks) stay objects, lists fall back to an empty array
     res.json({
       ok: true,
-      data: value ?? (key === 'meta' || key === 'profile' || key === 'audit' || key === 'trust' ? {} : []),
+      data:
+        value ??
+        (key === 'meta' || key === 'profile' || key === 'audit' || key === 'trust' || key === 'snapshot'
+          ? {}
+          : []),
     })
   })
 }
@@ -1033,6 +1038,19 @@ function seoJsonLd(base, reqPath = '/') {
     sameAs,
     alumniOf,
     knowsAbout,
+    // Marks the profile as a person who works in this occupation — the signal
+    // search engines use when someone searches "full stack developer Mohali".
+    hasOccupation: p.role
+      ? {
+          '@type': 'Occupation',
+          name: p.role,
+          occupationLocation: loc.length ? { '@type': 'City', name: loc[0] } : undefined,
+        }
+      : undefined,
+    knowsLanguage: (Array.isArray(p.languages) ? p.languages : [])
+      .map((l) => String(l).replace(/\(.*?\)/g, '').trim())
+      .filter(Boolean)
+      .map((name) => ({ '@type': 'Language', name })),
   }
 
   const graph = [person]

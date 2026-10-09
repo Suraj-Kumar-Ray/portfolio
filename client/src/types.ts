@@ -184,6 +184,21 @@ export interface TrustBlock {
   highlights?: string[]
 }
 
+/** One labelled fact in the recruiter snapshot card under the hero. */
+export interface SnapshotRow {
+  label: string
+  value: string
+  /** Icon name from icons.tsx — optional. */
+  icon?: string
+}
+
+/** "Quick facts" block a hiring team can scan before reading the page. */
+export interface SnapshotBlock {
+  eyebrow?: string
+  title?: string
+  rows?: SnapshotRow[]
+}
+
 /** The free-website-review lead magnet (/audit). */
 export interface AuditBlock {
   title?: string
@@ -264,6 +279,7 @@ export interface Content {
   sections: SectionConfig[]
   headings?: SectionHeading[]
   profile: Profile
+  snapshot?: SnapshotBlock
   services: Service[]
   skills: SkillGroup[]
   tools: string[]
