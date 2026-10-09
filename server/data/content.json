@@ -1,13 +1,24 @@
 {
   "meta": {
     "siteName": "Suraj Kumar",
-    "title": "Suraj Kumar — Full-Stack Developer | React, PHP & MySQL",
-    "description": "Portfolio of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL), M.E. CSE at Chandigarh University, ex-Intern at Hindustan Aeronautics Limited (HAL), MCSRDC.",
+    "title": "Suraj Kumar — Full-Stack Developer & QA | React, Node.js, PHP",
+    "description": "Fresher full-stack developer & QA in Mohali — React.js, TypeScript, Node.js, PHP & MySQL. Ex-Intern at HAL (MCSRDC) · M.E. CSE @ Chandigarh University. Immediate joiner.",
     "keywords": [
       "Suraj Kumar",
       "Full-Stack Developer",
+      "Fresher Full Stack Developer",
       "React.js Developer",
-      "PHP MySQL",
+      "Frontend Developer",
+      "Node.js Developer",
+      "Express.js",
+      "PHP MySQL Developer",
+      "QA Engineer",
+      "Manual Testing",
+      "Software Tester Fresher",
+      "Immediate Joiner",
+      "Mohali",
+      "Chandigarh",
+      "Punjab",
       "Chandigarh University",
       "M.E CSE",
       "HAL Internship",
@@ -181,25 +192,27 @@
   ],
   "profile": {
     "name": "Suraj Kumar",
-    "role": "Full-Stack Developer",
-    "tagline": "M.E. CSE @ Chandigarh University — I build responsive, scalable web apps with React.js, JavaScript, PHP & MySQL — ex-Intern at HAL (MCSRDC).",
+    "role": "Full-Stack Developer · QA & Manual Testing",
+    "tagline": "Fresher full-stack developer building responsive web apps with React.js, JavaScript, TypeScript, Node.js/Express, PHP & MySQL — open to Full-Stack, Frontend and QA roles. M.E. CSE @ Chandigarh University · ex-Intern at Hindustan Aeronautics Limited (MCSRDC).",
     "shortIntro": "Hi, I'm Suraj",
-    "location": "Ludhiana, Punjab, India",
+    "location": "Mohali, Punjab, India",
     "email": "csesuraj2003@gmail.com",
     "phone": "+91-7795253485",
     "avatar": "/avatar.jpg?v=3",
     "resumeUrl": "/api/resume",
     "bookingUrl": "",
-    "availability": "Open to work · replies within 24 hours",
+    "availability": "Open to work — immediate joiner · Mohali & PAN India · replies within 24 hours",
     "yearsOfExperience": 0,
     "about": [
-      "I'm a fresher full-stack developer with hands-on experience in React.js, JavaScript, PHP and MySQL. I build responsive, scalable web applications and care about strong debugging, clean databases and thorough testing before anything ships.",
-      "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I completed an internship at Hindustan Aeronautics Limited (MCSRDC, Design Complex), where I worked on navigation-systems software, functional testing and technical documentation."
+      "I'm a fresher full-stack developer based in Mohali, Punjab — available to join immediately and open to relocating anywhere in India. I build responsive, scalable web applications end to end: React.js and TypeScript on the frontend, Node.js/Express REST APIs and PHP + MySQL on the backend. Clean database design, strong debugging and testing every flow before it ships are the parts I care about most.",
+      "Currently pursuing M.E. in Computer Science & Engineering at Chandigarh University (UID 25MCS10032), after graduating B.E. CSE from Sambhram Institute of Technology (VTU) with a CGPA of 8.7. I interned at Hindustan Aeronautics Limited (MCSRDC, Design Complex) from August to September 2023, working on navigation-systems software, functional testing and technical documentation.",
+      "Alongside development I'm open to QA and manual-testing roles — I have hands-on experience in manual, functional and database testing with structured bug reporting. My M.E. dissertation applies deep learning to medical image analysis, so I'm comfortable with research work and Python too."
     ],
     "highlights": [
-      "Intern at Hindustan Aeronautics Limited (HAL) — MCSRDC, Design Complex",
-      "M.E. CSE at Chandigarh University · B.E. CSE with CGPA 8.7",
-      "Full-stack builds in React.js, PHP & MySQL with end-to-end testing",
+      "Open to Full-Stack, Frontend and QA / Manual Testing roles — immediate joiner, no notice period",
+      "Intern at Hindustan Aeronautics Limited (HAL) — MCSRDC, Design Complex, Bengaluru (Aug–Sep 2023)",
+      "M.E. CSE at Chandigarh University · B.E. CSE with CGPA 8.7/10",
+      "Ships full-stack apps with React.js, TypeScript, Node.js/Express, PHP & MySQL — tested end to end",
       "Winner — Intra-College Science Exhibition · DevHacks 1.0 participant"
     ],
     "languages": [
@@ -255,12 +268,12 @@
     {
       "title": "Frontend Development",
       "icon": "layout",
-      "description": "Responsive, mobile-first interfaces in React.js, HTML5, CSS3 and Bootstrap — clean, cross-browser and accessible."
+      "description": "Responsive, mobile-first interfaces in React.js, TypeScript, HTML5, CSS3 and Bootstrap — clean, cross-browser and accessible."
     },
     {
-      "title": "Backend & Databases",
+      "title": "Backend & APIs",
       "icon": "server",
-      "description": "PHP and MySQL backends with solid SQL, CRUD operations, data validation and well-structured database design."
+      "description": "Node.js + Express REST APIs and PHP + MySQL backends — relational schema design, SQL, CRUD, server-side validation and clean JSON APIs."
     },
     {
       "title": "Software Testing",
@@ -313,6 +326,10 @@
           "level": 90
         },
         {
+          "name": "TypeScript",
+          "level": 82
+        },
+        {
           "name": "Responsive Web Design",
           "level": 90
         },
@@ -330,6 +347,14 @@
       "category": "Backend & Databases",
       "icon": "server",
       "items": [
+        {
+          "name": "REST API Design",
+          "level": 80
+        },
+        {
+          "name": "Node.js & Express",
+          "level": 82
+        },
         {
           "name": "MySQL",
           "level": 88
@@ -403,13 +428,20 @@
     "Image Processing",
     "Manual Testing",
     "Functional Testing",
-    "Bug Reporting"
+    "Bug Reporting",
+    "Node.js",
+    "Express",
+    "TypeScript",
+    "REST API",
+    "GitHub",
+    "VS Code",
+    "Postman"
   ],
   "experience": [
     {
       "role": "Intern — MCSRDC, Design Complex",
       "company": "Hindustan Aeronautics Limited (HAL)",
-      "period": "Aug – Sep 2023",
+      "period": "Aug 2023 – Sep 2023 · 2 months",
       "location": "Bengaluru, India",
       "type": "Internship",
       "description": "Internship at MCSRDC, Design Complex — HAL's Mission & Combat Systems R&D Centre, Bengaluru. Worked with the senior engineering team on a navigation-systems project in a mission-critical, process-driven environment.",
@@ -430,8 +462,8 @@
     {
       "degree": "M.E. in Computer Science & Engineering",
       "school": "Chandigarh University, Punjab",
-      "period": "2025 — Present",
-      "description": "Pursuing (UID 25MCS10032 · Section ME-3). Focus on applied machine learning and deep learning for medical image analysis."
+      "period": "2025 — Present (expected 2027)",
+      "description": "Pursuing full-time (UID 25MCS10032 · Section ME-3). Dissertation on applied deep learning for medical image analysis; expected completion 2027."
     },
     {
       "degree": "B.E. in Computer Science & Engineering",
@@ -453,6 +485,11 @@
     }
   ],
   "certifications": [
+    {
+      "name": "Internship Certificate — MCSRDC, Design Complex (Air Navigation project)",
+      "issuer": "Hindustan Aeronautics Limited (HAL)",
+      "year": "Aug 2023"
+    },
     {
       "name": "Data Structures",
       "issuer": "Coursera",
@@ -713,15 +750,15 @@
         "platform": "LeetCode",
         "handle": "",
         "icon": "code",
-        "description": "Data structures & algorithms practice — arrays, dynamic programming, graphs and linked lists.",
+        "description": "Data structures & algorithms practice — arrays, dynamic programming, graphs and linked lists, solved in Java.",
         "stats": [
-          {
-            "label": "Problems Solved",
-            "value": "400+"
-          },
           {
             "label": "Focus",
             "value": "DSA"
+          },
+          {
+            "label": "Language",
+            "value": "Java"
           }
         ],
         "url": ""
@@ -771,6 +808,12 @@
     "subtitle": "Milestones and updates, newest first.",
     "items": [
       {
+        "date": "Oct 2026",
+        "type": "award",
+        "title": "Portfolio refreshed and recruiter-ready",
+        "description": "Case studies, project links, HAL internship certificate and a one-page resume in one place — built for a 30-second scan by a hiring team."
+      },
+      {
         "date": "Jul 2026",
         "type": "award",
         "title": "DSA Summer Winning Camp 2026",
@@ -783,16 +826,16 @@
         "description": "Began post-graduation in Computer Science & Engineering (UID 25MCS10032), focusing on applied machine learning."
       },
       {
-        "date": "2023",
-        "type": "briefcase",
-        "title": "Internship at HAL (MCSRDC, Design Complex)",
-        "description": "Completed an internship at MCSRDC, Design Complex — Hindustan Aeronautics Limited, Bengaluru."
-      },
-      {
         "date": "May 2024",
         "type": "award",
         "title": "Graduated B.E. CSE with CGPA 8.7",
         "description": "Completed B.E. in Computer Science & Engineering from Sambhram Institute of Technology (VTU)."
+      },
+      {
+        "date": "Aug 2023",
+        "type": "briefcase",
+        "title": "Internship at HAL (MCSRDC, Design Complex)",
+        "description": "Completed an internship at MCSRDC, Design Complex — Hindustan Aeronautics Limited, Bengaluru."
       }
     ]
   },
@@ -893,7 +936,7 @@
         "name": "Hindustan Aeronautics Limited",
         "short": "HAL",
         "role": "Intern — MCSRDC, Design Complex",
-        "year": "2023"
+        "year": "Aug 2023"
       },
       {
         "name": "Chandigarh University",
@@ -952,11 +995,11 @@
   "faq": [
     {
       "question": "Are you available for a full-time role?",
-      "answer": "Yes — I'm pursuing M.E. CSE at Chandigarh University and I'm open to full-time roles and internships in full-stack development. The fastest way to reach me is the contact form, email or phone."
+      "answer": "Yes — I'm open to full-time roles and internships in full-stack development and QA, and I can join immediately with no notice period. I'm based in Mohali, Punjab and happy to relocate anywhere in India. The fastest way to reach me is email, phone or the contact form."
     },
     {
       "question": "What is your core tech stack?",
-      "answer": "React.js, JavaScript (ES6+), HTML5, CSS3 and Bootstrap on the frontend; PHP and MySQL on the backend, with SQL, DBMS design and data validation. I also build Python/PyQt5 desktop tools and work with Java and C/C++."
+      "answer": "React.js, JavaScript (ES6+), TypeScript, HTML5, CSS3 and Bootstrap on the frontend; Node.js + Express REST APIs and PHP + MySQL on the backend, with SQL, DBMS design and data validation. I also build Python/PyQt5 desktop tools and work with Java and C/C++."
     },
     {
       "question": "Do you have industry experience?",
@@ -965,6 +1008,58 @@
     {
       "question": "What testing do you do?",
       "answer": "Manual testing, functional testing and database testing with structured bug reporting. Every project I ship — including my Teachers Management System — goes through end-to-end functional and database validation."
+    },
+    {
+      "question": "When can you join? Do you have a notice period?",
+      "answer": "I'm an immediate joiner — as a fresher there is no notice period to serve. I can start as soon as the offer and joining formalities are done, and I can join in Mohali, Chandigarh, Bengaluru, Hyderabad, Pune or Noida without delay."
+    },
+    {
+      "question": "Are you open to relocating or to on-site work?",
+      "answer": "Yes. I live in Mohali, Punjab and I am open to on-site, hybrid and remote roles anywhere in India — including Bengaluru, Hyderabad, Pune, Noida, Gurugram and Chennai. Relocation is not a constraint for me."
+    },
+    {
+      "question": "Do you know Node.js, Express and TypeScript?",
+      "answer": "Yes. My School Management Portal is a Node.js + Express + SQLite service, and a lot of my recent work is in TypeScript — this portfolio's own frontend is React + TypeScript over an Express REST API. I'm comfortable with routing, middleware, JSON APIs, environment config and deploying a Node service, alongside PHP + MySQL work."
+    },
+    {
+      "question": "Are you open to QA / manual testing roles?",
+      "answer": "Yes — I apply for QA and manual testing roles as well as development roles. I have hands-on experience in manual, functional and database testing with structured bug reporting, and during my HAL internship I assisted with functional testing and validation of navigation-systems software."
     }
-  ]
+  ],
+  "snapshot": {
+    "eyebrow": "Recruiter snapshot",
+    "title": "Quick facts",
+    "rows": [
+      {
+        "label": "Open to",
+        "value": "Full-Stack Developer · Frontend Developer (React.js) · QA / Manual Testing",
+        "icon": "briefcase"
+      },
+      {
+        "label": "Availability",
+        "value": "Immediate joiner — no notice period, ready to start right away.",
+        "icon": "calendar"
+      },
+      {
+        "label": "Location",
+        "value": "Mohali, Punjab — open to on-site, hybrid or remote roles anywhere in India.",
+        "icon": "map"
+      },
+      {
+        "label": "Experience",
+        "value": "Fresher + internship at HAL (MCSRDC, Design Complex), Bengaluru — Aug–Sep 2023.",
+        "icon": "rocket"
+      },
+      {
+        "label": "Education",
+        "value": "M.E. CSE, Chandigarh University (2025–2027) · B.E. CSE, VTU — CGPA 8.7/10.",
+        "icon": "education"
+      },
+      {
+        "label": "Contact",
+        "value": "csesuraj2003@gmail.com · +91-7795253485 · LinkedIn & GitHub — replies within 24 hours.",
+        "icon": "mail"
+      }
+    ]
+  }
 }

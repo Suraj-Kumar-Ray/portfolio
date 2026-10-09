@@ -42,12 +42,13 @@ export default function CodingProfiles({ block }: { block: CodingProfilesBlock }
               ))}
             </div>
 
-            {profile.url ? (
+            {/* No link yet → show nothing at all. A "Link soon" placeholder reads
+                as an unfinished portfolio to a recruiter, so the card simply ends
+                after its stats until a profile URL is added in the panel. */}
+            {profile.url && (
               <a className="btn btn-ghost btn-sm" href={profile.url} target="_blank" rel="noreferrer noopener">
                 Visit profile <ExternalLink size={14} />
               </a>
-            ) : (
-              <span className="code-pending">Link soon</span>
             )}
           </article>
         ))}

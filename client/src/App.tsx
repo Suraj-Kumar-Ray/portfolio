@@ -11,6 +11,7 @@ import Testimonials from './components/Testimonials'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustStrip from './components/TrustStrip'
+import Snapshot from './components/Snapshot'
 import Stats from './components/Stats'
 import About from './components/About'
 import Services from './components/Services'
@@ -183,6 +184,7 @@ export default function App() {
 
   const {
     profile,
+    snapshot,
     services,
     skills,
     tools,
@@ -237,6 +239,7 @@ export default function App() {
       <main id="main">
         <Hero profile={profile} />
         <TrustStrip block={trust} />
+        <Snapshot block={snapshot} profile={profile} />
         <Stats stats={profile.stats} />
         {isOn('about') && <About profile={profile} />}
         {isOn('services') && <Services services={services} />}
