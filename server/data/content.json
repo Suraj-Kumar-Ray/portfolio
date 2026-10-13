@@ -29,7 +29,7 @@
     "favicon": "/favicon.svg",
     "notifyEmail": "csesuraj2003@gmail.com",
     "verification": {
-      "google": "",
+      "google": "0ALXJsK1SIRPlzqVy_TaQhAXpyDKL20wdpXQmY8GTok",
       "bing": ""
     },
     "telegram": {
@@ -232,7 +232,7 @@
       },
       {
         "label": "Certifications & Training",
-        "value": 4,
+        "value": 5,
         "suffix": ""
       },
       {
@@ -485,6 +485,12 @@
     }
   ],
   "certifications": [
+    {
+      "name": "Oracle Cloud Infrastructure Certified Architect Associate",
+      "issuer": "Oracle",
+      "year": "Oct 2026",
+      "link": "/api/certificate/oci"
+    },
     {
       "name": "Internship Certificate — MCSRDC, Design Complex (Air Navigation project)",
       "issuer": "Hindustan Aeronautics Limited (HAL)",
@@ -807,6 +813,12 @@
     "title": "What's New",
     "subtitle": "Milestones and updates, newest first.",
     "items": [
+      {
+        "date": "Oct 2026",
+        "type": "award",
+        "title": "Oracle Cloud Infrastructure Certified Architect Associate",
+        "description": "Cleared the OCI Architect Associate certification (Oracle, Oct 2026, credential 332268769OCI26CAA) — cloud architecture, compute, networking and storage design."
+      },
       {
         "date": "Oct 2026",
         "type": "award",

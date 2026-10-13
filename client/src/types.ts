@@ -86,6 +86,8 @@ export interface Certification {
   name: string
   issuer: string
   year: string
+  /** Optional link to the verifiable certificate file (e.g. /api/certificate/oci). */
+  link?: string
 }
 
 export interface ProjectLinks {
