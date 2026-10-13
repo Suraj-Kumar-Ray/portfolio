@@ -218,7 +218,14 @@ export default function App() {
 
   // standalone pages — real URLs, own chrome, own SEO (see server sendIndex)
   if (WORK_ID) return withPalette(<CaseStudy project={projects.find((p) => p.id === WORK_ID)} profile={profile} />)
-  if (BLOG_SLUG) return withPalette(<BlogPostView post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)} profile={profile} />)
+  if (BLOG_SLUG)
+    return withPalette(
+      <BlogPostView
+        post={(blog?.posts || []).find((p) => p.slug === BLOG_SLUG)}
+        posts={blog?.posts || []}
+        profile={profile}
+      />
+    )
   if (PATH === '/blog') return withPalette(<BlogIndex block={blog || { posts: [] }} profile={profile} />)
   if (IS_QUOTE) return withPalette(<Quote work={work} profile={profile} process={process} />)
   if (IS_AUDIT) return withPalette(<Audit audit={audit} profile={profile} />)

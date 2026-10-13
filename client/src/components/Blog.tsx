@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowRight, Calendar, Clock } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { ArrowLeft, ArrowRight, Calendar, Clock, Rss } from 'lucide-react'
 import Section from './Section'
 import ShareBar from './ShareBar'
 import SubPage from './SubPage'
@@ -67,6 +68,9 @@ export function Notes({ block }: { block: BlogBlock }) {
         <a className="btn btn-ghost" href="/blog">
           View all notes <ArrowRight size={16} />
         </a>
+        <a className="feed-link" href="/rss.xml" title="Subscribe to these notes as RSS">
+          <Rss size={14} /> RSS
+        </a>
       </div>
     </Section>
   )
@@ -74,7 +78,10 @@ export function Notes({ block }: { block: BlogBlock }) {
 
 /** Standalone /blog page — every note, newest first. */
 export function BlogIndex({ block, profile }: { block: BlogBlock; profile: Profile }) {
-  const posts = [...(block.posts || [])].sort(byNewest)
+  const posts = useMemo(() => [...(block.posts || [])].sort(byNewest), [block.posts])
+  const tags = useMemo(() => ['All', ...Array.from(new Set(posts.flatMap((p) => p.tags || [])))], [posts])
+  const [tag, setTag] = useState('All')
+  const visible = tag === 'All' ? posts : posts.filter((p) => (p.tags || []).includes(tag))
 
   return (
     <SubPage profile={profile} title={`${block.title || 'Notes'} · ${profile.name}`}>
@@ -88,8 +95,35 @@ export function BlogIndex({ block, profile }: { block: BlogBlock; profile: Profi
 
       <section className="section">
         <div className="container">
+          {tags.length > 1 && (
+            <div className="filter-bar" role="tablist" aria-label="Filter notes by tag">
+              {tags.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  role="tab"
+                  aria-selected={tag === t}
+                  className={`filter-btn ${tag === t ? 'active' : ''}`}
+                  onClick={() => setTag(t)}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="notes-toolbar">
+            <p className="notes-count">
+              {visible.length} {visible.length === 1 ? 'note' : 'notes'}
+              {tag !== 'All' ? ` tagged \u201C${tag}\u201D` : ''}
+            </p>
+            <a className="feed-link" href="/rss.xml" title="Subscribe to these notes as RSS">
+              <Rss size={14} /> RSS
+            </a>
+          </div>
+
           <div className="notes-list">
-            {posts.map((post) => (
+            {visible.map((post) => (
               <a className="note-row reveal" key={post.slug} href={`/blog/${post.slug}`}>
                 <div>
                   <PostMeta post={post} />
@@ -108,8 +142,12 @@ export function BlogIndex({ block, profile }: { block: BlogBlock; profile: Profi
                 <ArrowRight size={18} className="note-row-arrow" />
               </a>
             ))}
-            {!posts.length && (
-              <p style={{ color: 'var(--muted)' }}>No notes published yet — check back soon.</p>
+            {!visible.length && (
+              <p style={{ color: 'var(--muted)' }}>
+                {posts.length
+                  ? `No notes tagged “${tag}” yet.`
+                  : 'No notes published yet — check back soon.'}
+              </p>
             )}
           </div>
         </div>
@@ -119,7 +157,15 @@ export function BlogIndex({ block, profile }: { block: BlogBlock; profile: Profi
 }
 
 /** Standalone /blog/:slug page — the note itself. */
-export function BlogPostView({ post, profile }: { post?: BlogPost; profile: Profile }) {
+export function BlogPostView({
+  post,
+  posts = [],
+  profile,
+}: {
+  post?: BlogPost
+  posts?: BlogPost[]
+  profile: Profile
+}) {
   if (!post) {
     return (
       <SubPage profile={profile} title={`Note not found · ${profile.name}`}>
@@ -135,6 +181,17 @@ export function BlogPostView({ post, profile }: { post?: BlogPost; profile: Prof
       </SubPage>
     )
   }
+
+  // Reading order + "more like this" — both come from the same CMS list the
+  // index uses, so a new note needs no extra wiring.
+  const ordered = [...posts].sort(byNewest)
+  const index = ordered.findIndex((p) => p.slug === post.slug)
+  const newer = index > 0 ? ordered[index - 1] : undefined
+  const older = index >= 0 && index < ordered.length - 1 ? ordered[index + 1] : undefined
+  const others = ordered.filter((p) => p.slug !== post.slug)
+  const tagMatches = others.filter((p) => (p.tags || []).some((t) => (post.tags || []).includes(t)))
+  // Prefer shared tags, but never leave the slot empty — newest notes are the fallback.
+  const related = (tagMatches.length ? tagMatches : others).slice(0, 3)
 
   return (
     <SubPage profile={profile} title={`${post.title} · ${profile.name}`}>
@@ -173,6 +230,53 @@ export function BlogPostView({ post, profile }: { post?: BlogPost; profile: Prof
               Discuss this with me <ArrowRight size={16} />
             </a>
           </div>
+
+          {(newer || older) && (
+            <nav className="post-nav" aria-label="More notes">
+              {newer ? (
+                <a className="post-nav-link" href={`/blog/${newer.slug}`} rel="prev">
+                  <span className="post-nav-label">
+                    <ArrowLeft size={14} /> Newer
+                  </span>
+                  <span className="post-nav-title">{newer.title}</span>
+                </a>
+              ) : (
+                <span />
+              )}
+              {older ? (
+                <a className="post-nav-link end" href={`/blog/${older.slug}`} rel="next">
+                  <span className="post-nav-label">
+                    Older <ArrowRight size={14} />
+                  </span>
+                  <span className="post-nav-title">{older.title}</span>
+                </a>
+              ) : (
+                <span />
+              )}
+            </nav>
+          )}
+
+          {related.length > 0 && (
+            <section className="notes-related">
+              <h2 className="related-title">
+                {tagMatches.length && post.tags?.length
+                  ? `More notes on ${post.tags.join(' · ')}`
+                  : 'More notes'}
+              </h2>
+              <div className="notes-grid">
+                {related.map((p) => (
+                  <a className="note-card" key={p.slug} href={`/blog/${p.slug}`}>
+                    <PostMeta post={p} />
+                    <h3 className="note-title">{p.title}</h3>
+                    <p className="note-excerpt">{p.excerpt}</p>
+                    <span className="note-more">
+                      Read note <ArrowRight size={14} />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </article>
     </SubPage>
