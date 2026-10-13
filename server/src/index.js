@@ -874,6 +874,17 @@ app.get('/api/resume', (req, res) => {
   res.status(404).json({ ok: false, error: 'Resume not found. Add server/data/resume.pdf' })
 })
 
+// Verifiable proof for the headline credential: employers can open the actual
+// Oracle eCertificate (scan-to-verify QR + credential ID) instead of taking
+// the certifications list on trust.
+app.get('/api/certificate/oci', (req, res) => {
+  const certPath = path.join(DATA_DIR, 'oci-certificate.pdf')
+  if (fs.existsSync(certPath)) {
+    return res.download(certPath, 'Suraj-Kumar-OCI-Architect-Associate-Certificate.pdf')
+  }
+  res.status(404).json({ ok: false, error: 'Certificate not found. Add server/data/oci-certificate.pdf' })
+})
+
 // One-page portfolio + resume: that is the whole public surface. The homepage
 // entry carries <image:*> tags (avatar + project thumbnails) so images can
 // surface in search too; lastmod differs per page (content vs resume edits).

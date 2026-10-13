@@ -14,6 +14,9 @@ M.E. CSE @ Chandigarh University · ex-Intern at Hindustan Aeronautics Limited (
 ### Toolbox
 `JavaScript (ES6+)` `React.js` `Java` `C/C++` `Python` `PHP` `MySQL` `HTML5/CSS3` `Bootstrap` `Git` `Selenium` `PyQt5`
 
+### Certifications
+- 🏅 **Oracle Cloud Infrastructure Certified Architect Associate** — Oracle, issued Oct 2026 (valid to Oct 2028) · Credential ID `332268769OCI26CAA`
+
 ### Featured projects
 - **Skin Lesion Classification** — fine-tuned multi-modal CNN with class-balanced learning for melanoma detection (M.E. dissertation)
 - **Teachers Management System** — full-stack PHP + MySQL CRUD app with end-to-end functional & database testing

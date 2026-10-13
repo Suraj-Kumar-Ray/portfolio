@@ -90,9 +90,26 @@ export default function Experience({ experience, education, certifications }: Pr
                   <Award size={18} />
                 </span>
                 <div>
-                  <p className="cert-name">{cert.name}</p>
+                  <p className="cert-name">
+                    {cert.link ? (
+                      <a href={cert.link} target="_blank" rel="noreferrer">
+                        {cert.name}
+                      </a>
+                    ) : (
+                      cert.name
+                    )}
+                  </p>
                   <p className="cert-meta">
                     {cert.issuer} · {cert.year}
+                    {cert.link && (
+                      <>
+                        {' '}
+                        ·{' '}
+                        <a href={cert.link} target="_blank" rel="noreferrer">
+                          View certificate
+                        </a>
+                      </>
+                    )}
                   </p>
                 </div>
               </article>
