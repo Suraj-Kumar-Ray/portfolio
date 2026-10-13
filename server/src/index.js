@@ -961,6 +961,119 @@ app.get('/sitemap.xml', (req, res) => {
   res.type('application/xml').send(xml)
 })
 
+// --- blog feeds: RSS 2.0 + JSON Feed ----------------------------------------
+// Real URLs (not /api) so feed readers, aggregators and newsletters can
+// subscribe, and so crawlers discover every note without reading the HTML.
+const MONTH_INDEX = {
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11,
+}
+
+/** "Sep 2026" · "2026-09-05" · "2026" → a Date (UTC midnight). Invalid → epoch. */
+function postDate(value) {
+  const s = String(value || '').trim()
+  let m = s.match(/^([A-Za-z]{3,})\.?\s+(\d{4})$/)
+  if (m) {
+    const mon = MONTH_INDEX[m[1].slice(0, 3).toLowerCase()]
+    if (mon !== undefined) return new Date(Date.UTC(Number(m[2]), mon, 1))
+  }
+  m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (m) return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])))
+  m = s.match(/(\d{4})/)
+  return m ? new Date(Date.UTC(Number(m[1]), 0, 1)) : new Date(0)
+}
+
+/** Shared channel metadata — both feed formats describe the same notes. */
+function feedChannel(req) {
+  const content = getContent()
+  const base = siteBase(req)
+  const profile = content.profile || {}
+  const meta = content.meta || {}
+  const owner = profile.name || meta.siteName || 'Portfolio'
+  const posts = [...((content.blog || {}).posts || [])]
+    .filter((p) => p && p.slug)
+    .sort((a, b) => postDate(b.date) - postDate(a.date))
+  return {
+    base,
+    owner,
+    title: `${owner} — notes`,
+    description: meta.description || `Notes, case studies and write-ups by ${owner}.`,
+    link: `${base}/blog`,
+    language: 'en-IN',
+    email: profile.email || meta.notifyEmail || '',
+    posts,
+  }
+}
+
+const feedPostUrl = (channel, post) => `${channel.base}/blog/${post.slug}`
+
+app.get(['/rss.xml', '/feed.xml'], (req, res) => {
+  const channel = feedChannel(req)
+  const items = channel.posts.map((post) => {
+    const url = feedPostUrl(channel, post)
+    return (
+      '    <item>\n' +
+      `      <title>${escXml(post.title || post.slug)}</title>\n` +
+      `      <link>${escXml(url)}</link>\n` +
+      `      <guid isPermaLink="true">${escXml(url)}</guid>\n` +
+      `      <pubDate>${postDate(post.date).toUTCString()}</pubDate>\n` +
+      (channel.email ? `      <author>${escXml(channel.email)} (${escXml(channel.owner)})</author>\n` : '') +
+      (post.excerpt ? `      <description>${escXml(post.excerpt)}</description>\n` : '') +
+      (post.tags || []).map((tag) => `      <category>${escXml(tag)}</category>\n`).join('') +
+      '    </item>'
+    )
+  })
+
+  const xml =
+    '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n' +
+    '  <channel>\n' +
+    `    <title>${escXml(channel.title)}</title>\n` +
+    `    <link>${escXml(channel.link)}</link>\n` +
+    `    <description>${escXml(channel.description)}</description>\n` +
+    `    <language>${channel.language}</language>\n` +
+    `    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>\n` +
+    `    <atom:link href="${escXml(channel.base)}/rss.xml" rel="self" type="application/rss+xml" />\n` +
+    (items.length ? items.join('\n') + '\n' : '') +
+    '  </channel>\n' +
+    '</rss>\n'
+
+  res.type('application/rss+xml').send(xml)
+})
+
+// JSON Feed 1.1 — the same notes for readers that prefer JSON.
+app.get('/feed.json', (req, res) => {
+  const channel = feedChannel(req)
+  res.json({
+    version: 'https://jsonfeed.org/version/1.1',
+    title: channel.title,
+    home_page_url: channel.base + '/',
+    feed_url: `${channel.base}/feed.json`,
+    description: channel.description,
+    language: channel.language,
+    authors: [{ name: channel.owner, url: channel.base + '/' }],
+    items: channel.posts.map((post) => ({
+      id: feedPostUrl(channel, post),
+      url: feedPostUrl(channel, post),
+      title: post.title || post.slug,
+      summary: post.excerpt || '',
+      content_text: (post.body || []).join('\n\n'),
+      date_published: postDate(post.date).toISOString(),
+      tags: post.tags || [],
+    })),
+  })
+})
+
 // --- 404 for unknown API routes --------------------------------------------
 app.use('/api', (req, res) => res.status(404).json({ ok: false, error: 'Not found.' }))
 
@@ -1342,6 +1455,13 @@ function sendIndex(req, res) {
       `<meta property="og:image:type" content="image/png" />`,
       verify.google ? `<meta name="google-site-verification" content="${escXml(verify.google)}" />` : '',
       verify.bing ? `<meta name="msvalidate.01" content="${escXml(verify.bing)}" />` : '',
+      // feed discovery: readers (and Google) find the notes feed without guessing
+      content.blog?.posts?.length
+        ? `<link rel="alternate" type="application/rss+xml" title="${escXml(owner)} — notes (RSS)" href="${escXml(base)}/rss.xml" />`
+        : '',
+      content.blog?.posts?.length
+        ? `<link rel="alternate" type="application/feed+json" title="${escXml(owner)} — notes (JSON)" href="${escXml(base)}/feed.json" />`
+        : '',
       `<script type="application/ld+json">${ld}</script>`,
       `<script>window.__CONTENT__=${inlineContent}</script>`,
     ].filter(Boolean)
