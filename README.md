@@ -289,7 +289,7 @@ Environment tab, not stored in git)
 
 Setup used (all declared in [`render.yaml`](render.yaml) — a Render **Blueprint**):
 
-1. Repo: `github.com/Suraj-Kumar-Ray/portfolio` (private, `main` branch) → Render **New → Blueprint**.
+1. Repo: `github.com/Suraj-Kumar-Ray/portfolio` (`main` branch) → Render **New → Blueprint**.
 2. `render.yaml` declares the Node web service: free plan, build command (`npm install --prefix server --include=dev && npm install --prefix client --include=dev && npm run build`), start (`npm start`), `NODE_ENV=production`, `ADMIN_PATH`, and `healthCheckPath: /api/health`.
 3. `ADMIN_TOKEN` + `SITE_URL` live in the Render **Environment** tab (never in git).
 4. **Auto-deploy:** every `git push` to `main` redeploys automatically.
