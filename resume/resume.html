@@ -3,337 +3,257 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="Resume of Suraj Kumar — full-stack developer (React.js, JavaScript, PHP, MySQL). M.E. CSE at Chandigarh University, ex-Intern at Hindustan Aeronautics Limited (HAL), MCSRDC." />
+<meta name="description" content="Resume of Suraj Kumar — full-stack developer and QA engineer. M.E. Computer Science & Engineering (2027), Chandigarh University; B.E. CSE, CGPA 8.7; intern at Hindustan Aeronautics Limited (HAL)." />
 <title>Suraj Kumar — Resume</title>
 <style>
-  @page { size: A4; margin: 9mm 10mm; }
+  @page { size: A4; margin: 12mm 14mm; }
 
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    margin: 0;
-    padding: 0;
     background: #fff;
-    color: #1a2233;
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-    font-size: 10.2pt;
-    line-height: 1.28;
+    color: #1b2436;
+    font-family: Calibri, "Segoe UI", Arial, Helvetica, sans-serif;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    -webkit-font-smoothing: antialiased;
   }
 
-  .page { width: 100%; }
+  .page { font-size: 10pt; line-height: 1.38; }
 
   /* ---------- header ---------- */
-  header { text-align: center; }
-
   .name {
-    margin: 0;
-    font-size: 24pt;
+    font-size: 20pt;
     font-weight: 700;
     letter-spacing: 0.6px;
-    color: #0b1226;
-    text-transform: uppercase;
-    line-height: 1.05;
+    text-align: center;
+    color: #14213d;
+    line-height: 1.1;
   }
-
-  .headline {
-    margin: 3px 0 0;
-    font-size: 11.2pt;
+  .role {
+    margin-top: 3px;
+    font-size: 10.5pt;
     font-weight: 600;
-    color: #4f46e5;
-    letter-spacing: 0.2px;
+    text-align: center;
+    color: #2b3f6b;
   }
-
   .contact {
-    margin: 7px auto 0;
+    margin-top: 5px;
     font-size: 9.4pt;
-    color: #33405a;
-    max-width: 100%;
+    text-align: center;
+    color: #3f4c63;
   }
-  .contact span { white-space: nowrap; }
-  .sep { color: #9aa5bb; padding: 0 6px; }
-  a { color: #33405a; text-decoration: none; }
+  .contact a { color: #3f4c63; text-decoration: none; }
+  .sep { color: #aab4c6; padding: 0 5px; }
 
-  .rule {
-    height: 2.5px;
-    background: linear-gradient(90deg, #4f46e5, #0891b2);
-    margin: 9px 0 0;
-    border-radius: 2px;
-  }
+  .rule { height: 1.5px; background: #14213d; margin-top: 8px; }
 
   /* ---------- sections ---------- */
-  section { margin-top: 7px; }
-
   h2 {
-    margin: 0 0 5px;
-    font-size: 11pt;
+    font-size: 10.2pt;
     font-weight: 700;
-    letter-spacing: 1.3px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
-    color: #0b1226;
-    border-bottom: 1.4px solid #d7dcea;
-    padding-bottom: 3px;
+    color: #14213d;
+    border-bottom: 1px solid #c8d1e0;
+    padding-bottom: 2px;
+    margin: 12px 0 5px;
   }
 
-  ul { margin: 4px 0 0; padding-left: 15px; }
+  p { margin: 0; }
+  ul { margin: 1px 0 0; padding-left: 15px; }
   li { margin-bottom: 1px; }
-  li::marker { color: #4f46e5; }
+  li::marker { color: #7d8aa3; }
 
-  .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
-  .title { font-weight: 700; color: #0b1226; font-size: 10.4pt; }
-  .org { color: #37415c; font-weight: 600; }
-  .dates { font-size: 9.3pt; color: #4f46e5; font-weight: 700; white-space: nowrap; }
-  .meta { font-size: 9.4pt; color: #5b6784; font-style: italic; }
+  .item { margin-bottom: 8px; }
+  .item:last-child { margin-bottom: 0; }
 
-  .entry { margin-bottom: 7px; }
-  .entry:last-child { margin-bottom: 0; }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .t { font-weight: 700; color: #14213d; min-width: 0; }
+  .t .stack { font-weight: 400; color: #4a5a7a; font-size: 9.6pt; }
+  .d { font-size: 9.5pt; color: #4a5a7a; white-space: nowrap; flex: 0 0 auto; }
+  .sub { font-size: 9.6pt; color: #4a5a7a; }
 
-  .skills-line { margin-bottom: 3.5px; }
-  .skills-line b {
-    color: #0b1226;
+  .skill {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 3px;
+  }
+  .skill .k {
+    flex: 0 0 96px;
     font-weight: 700;
-    display: inline-block;
-    min-width: 132px;
+    color: #14213d;
+    font-size: 9.9pt;
+  }
+  .skill .v { flex: 1; }
+
+  .note {
+    margin-top: 4px;
+    font-size: 9.3pt;
+    color: #5a6580;
+    font-style: italic;
   }
 
-  .proj { margin-bottom: 6.5px; }
-  .proj .title { font-size: 10.3pt; }
-  .stack { color: #4f46e5; font-weight: 600; font-size: 9.5pt; }
-
-  .two-col { display: flex; gap: 18px; }
-  .two-col > div { flex: 1; }
-
-  /* floating download button — screen only, never printed */
+  /* ---------- screen only ---------- */
   .dl-btn {
     display: none;
     position: fixed;
-    right: 16px;
-    bottom: 16px;
+    right: 18px;
+    bottom: 18px;
     z-index: 10;
-    background: linear-gradient(135deg, #4f46e5, #0891b2);
+    background: #2b3f6b;
     color: #fff;
     font-family: inherit;
-    font-size: 11pt;
+    font-size: 10.6pt;
     font-weight: 600;
     text-decoration: none;
-    padding: 12px 20px;
+    padding: 11px 19px;
     border-radius: 999px;
-    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 10px 26px rgba(20, 33, 61, 0.3);
   }
 
-  /* ---------- screen: page as a card ---------- */
   @media screen {
-    body { background: #eef1f7; }
+    body { background: #eef1f6; }
     .page {
-      max-width: 800px;
-      margin: 24px auto;
+      max-width: 820px;
+      margin: 26px auto;
       background: #fff;
-      padding: 30px 32px;
-      border-radius: 10px;
-      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.12);
+      padding: 38px 46px 44px;
+      border-radius: 4px;
+      box-shadow: 0 10px 40px rgba(20, 33, 61, 0.12);
     }
     .dl-btn { display: inline-flex; align-items: center; gap: 8px; }
   }
 
-  /* ---------- screen: mobile ---------- */
-  @media screen and (max-width: 720px) {
-    body {
-      background: #fff;
-      font-size: 11.5pt;
-      line-height: 1.45;
-    }
+  @media screen and (max-width: 760px) {
+    body { background: #fff; }
     .page {
       margin: 0;
-      padding: 22px 16px 84px;
+      padding: 24px 18px 92px;
       border-radius: 0;
       box-shadow: none;
+      font-size: 11.2pt;
+      line-height: 1.45;
     }
-    .name { font-size: 19pt; letter-spacing: 0.4px; }
-    .headline { font-size: 10.6pt; }
+    .name { font-size: 17pt; }
     .contact {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2px 12px;
-      font-size: 9.8pt;
+      gap: 2px 13px;
+      font-size: 10pt;
     }
     .contact .sep { display: none; }
-    section { margin-top: 16px; }
-    h2 { font-size: 10.6pt; letter-spacing: 1px; }
-    .row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1px;
-    }
-    .dates { font-size: 9.8pt; }
-    .meta { font-size: 10pt; }
-    .two-col { flex-direction: column; gap: 0; }
-    .skills-line { margin-bottom: 8px; }
-    .skills-line b {
-      display: block;
-      min-width: 0;
-      margin-bottom: 1px;
-    }
-    .entry { margin-bottom: 14px; }
-    .proj { margin-bottom: 12px; }
-    ul { padding-left: 18px; }
-    li { margin-bottom: 5px; }
-    .stack { font-size: 10pt; }
-    .dl-btn { left: 16px; right: 16px; justify-content: center; }
+    h2 { margin-top: 18px; }
+    .item { margin-bottom: 12px; }
+    .head { flex-direction: column; gap: 1px; }
+    li { margin-bottom: 4px; }
+    .skill { display: block; margin-bottom: 7px; }
+    .skill .k { display: block; }
+    .dl-btn { left: 18px; right: 18px; justify-content: center; }
   }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <header>
-    <h1 class="name">Suraj Kumar</h1>
-    <p class="headline">Full-Stack Developer (Fresher) &nbsp;|&nbsp; React.js &middot; JavaScript &middot; TypeScript &middot; Node.js &middot; PHP &middot; MySQL</p>
-    <p class="contact">
-      <span>Mohali, Punjab, India</span><span class="sep">|</span>
-      <span>+91-7795253485</span><span class="sep">|</span>
-      <span><a href="mailto:csesuraj2003@gmail.com">csesuraj2003@gmail.com</a></span><span class="sep">|</span>
-      <span><a href="https://linkedin.com/in/suraj-kumar-507119203">linkedin.com/in/suraj-kumar-507119203</a></span>
-    </p>
-    <p class="contact" style="margin-top:2px">
-      <span><a href="https://github.com/Suraj-Kumar-Ray">github.com/Suraj-Kumar-Ray</a></span><span class="sep">|</span>
-      <span><a href="https://suraj-portfolio-wjpt.onrender.com">suraj-portfolio-wjpt.onrender.com</a></span>
-    </p>
-    <div class="rule"></div>
-  </header>
+  <div class="name">Suraj Kumar</div>
+  <div class="role">Full-Stack Developer &amp; QA Engineer</div>
+  <div class="contact">
+    Mohali, Punjab<span class="sep">|</span>+91 77952 53485<span class="sep">|</span><a href="mailto:csesuraj2003@gmail.com">csesuraj2003@gmail.com</a>
+  </div>
+  <div class="contact" style="margin-top:1px">
+    <a href="https://linkedin.com/in/suraj-kumar-507119203">linkedin.com/in/suraj-kumar-507119203</a><span class="sep">|</span><a href="https://github.com/Suraj-Kumar-Ray">github.com/Suraj-Kumar-Ray</a><span class="sep">|</span><a href="https://suraj-portfolio-wjpt.onrender.com">suraj-portfolio-wjpt.onrender.com</a>
+  </div>
+  <div class="rule"></div>
 
-  <section>
-    <h2>Professional Summary</h2>
-    <p style="margin:0">
-      Fresher full-stack developer with hands-on experience in <b>React.js, JavaScript, PHP and MySQL</b>, building
-      responsive, scalable web applications with strong debugging and testing skills. Currently pursuing
-      <b>M.E. in Computer Science &amp; Engineering at Chandigarh University</b>, after graduating B.E. CSE from
-      Sambhram Institute of Technology (VTU) with <b>CGPA 8.7</b>. Completed an internship at
-      <b>Hindustan Aeronautics Limited (HAL)</b> — MCSRDC, Design Complex — in Aug&ndash;Sep 2023, working on
-      navigation-systems software, functional testing and technical documentation. Available
-      immediately for a full-time role or internship.
-    </p>
-  </section>
+  <h2>Career Objective</h2>
+  <p>Final-year M.E. Computer Science &amp; Engineering student at Chandigarh University (2027), with a B.E. in CSE and CGPA 8.7. Seeking a full-time software developer or QA engineer role to build web applications in React.js, Node.js and PHP over MySQL, and test them through manual and automated test cases.</p>
 
-  <section>
-    <h2>Technical Skills</h2>
-    <div class="skills-line"><b>Languages:</b> Java, C, C++, Python, JavaScript (ES6+), SQL</div>
-    <div class="skills-line"><b>Frontend:</b> React.js, HTML5, CSS3, Bootstrap, Responsive Web Design</div>
-    <div class="skills-line"><b>Backend / DB:</b> PHP, MySQL, SQL, DBMS, CRUD &amp; Data Validation</div>
-    <div class="skills-line"><b>Testing &amp; Tools:</b> Manual Testing, Functional Testing, Database Testing, Bug Reporting, Git, Selenium, PyQt5, Image Processing</div>
-    <div class="skills-line"><b>Languages Known:</b> English (Proficient), Hindi (Native)</div>
-  </section>
+  <h2>Technical Skills</h2>
+  <div class="skill"><span class="k">Languages</span><span class="v">JavaScript (ES6+), TypeScript, SQL, PHP, Java, Python, C</span></div>
+  <div class="skill"><span class="k">Frontend</span><span class="v">React.js, HTML5, CSS3, Bootstrap, Responsive Web Design, REST API Integration, JSON</span></div>
+  <div class="skill"><span class="k">Backend</span><span class="v">Node.js, Express.js, PHP, RESTful APIs, MVC, Session Authentication, Role-Based Access Control</span></div>
+  <div class="skill"><span class="k">Databases</span><span class="v">MySQL, SQL — joins, subqueries, normalization, indexing, query optimization, CRUD</span></div>
+  <div class="skill"><span class="k">Testing</span><span class="v">Manual Testing, Functional Testing, Regression Testing, Test Case Design, Defect Reporting, SDLC, STLC, Playwright, Selenium, Postman</span></div>
+  <div class="skill"><span class="k">Tools</span><span class="v">Git, GitHub, GitHub Actions, VS Code, Chrome DevTools, Linux, Agile / Scrum</span></div>
 
-  <section>
-    <h2>Internship Experience</h2>
-
-    <div class="entry">
-      <div class="row">
-        <div>
-          <span class="title">Intern — MCSRDC, Design Complex</span>
-          <span class="org"> &mdash; Hindustan Aeronautics Limited (HAL)</span>
-        </div>
-        <div class="dates">Aug — Sep 2023 · Bengaluru, India</div>
-      </div>
-      <div class="meta">Aerospace &amp; defence — navigation-systems software · Mission &amp; Combat Systems R&amp;D Centre</div>
-      <ul>
-        <li>Worked with senior engineers on a navigation-systems project, following established review and documentation practices.</li>
-        <li>Assisted with functional testing and validation of software modules, and documented the findings.</li>
-        <li>Wrote shell scripts to automate routine build and data-handling tasks.</li>
-        <li>Took part in team planning and documentation reviews in a mission-critical environment.</li>
-      </ul>
+  <h2>Internship Experience</h2>
+  <div class="item">
+    <div class="head">
+      <span class="t">Software Engineering Intern — Hindustan Aeronautics Limited (HAL), MCSRDC</span>
+      <span class="d">Aug – Sep 2023</span>
     </div>
-  </section>
+    <div class="sub">Bengaluru, India</div>
+    <ul>
+      <li>Worked on navigation-systems software with senior engineers in a mission-critical, review-gated environment.</li>
+      <li>Performed functional testing and validation of software modules, and documented the results.</li>
+      <li>Wrote shell scripts to automate routine build and data-handling tasks.</li>
+    </ul>
+  </div>
 
-  <section>
-    <h2>Projects</h2>
+  <h2>Projects</h2>
 
-    <div class="proj">
-      <div class="row">
-        <span class="title">Teachers Management System</span>
-        <span class="stack">HTML · CSS · JavaScript · PHP · MySQL</span>
-      </div>
-      <ul>
-        <li>Built a full-stack DBMS web app for managing teacher and student profiles with complete CRUD operations.</li>
-        <li>Wrote SQL queries for data validation; performed end-to-end functional and database testing.</li>
-      </ul>
+  <div class="item">
+    <div class="head">
+      <span class="t">School Management Portal <span class="stack">— React.js · Node.js · Express · MySQL</span></span>
     </div>
+    <ul>
+      <li>Multi-role application for admin, teacher, student and parent covering admissions, fees, marks, timetable, homework and notices.</li>
+      <li>Session-based login with role-based permissions, server-side validation on every form, and PDF report-card export.</li>
+      <li>SQL reporting for toppers, class performance and pending fee dues, with a simple offline page cache.</li>
+    </ul>
+  </div>
 
-    <div class="proj">
-      <div class="row">
-        <span class="title">Image Compression &amp; Decompression Tool</span>
-        <span class="stack">Python · PyQt5 · Image Processing</span>
-      </div>
-      <ul>
-        <li>Developed a desktop application to compress and decompress images with an intuitive PyQt5 GUI.</li>
-        <li>Applied and tested image-processing algorithms ensuring quality and reduced file sizes.</li>
-      </ul>
+  <div class="item">
+    <div class="head">
+      <span class="t">Portfolio &amp; Resume Platform <span class="stack">— React · TypeScript · Node.js</span></span>
     </div>
+    <ul>
+      <li>React and TypeScript front end over an Express REST API, with a private dashboard for editing all site content.</li>
+      <li>Resume served as a web page and as a generated PDF download; deployed and running.</li>
+    </ul>
+  </div>
 
-    <div class="proj">
-      <div class="row">
-        <span class="title">Portfolio &amp; Resume Platform</span>
-        <span class="stack">React · TypeScript · Express · Node.js</span>
-      </div>
-      <ul>
-        <li>Full-stack app with a REST API, private content dashboard and auto-generated resume page.</li>
-        <li>Live: <a href="https://suraj-portfolio-wjpt.onrender.com">suraj-portfolio-wjpt.onrender.com</a> &nbsp;·&nbsp; Code: <a href="https://github.com/Suraj-Kumar-Ray/portfolio">github.com/Suraj-Kumar-Ray/portfolio</a></li>
-      </ul>
+  <h2>Education</h2>
+
+  <div class="item">
+    <div class="head">
+      <span class="t">M.E. Computer Science &amp; Engineering</span>
+      <span class="d">2025 – 2027 (pursuing)</span>
     </div>
+    <div class="sub">Chandigarh University, Mohali &nbsp;·&nbsp; Final year, dissertation on deep learning for skin-lesion classification</div>
+  </div>
 
-    <div class="proj">
-      <div class="row">
-        <span class="title">Skin Lesion Classification &mdash; M.E. Dissertation</span>
-        <span class="stack">Python · Deep Learning · CNN</span>
-      </div>
-      <ul>
-        <li>Fine-tuned multi-modal CNN with class-balanced learning for melanoma and minority-class detection in skin-lesion classification.</li>
-        <li>Code: <a href="https://github.com/Suraj-Kumar-Ray/skin-lesion-classification">github.com/Suraj-Kumar-Ray/skin-lesion-classification</a></li>
-      </ul>
+  <div class="item">
+    <div class="head">
+      <span class="t">B.E. Computer Science &amp; Engineering</span>
+      <span class="d">2020 – 2024</span>
     </div>
-  </section>
+    <div class="sub">Sambhram Institute of Technology (VTU), Bengaluru &nbsp;·&nbsp; CGPA 8.7 / 10</div>
+  </div>
 
-  <section>
-    <div class="two-col">
-      <div>
-        <h2>Education</h2>
-        <div class="entry" style="margin-bottom:6px">
-          <div class="row">
-            <span class="title" style="font-size:10.2pt">M.E. Computer Science &amp; Engineering</span>
-            <span class="dates">2025 — Present</span>
-          </div>
-          <div class="meta">Chandigarh University, Punjab · UID 25MCS10032</div>
-        </div>
-        <div class="entry" style="margin-bottom:6px">
-          <div class="row">
-            <span class="title" style="font-size:10.2pt">B.E. Computer Science &amp; Engineering</span>
-            <span class="dates">2020 — 2024</span>
-          </div>
-          <div class="meta">Sambhram Institute of Technology (VTU) · CGPA 8.7/10</div>
-        </div>
-        <div class="entry">
-          <div class="row">
-            <span class="title" style="font-size:10.2pt">Higher Secondary (Class XII)</span>
-            <span class="dates">2018 — 2020</span>
-          </div>
-          <div class="meta">New Horizon School, Bhagalpur, Bihar · 85.6%</div>
-        </div>
-      </div>
-
-      <div>
-        <h2>Certifications &amp; Achievements</h2>
-        <ul style="margin-top:2px">
-          <li><b>Oracle Cloud Infrastructure Certified Architect Associate</b> — Oracle, Oct 2026</li>
-          <li><b>Data Structures</b> — Coursera, Jan 2023</li>
-          <li><b>Web Development</b> — iNeuron, Dec 2023</li>
-          <li><b>Advanced IT Skill Training</b> — Mphasis</li>
-          <li><b>Winner</b> — Intra-College Science Exhibition</li>
-          <li><b>Participant</b> — DevHacks 1.0 National Level 24-Hour Hackathon</li>
-        </ul>
-      </div>
+  <div class="item">
+    <div class="head">
+      <span class="t">Higher Secondary (Class XII)</span>
+      <span class="d">2020</span>
     </div>
-  </section>
+    <div class="sub">New Horizon School, Bhagalpur, Bihar &nbsp;·&nbsp; 85.6%</div>
+  </div>
+
+  <div class="note">One-year break (2024–25) between B.E. and M.E., spent on full-stack self-study and entrance preparation.</div>
+
+  <h2>Certifications</h2>
+  <ul>
+    <li>Oracle Cloud Infrastructure 2026 Certified Architect Associate — Oracle, Oct 2026</li>
+    <li>Web Development — iNeuron &nbsp;·&nbsp; Data Structures — Coursera &nbsp;·&nbsp; Advanced IT Skill Training — Mphasis</li>
+  </ul>
 
 </div>
 
