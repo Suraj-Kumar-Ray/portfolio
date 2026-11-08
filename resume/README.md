@@ -56,7 +56,7 @@ If you add a line, measure again; going past 1032 px silently produces a second 
 4. **Projects** — School Management Portal (React/Node/MySQL), Portfolio & Resume Platform
    (React/TS/Node).
 5. **Education** — M.E. 2025–2027, B.E. 2020–2024 (CGPA 8.7), XII 85.6%.
-6. **Certifications** — OCI Architect Associate (Oct 2026) plus three courses.
+6. **Certifications** — AWS Certified Developer – Associate (Nov 2026), OCI Architect Associate (Oct 2026) plus three courses.
 
 ## Why 2027 is the headline year
 
