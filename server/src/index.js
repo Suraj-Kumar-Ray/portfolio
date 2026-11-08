@@ -874,15 +874,20 @@ app.get('/api/resume', (req, res) => {
   res.status(404).json({ ok: false, error: 'Resume not found. Add server/data/resume.pdf' })
 })
 
-// Verifiable proof for the headline credential: employers can open the actual
-// Oracle eCertificate (scan-to-verify QR + credential ID) instead of taking
-// the certifications list on trust.
-app.get('/api/certificate/oci', (req, res) => {
-  const certPath = path.join(DATA_DIR, 'oci-certificate.pdf')
-  if (fs.existsSync(certPath)) {
-    return res.download(certPath, 'Suraj-Kumar-OCI-Architect-Associate-Certificate.pdf')
-  }
-  res.status(404).json({ ok: false, error: 'Certificate not found. Add server/data/oci-certificate.pdf' })
+// Verifiable proof for the headline credentials: employers can open the actual
+// eCertificate (verification ID / scan-to-verify QR) instead of taking the
+// certifications list on trust.
+const CERTIFICATES = {
+  oci: { file: 'oci-certificate.pdf', download: 'Suraj-Kumar-OCI-Architect-Associate-Certificate.pdf' },
+  aws: { file: 'aws-certificate.pdf', download: 'Suraj-Kumar-AWS-Certified-Developer-Associate-Certificate.pdf' },
+}
+
+app.get('/api/certificate/:cert', (req, res) => {
+  const cert = CERTIFICATES[req.params.cert]
+  if (!cert) return res.status(404).json({ ok: false, error: 'Unknown certificate' })
+  const certPath = path.join(DATA_DIR, cert.file)
+  if (fs.existsSync(certPath)) return res.download(certPath, cert.download)
+  res.status(404).json({ ok: false, error: `Certificate not found. Add server/data/${cert.file}` })
 })
 
 // One-page portfolio + resume: that is the whole public surface. The homepage

@@ -348,6 +348,10 @@
       "icon": "server",
       "items": [
         {
+          "name": "AWS (Lambda, S3, EC2, DynamoDB)",
+          "level": 75
+        },
+        {
           "name": "REST API Design",
           "level": 80
         },
@@ -485,6 +489,12 @@
     }
   ],
   "certifications": [
+    {
+      "name": "AWS Certified Developer — Associate",
+      "issuer": "Amazon Web Services",
+      "year": "Nov 2026 · valid to Nov 2029",
+      "link": "/api/certificate/aws"
+    },
     {
       "name": "Oracle Cloud Infrastructure Certified Architect Associate",
       "issuer": "Oracle",
@@ -813,6 +823,12 @@
     "title": "What's New",
     "subtitle": "Milestones and updates, newest first.",
     "items": [
+      {
+        "date": "Nov 2026",
+        "type": "award",
+        "title": "AWS Certified Developer — Associate",
+        "description": "Passed the AWS Certified Developer – Associate exam (Amazon Web Services, Nov 2026, valid to Nov 2029, verification 736820766be54281af703604326b6ea3) — serverless, Lambda, DynamoDB, IAM and CI/CD on AWS."
+      },
       {
         "date": "Oct 2026",
         "type": "award",
