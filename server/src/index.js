@@ -890,6 +890,16 @@ app.get('/api/certificate/:cert', (req, res) => {
   res.status(404).json({ ok: false, error: `Certificate not found. Add server/data/${cert.file}` })
 })
 
+// Shareable proof page for the AWS credential. LinkedIn (and any other site)
+// cannot build a preview card from a PDF download, so the credential gets a
+// small HTML page with its own title/description to link to.
+app.get('/certificate/aws', (req, res, next) => {
+  const pagePath = path.join(DATA_DIR, 'certificate-aws.html')
+  if (!fs.existsSync(pagePath)) return next()
+  res.setHeader('Cache-Control', 'no-cache')
+  res.sendFile(pagePath)
+})
+
 // One-page portfolio + resume: that is the whole public surface. The homepage
 // entry carries <image:*> tags (avatar + project thumbnails) so images can
 // surface in search too; lastmod differs per page (content vs resume edits).
